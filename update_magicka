@@ -1,0 +1,6 @@
+#!/bin/sh
+rm -r ~/Dropbox/Java/WindowTest/bin/media
+rm -r ~/Dropbox/Java/WindowTest/src/media
+cp -r ~/Dropbox/Java/WindowTest/media ~/Dropbox/Java/WindowTest/bin
+cp -r ~/Dropbox/Java/WindowTest/media ~/Dropbox/Java/WindowTest/src
+exit 0

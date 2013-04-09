@@ -1,0 +1,70 @@
+package pvpmagic;
+
+import java.awt.Graphics2D;
+import java.awt.Image;
+
+public class View {
+
+	Graphics2D g;
+	GameData _data;
+	
+	Vector _pos;
+	Vector _size;
+	Vector _camera;
+	double _scale;
+	
+	public View(GameData data){
+		_data = data;
+		_pos = new Vector(0,0);
+		_camera = new Vector(0,0);
+		_size = new Vector(800, 800);
+		_scale = 1;
+	}
+	
+	public void setGraphics(Graphics2D tempG){
+		g = tempG;
+	}
+	
+	public void drawRect(Vector pos, Vector size){
+		pos = gameToScreenPoint(pos);
+		size = size.mult(_scale);
+		g.drawRect((int)(pos.x), (int)(pos.y), (int)size.x, (int)size.y);
+	}
+	
+	public void fillRect(Vector pos, Vector size){
+		pos = gameToScreenPoint(pos);
+		size = size.mult(_scale);
+		g.fillRect((int)(pos.x), (int)(pos.y), (int)size.x, (int)size.y);
+	}
+	
+	public void drawCircle(Vector pos, double r){
+		pos = gameToScreenPoint(pos);
+		r = r*_scale;
+		g.drawOval((int)(pos.x), (int)(pos.y), (int)r, (int)r);
+	}
+	
+	public void fillCircle(Vector pos, double r){
+		pos = gameToScreenPoint(pos);
+		r = r*_scale;
+		g.fillOval((int)(pos.x), (int)(pos.y), (int)r, (int)r);
+	}
+	
+	
+	public void drawImage(Image i, Vector pos){
+		pos = gameToScreenPoint(pos);
+		g.drawImage(i, (int)(pos.x), (int)(pos.y), null);
+	}
+	
+	public void drawImage(Image i, Vector pos, Vector size){
+		pos = gameToScreenPoint(pos);
+		size = size.mult(_scale);
+		g.drawImage(i, (int)(pos.x), (int)(pos.y), (int)(size.x), (int)(size.y), null);
+	}
+	
+	public Vector gameToScreenPoint(Vector gamePoint){
+		return gamePoint.minus(_camera.minus(_size.div(_scale*2))).mult(_scale).plus(_pos);
+	}
+	public Vector screenToGamePoint(Vector screenPoint){
+		return screenPoint.minus(_pos).div(_scale).plus(_camera.minus(_size.div(_scale*2)));
+	}
+}
