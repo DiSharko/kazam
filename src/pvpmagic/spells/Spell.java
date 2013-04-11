@@ -1,7 +1,6 @@
-package pvpmagic;
+package pvpmagic.spells;
 
-import pvpmagic.spells.*;
-
+import pvpmagic.*;
 
 public abstract class Spell extends Unit {
 	

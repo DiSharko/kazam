@@ -2,6 +2,8 @@ package pvpmagic;
 
 import java.util.ArrayList;
 
+import pvpmagic.spells.Spell;
+
 
 public class GameData {
 

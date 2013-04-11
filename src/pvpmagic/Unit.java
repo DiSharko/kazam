@@ -1,11 +1,11 @@
 package pvpmagic;
 
 public abstract class Unit {
-	protected Vector _pos;
+	public Vector _pos;
 
 	protected Vector _size;
 
-	Vector _vel = new Vector(0,0);
+	protected Vector _vel = new Vector(0,0);
 	
 	private String _type;
 	public Unit(String type){ _type = type; }

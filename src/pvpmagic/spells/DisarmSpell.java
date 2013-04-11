@@ -3,7 +3,6 @@ package pvpmagic.spells;
 import java.awt.Color;
 
 import pvpmagic.Player;
-import pvpmagic.Spell;
 import pvpmagic.Unit;
 import pvpmagic.Vector;
 import pvpmagic.View;
