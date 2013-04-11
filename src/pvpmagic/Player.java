@@ -14,6 +14,7 @@ public class Player extends Unit {
 	Vector _destination;
 
 	double _spellCastingTime = 0;
+	Spell _spellToCast = null;
 
 	String[] _spells;
 
@@ -24,8 +25,8 @@ public class Player extends Unit {
 	double _velocity = 3;
 
 
-	public Player(String characterName, String playerName, String[] spellNames){
-		super("player");
+	public Player(GameData data, String characterName, String playerName, String[] spellNames){
+		super(data, "player");
 		_canBeStunned = true;
 		_canBeRooted = true;
 		_canBeSilenced = true;
@@ -57,6 +58,10 @@ public class Player extends Unit {
 	public void update(){
 		super.update();
 		if (_spellCastingTime > 0) _spellCastingTime--;
+		else if (_spellToCast != null){
+			_data.finishCastingSpell(_spellToCast);
+			_spellToCast = null;
+		}
 		if (_destination != null){
 			if (_spellCastingTime > 0) _vel = new Vector(0, 0);
 			else {
@@ -79,6 +84,7 @@ public class Player extends Unit {
 	}
 
 	public void castSpell(Spell spell) {
+		_spellToCast = spell;
 		_spellCastingTime = spell._castingTime;
 		decrementMana();
 		_timeLastCast = System.currentTimeMillis();

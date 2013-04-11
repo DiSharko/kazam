@@ -5,8 +5,8 @@ import pvpmagic.*;
 
 public class StunSpell extends Spell {
 	
-	public StunSpell(Player caster, Vector dir){
-		super(caster, dir);
+	public StunSpell(GameData data, Player caster, Vector dir){
+		super(data, caster, dir);
 		_size = new Vector(10, 10);
 		setVelocity(4);
 	}

@@ -1,14 +1,14 @@
 package pvpmagic;
 
 public abstract class Unit {
+	protected GameData _data;
+	
 	public Vector _pos;
-
 	protected Vector _size;
-
 	protected Vector _vel = new Vector(0,0);
 	
 	private String _type;
-	public Unit(String type){ _type = type; }
+	public Unit(GameData data, String type){ _data = data; _type = type; }
 	public String type(){ return _type; }
 	
 	protected boolean _canBeStunned = false;

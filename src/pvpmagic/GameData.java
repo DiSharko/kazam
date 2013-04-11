@@ -18,7 +18,7 @@ public class GameData {
 		for (int i = 0; i < 20; i++){
 			Vector pos = new Vector(Math.random()*600-300, Math.random()*600-300);
 			Vector size = new Vector(Math.random()*50+20, Math.random()*50+20);
-			_units.add(new Rock(pos, size));
+			_units.add(new Rock(this, pos, size));
 		}
 	}
 
@@ -30,19 +30,21 @@ public class GameData {
 			spells[i] = s._spells[i].name;
 		}
 
-		Player p = new Player(characterName, null, spells);
+		Player p = new Player(this, characterName, null, spells);
 		_players.add(p);
 		_units.add(p);
 
 		return p;
 	}
 
-	public void castSpell(Player caster, String name, Vector dir){
-		Spell s = Spell.newSpell(name, caster, dir);
+	public void startCastingSpell(Player caster, String name, Vector dir){
+		Spell s = Spell.newSpell(this, name, caster, dir);
 		if (s != null){
 			caster.castSpell(s);
-			_units.add(s);
 		}
+	}
+	public void finishCastingSpell(Spell s){
+		_units.add(s);
 	}
 
 	public void update(){
