@@ -8,6 +8,8 @@ public abstract class Spell extends Unit {
 	protected double _damage;
 	protected double _cooldown;
 	
+	public double _castingTime = 10;
+	
 	String _name;
 	
 	double _velocity = 1;
