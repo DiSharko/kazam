@@ -1,8 +1,10 @@
 package pvpmagic;
 
+import pvpmagic.spells.StunSpell;
+
 public abstract class Spell extends Unit {
 	
-	Player _caster;
+	protected Player _caster;
 	
 	String _name;
 	

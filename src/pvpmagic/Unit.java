@@ -1,7 +1,11 @@
 package pvpmagic;
 
 public abstract class Unit {
-	Vector _pos, _size, _vel;
+	protected Vector _pos;
+
+	protected Vector _size;
+
+	Vector _vel;
 	
 	protected boolean _canBeStunned = false;
 	protected double _stunnedTime = 0;

@@ -37,4 +37,9 @@ public class Player extends Unit {
 			
 		}
 	}
+	
+	public void decrementMana(int amount) {
+		_mana = _mana - amount;
+		if (_mana < 0) _mana = 0;
+	}
 }

@@ -2,6 +2,7 @@ package pvpmagic;
 
 import java.util.ArrayList;
 
+
 public class GameData {
 	
 	ArrayList<Unit> _units;
