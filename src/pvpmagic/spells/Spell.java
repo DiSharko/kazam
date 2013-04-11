@@ -1,13 +1,14 @@
-package pvpmagic;
+package pvpmagic.spells;
 
-import pvpmagic.spells.*;
-
+import pvpmagic.*;
 
 public abstract class Spell extends Unit {
 	
 	protected Player _caster;
 	protected double _damage;
 	protected double _cooldown;
+	
+	public double _castingTime = 10;
 	
 	String _name;
 	

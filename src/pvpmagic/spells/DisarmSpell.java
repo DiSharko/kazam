@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import pvpmagic.*;
 
+
 public class DisarmSpell extends Spell {
 
 	public DisarmSpell(Player caster, Vector dir) {

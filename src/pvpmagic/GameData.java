@@ -2,6 +2,8 @@ package pvpmagic;
 
 import java.util.ArrayList;
 
+import pvpmagic.spells.Spell;
+
 
 public class GameData {
 
@@ -36,9 +38,9 @@ public class GameData {
 	}
 
 	public void castSpell(Player caster, String name, Vector dir){
-		caster.stop();
 		Spell s = Spell.newSpell(name, caster, dir);
 		if (s != null){
+			caster.castSpell(s);
 			_units.add(s);
 		}
 	}
