@@ -15,7 +15,6 @@ public class DisarmSpell extends Spell {
 	
 	@Override
 	public void hit(Unit u){
-		_caster.decrementMana(10);
 		u.silence(10);
 	}
 	

@@ -5,11 +5,10 @@ import pvpmagic.spells.StunSpell;
 public abstract class Spell extends Unit {
 	
 	protected Player _caster;
+	protected double _damage;
+	protected double _cooldown;
 	
 	String _name;
-	
-	double _damage;
-	double _cooldown;
 	
 	double _velocity = 1;
 	
