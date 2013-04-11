@@ -220,7 +220,7 @@ public class SetupScreen extends Screen {
 		if (_currentTab.id.equals("joinTab") || _currentTab.id.equals("hostTab")){
 			g.setColor(Color.black);
 			g.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-			g.drawString("Choose your name:", 30, 125);
+			g.drawString("Choose your name:", 195, 135);
 		}
 	}
 
@@ -284,6 +284,11 @@ public class SetupScreen extends Screen {
 			if (c._chosen != null) getElement("selectedMap").name = c._chosen.name;
 		}
 	}
+	
+	@Override
+	public void update(){
+		onResize();
+	}
 
 	@Override
 	protected void onResize() {
@@ -316,24 +321,21 @@ public class SetupScreen extends Screen {
 			if (_currentTab.id.equals("joinTab") || _currentTab.id.equals("hostTab")){
 				if (e.id.equals("selectedCharacter")){
 					e.x = 55;
-					e.y = _tabHeight + 65;
+					e.y = _tabHeight + 75;
 				} else if (e.id.equals("characterChooser")){
-					e.x = 30;
-					e.y = _tabHeight + 240;
+					e.x = 37;
+					e.y = _tabHeight + 250;
 				} else if (e.id.equals("spellChooser")){
 					e.x = 420;
-					e.y = _tabHeight + 240;
+					e.y = _tabHeight + 250;
+				}
+				if (e.id.equals("playerName")){
+					e.x = 350;
+					e.y = _tabHeight + 25;
+					e.h = 20;
 				}
 			}
 			
-			if (_currentTab.id.equals("joinTab")){
-				if (e.id.equals("playerName")){
-					e.x = 80;
-					e.y = _tabHeight + 405;
-				}
-				
-			}
-
 			if (_currentTab.id.equals("hostTab")){
 				if (e.id.equals("selectedGameType")){
 					e.x = 30;
@@ -369,7 +371,7 @@ public class SetupScreen extends Screen {
 		}
 		for (int i = 0; i < _spells.length; i++){
 			_spells[i].x = 85*(i%4) + 350;
-			_spells[i].y = 85*(i/4) + _tabHeight + 65;
+			_spells[i].y = 85*(i/4) + _tabHeight + 75;
 		}
 	}
 

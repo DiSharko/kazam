@@ -1,11 +1,19 @@
 package pvpmagic;
 
 public abstract class Unit {
+<<<<<<< HEAD
 	protected Vector _pos;
 
 	protected Vector _size;
 
 	Vector _vel;
+=======
+	Vector _pos, _size, _vel = new Vector(0,0);
+	
+	private String _type;
+	public Unit(String type){ _type = type; }
+	public String type(){ return _type; }
+>>>>>>> Spells are now functional and basic movement
 	
 	protected boolean _canBeStunned = false;
 	protected double _stunnedTime = 0;

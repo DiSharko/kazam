@@ -11,6 +11,7 @@ public class Player extends Unit {
 	
 	Vector _destination;
 	
+<<<<<<< HEAD
 	String[] _spells;
 
 	/* The time at which the most recent spell was cast by
@@ -18,6 +19,15 @@ public class Player extends Unit {
 	long _timeLastCast;
 	
 	public Player(String characterName, String playerName, String[] spellNames){
+=======
+	double _velocity = 3;
+	
+	String[] _spells;
+	
+	
+	public Player(String characterName, String playerName, String[] spells){
+		super("player");
+>>>>>>> Spells are now functional and basic movement
 		_canBeStunned = true;
 		_canBeRooted = true;
 		_canBeSilenced = true;
@@ -28,20 +38,38 @@ public class Player extends Unit {
 		_pos = new Vector(-50, -20);
 		_size = new Vector(20, 20);
 		
+<<<<<<< HEAD
 		_spells = spellNames;
+=======
+		_characterName = characterName;
+		_playerName = playerName;
+		_spells = spells;
+		
+>>>>>>> Spells are now functional and basic movement
 	}
 	
 	@Override
 	public void draw(View v){
-		v.g.setColor(Color.red);
+		v.g.setColor(Color.blue);
 		v.fillRect(_pos, _size);
 	}
 	
+	public void stop(){
+		_destination = null;
+		_vel = new Vector(0,0);
+	}
 	
 	@Override
 	public void update(){
+		super.update();
 		if (_destination != null){
-			
+			_vel = (_destination.minus(_pos)).normalize().mult(_velocity);
+			System.out.println(_vel);
+			if (_destination.minus(_pos).mag() < 0.5){
+				stop();
+			} else if (_destination.minus(_pos).mag() < _velocity){
+				_vel = _destination.minus(_pos);
+			}
 		}
 	}
 	

@@ -3,6 +3,7 @@ package pvpmagic;
 import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 import screen.Screen;
 import screen.ScreenHolder;
@@ -31,7 +32,7 @@ public class GameScreen extends Screen {
 	}
 	
 	public void configureGame(SetupScreen s){
-		_data.addPlayer(s);
+		_focus = _data.addPlayer(s);
 	}
 
 	@Override
@@ -79,8 +80,32 @@ public class GameScreen extends Screen {
 			_view._camera = _view._camera.plus(0, 10);
 		}
 		
+		Vector dir = new Vector(_xMouse, _yMouse).minus(_view.gameToScreenPoint(_focus._pos));
+		if (key == KeyEvent.VK_Q){
+			_data.castSpell(_focus, _focus._spells[0], dir);
+		} else if (key == KeyEvent.VK_W){
+			_data.castSpell(_focus, _focus._spells[1], dir);
+		} else if (key == KeyEvent.VK_E){
+			_data.castSpell(_focus, _focus._spells[2], dir);
+		} else if (key == KeyEvent.VK_R){
+			_data.castSpell(_focus, _focus._spells[3], dir);
+		} else if (key == KeyEvent.VK_A){
+			_data.castSpell(_focus, _focus._spells[4], dir);
+		} else if (key == KeyEvent.VK_S){
+			_data.castSpell(_focus, _focus._spells[5], dir);
+		} else if (key == KeyEvent.VK_D){
+			_data.castSpell(_focus, _focus._spells[6], dir);			
+		} else if (key == KeyEvent.VK_F){
+			_data.castSpell(_focus, _focus._spells[7], dir);
+		}
+		
 	}
 
+	@Override
+	public void onMousePressed(MouseEvent e){
+		Vector point = _view.screenToGamePoint(new Vector(e.getX(), e.getY()));
+		_focus._destination = point;
+	}
 
 	
 	

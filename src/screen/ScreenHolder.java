@@ -39,7 +39,7 @@ public abstract class ScreenHolder extends JPanel implements KeyListener, MouseI
 	public int _minW;
 	public int _minH;
 
-	Timer _timer = new Timer(35, new ActionListener() {
+	Timer _timer = new Timer(24, new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			update();

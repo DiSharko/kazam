@@ -35,6 +35,8 @@ public abstract class Screen {
 	protected boolean _allowUpdateBehind = false;
 	protected boolean _allowInputBehind = false;
 
+	protected int _xMouse = 0;
+	protected int _yMouse = 0;
 
 	// Buttons
 	public ArrayList<InterfaceElement> _interfaceElements;
@@ -133,14 +135,14 @@ public abstract class Screen {
 	//	protected abstract void onMouseClicked(MouseEvent e);
 
 	protected void onMousePressed(MouseEvent event){
-		int _x = event.getX();
-		int _y = event.getY();
+		_xMouse = event.getX();
+		_yMouse = event.getY();
 		if (_interfaceElements != null){
 			boolean found = false;
 			for (int i = 0; i < _interfaceElements.size(); i++){
 				InterfaceElement e = _interfaceElements.get(i);
 				if (!e.enabled || !e.visible) continue;
-				if (!found && Function.within(e.x, e.y, e.w, e.h, _x, _y)){
+				if (!found && Function.within(e.x, e.y, e.w, e.h, _xMouse, _yMouse)){
 					e.selected = true;
 					e.handleMousePressed(event);
 					found = true;
@@ -161,17 +163,19 @@ public abstract class Screen {
 	int previousDragX = 0;			int previousDragY = 0;
 	protected int deltaDragX = 0;	protected int deltaDragY = 0;
 	protected void onMouseDragged(MouseEvent event){
-
+		_xMouse = event.getX();
+		_yMouse = event.getY();
+		
 		if (dragging){
-			deltaDragX = event.getX() - previousDragX;
-			deltaDragY = event.getY() - previousDragY;
+			deltaDragX = _xMouse - previousDragX;
+			deltaDragY = _xMouse - previousDragY;
 		} else {
 			dragging = true;
 			deltaDragX = 0;
 			deltaDragY = 0;
 		}
-		previousDragX = event.getX();
-		previousDragY = event.getY();
+		previousDragX = _xMouse;
+		previousDragY = _xMouse;
 
 		if (_interfaceElements != null){
 			for (int i = 0; i < _interfaceElements.size(); i++){
@@ -194,8 +198,8 @@ public abstract class Screen {
 	}
 
 	protected void onMouseMoved(MouseEvent event){
-		int _x = event.getX();
-		int _y = event.getY();
+		_xMouse = event.getX();
+		_yMouse = event.getY();
 		boolean found = false;
 
 		if (_interfaceElements != null){
@@ -203,7 +207,7 @@ public abstract class Screen {
 				InterfaceElement e = _interfaceElements.get(i);
 				e.handleMouseMoved(event);
 				if (!e.enabled || !e.visible) continue;
-				if (!found && Function.within(e.x, e.y, e.w, e.h, _x, _y)){
+				if (!found && Function.within(e.x, e.y, e.w, e.h, _xMouse, _yMouse)){
 					e.mousedOver = true; found = true;
 					if (e.type.equals("Button")){
 						_holder._window.setCursor(new Cursor(Cursor.HAND_CURSOR));
