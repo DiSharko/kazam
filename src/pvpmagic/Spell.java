@@ -1,5 +1,7 @@
 package pvpmagic;
 
+import pvpmagic.spells.*;
+
 
 public abstract class Spell extends Unit {
 	
@@ -41,7 +43,7 @@ public abstract class Spell extends Unit {
 			return null;
 		}
 		if (name.equals("Stun")){ return new StunSpell(caster, dir); }
-		
+		else if (name.equals("Disarm")) { return new DisarmSpell(caster, dir); }
 		
 		System.out.println("Spell name \""+name+"\" not found!");
 		return null;

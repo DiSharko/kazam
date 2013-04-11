@@ -1,5 +1,7 @@
 package pvpmagic.spells;
 
+import java.awt.Color;
+
 import pvpmagic.Player;
 import pvpmagic.Spell;
 import pvpmagic.Unit;
@@ -8,9 +10,10 @@ import pvpmagic.View;
 
 public class DisarmSpell extends Spell {
 
-	public DisarmSpell(Player caster, Vector pos, Vector dir) {
-		super(caster, pos, dir);
-		_size = new Vector(30, 30);
+	public DisarmSpell(Player caster, Vector dir) {
+		super(caster, dir);
+		_size = new Vector(10, 10);
+		setVelocity(4);
 	}
 	
 	@Override
@@ -20,6 +23,7 @@ public class DisarmSpell extends Spell {
 	
 	@Override
 	public void draw(View v){
-		v.fillCircle(_pos, 10);
+		v.getGraphics().setColor(Color.yellow);
+		v.fillRect(_pos, _size);
 	}
 }

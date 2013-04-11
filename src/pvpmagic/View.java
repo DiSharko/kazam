@@ -5,7 +5,7 @@ import java.awt.Image;
 
 public class View {
 
-	Graphics2D g;
+	private Graphics2D g;
 	GameData _data;
 	
 	Vector _pos;
@@ -19,6 +19,14 @@ public class View {
 		_camera = new Vector(0,0);
 		_size = new Vector(800, 800);
 		_scale = 1;
+	}
+	
+	/**
+	 * Get the backing Graphics2D object for the view
+	 * @return the g
+	 */
+	public Graphics2D getGraphics() {
+		return g;
 	}
 	
 	public void setGraphics(Graphics2D tempG){

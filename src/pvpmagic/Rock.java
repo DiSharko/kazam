@@ -12,9 +12,9 @@ public class Rock extends Unit {
 	}
 	
 	public void draw(View v){
-		v.g.setColor(Color.gray);
+		v.getGraphics().setColor(Color.gray);
 		v.fillRect(_pos, _size);
-		v.g.setColor(Color.DARK_GRAY);
+		v.getGraphics().setColor(Color.DARK_GRAY);
 		v.drawRect(_pos, _size);
 	}
 

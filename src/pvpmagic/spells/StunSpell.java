@@ -1,26 +1,24 @@
 package pvpmagic.spells;
 
-import pvpmagic.Player;
-import pvpmagic.Spell;
-import pvpmagic.Unit;
-import pvpmagic.Vector;
-import pvpmagic.View;
+import java.awt.Color;
+import pvpmagic.*;
 
 public class StunSpell extends Spell {
 	
-	public StunSpell(Player caster, Vector pos, Vector dir){
-		super(caster, pos, dir);
-		_size = new Vector(30, 30);
-		_cooldown = 5;
+	public StunSpell(Player caster, Vector dir){
+		super(caster, dir);
+		_size = new Vector(10, 10);
+		setVelocity(4);
 	}
 
 	@Override
 	public void hit(Unit u){
-		u.stun(10);
+		//u.stun(10);
 	}
 	
 	@Override
 	public void draw(View v){
-		v.fillCircle(_pos, 10);
+		v.getGraphics().setColor(Color.red);
+		v.fillRect(_pos, _size);
 	}
 }

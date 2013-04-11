@@ -40,7 +40,7 @@ public class Player extends Unit {
 	
 	@Override
 	public void draw(View v){
-		v.g.setColor(Color.blue);
+		v.getGraphics().setColor(Color.blue);
 		v.fillRect(_pos, _size);
 	}
 	
