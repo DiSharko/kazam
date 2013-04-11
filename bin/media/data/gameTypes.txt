@@ -1,5 +1,0 @@
-King of the Hill
-Capture the Flag
-Deathmatch
-Team Deathmatch
-Sumo
