@@ -11,23 +11,17 @@ public class Player extends Unit {
 	
 	Vector _destination;
 	
-<<<<<<< HEAD
 	String[] _spells;
 
 	/* The time at which the most recent spell was cast by
 	   the player. Used for calculation of mana cost. */
 	long _timeLastCast;
 	
-	public Player(String characterName, String playerName, String[] spellNames){
-=======
 	double _velocity = 3;
 	
-	String[] _spells;
 	
-	
-	public Player(String characterName, String playerName, String[] spells){
+	public Player(String characterName, String playerName, String[] spellNames){
 		super("player");
->>>>>>> Spells are now functional and basic movement
 		_canBeStunned = true;
 		_canBeRooted = true;
 		_canBeSilenced = true;
@@ -38,14 +32,10 @@ public class Player extends Unit {
 		_pos = new Vector(-50, -20);
 		_size = new Vector(20, 20);
 		
-<<<<<<< HEAD
 		_spells = spellNames;
-=======
 		_characterName = characterName;
 		_playerName = playerName;
-		_spells = spells;
 		
->>>>>>> Spells are now functional and basic movement
 	}
 	
 	@Override

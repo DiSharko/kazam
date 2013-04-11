@@ -1,6 +1,5 @@
 package pvpmagic;
 
-import pvpmagic.spells.StunSpell;
 
 public abstract class Spell extends Unit {
 	
