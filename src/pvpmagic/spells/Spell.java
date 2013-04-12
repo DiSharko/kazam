@@ -43,7 +43,7 @@ public abstract class Spell extends Unit {
 			System.out.println("Given a null name!");
 			return null;
 		}
-		switch (name) {
+		/*switch (name) {
 			case "Stun": return new StunSpell(data, caster, dir);
 			case "Disarm": return new DisarmSpell(data, caster, dir);
 			case "Burn": return new BurnSpell(data, caster, dir);
@@ -52,15 +52,17 @@ public abstract class Spell extends Unit {
 			case "Push": return new PushSpell(data, caster, dir);
 			case "Abracadabra": return new AbracadabraSpell(data, caster, dir);
 			default: System.out.println("Spell name \""+name+"\" not found!");
-		}
-		/*
+		}*/
+		
 		if (name.equals("Stun")){ return new StunSpell(data, caster, dir); }
 		else if (name.equals("Disarm")) { return new DisarmSpell(data, caster, dir); }
-		else if (name.equals("Disarm")) { return new DisarmSpell(data, caster, dir); }
-		else if (name.equals("Disarm")) { return new DisarmSpell(data, caster, dir); }
-		else if (name.equals("Disarm")) { return new DisarmSpell(data, caster, dir); }
-		
-		System.out.println("Spell name \""+name+"\" not found!");*/
+		else if (name.equals("Burn")) { return new BurnSpell(data, caster, dir); }
+		else if (name.equals("Root")) { return new RootSpell(data, caster, dir); }
+		else if (name.equals("Blind")) { return new BlindSpell(data, caster, dir); }
+		else if (name.equals("Push")) { return new PushSpell(data, caster, dir); }
+		else if (name.equals("Abracadabra")) { return new AbracadabraSpell(data, caster, dir); }
+
+		System.out.println("Spell name \""+name+"\" not found!");
 		return null;
 	}
 	
