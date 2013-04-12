@@ -57,6 +57,7 @@ public class Player extends Unit {
 	@Override
 	public void update(){
 		super.update();
+		Vector center = _pos.plus(_size.div(2.0));
 		if (_spellCastingTime > 0) _spellCastingTime--;
 		else if (_spellToCast != null){
 			_data.finishCastingSpell(_spellToCast);
@@ -65,11 +66,11 @@ public class Player extends Unit {
 		if (_destination != null){
 			if (_spellCastingTime > 0) _vel = new Vector(0, 0);
 			else {
-				_vel = (_destination.minus(_pos)).normalize().mult(_velocity);
-				if (_destination.minus(_pos).mag() < 0.5){
+				_vel = (_destination.minus(center)).normalize().mult(_velocity);
+				if (_destination.minus(center).mag() < 0.5){
 					stop();
-				} else if (_destination.minus(_pos).mag() < _velocity){
-					_vel = _destination.minus(_pos);
+				} else if (_destination.minus(center).mag() < _velocity){
+					_vel = _destination.minus(center);
 				}
 			}
 		}
