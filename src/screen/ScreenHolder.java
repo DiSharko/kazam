@@ -39,11 +39,18 @@ public abstract class ScreenHolder extends JPanel implements KeyListener, MouseI
 	public int _minW;
 	public int _minH;
 
-	Timer _timer = new Timer(24, new ActionListener() {
+	int _timerDelay = 25;
+	public void setFPS(int fps){
+		_timerDelay = 1000/fps;
+	}
+	
+	Timer _timer = new Timer(_timerDelay, new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			update();
 			repaint();
+			
+			_timer.setInitialDelay(_timerDelay);
 
 			_timer.restart();
 		}
@@ -121,6 +128,7 @@ public abstract class ScreenHolder extends JPanel implements KeyListener, MouseI
 				Screen temp = _screenList.get(i);
 				_screenList.remove(i);
 				_screenList.add(0, temp);
+				temp.switchInto();
 				
 				if (_showBorder && _borderScreen != null){
 					_screenList.remove(_borderScreen);

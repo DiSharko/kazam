@@ -17,7 +17,12 @@ public class GameScreen extends Screen {
 	public GameScreen(ScreenHolder holder) {
 		super(holder, "game");
 	}
-
+	
+	@Override
+	public void switchInto(){
+		_holder.setFPS(40);
+	}
+	
 	@Override
 	public void setup() {
 		startGame();

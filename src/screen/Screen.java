@@ -55,6 +55,8 @@ public abstract class Screen {
 
 
 	public abstract void setup();
+	
+	public void switchInto(){};
 
 
 	// Updates

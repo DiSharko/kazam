@@ -46,6 +46,11 @@ public class SetupScreen extends Screen {
 	}
 
 	@Override
+	public void switchInto(){
+		_holder.setFPS(25);
+	}
+	
+	@Override
 	public void setup() {
 		_tabHeight = Resource._borderHeight+55;
 

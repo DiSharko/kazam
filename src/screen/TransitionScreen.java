@@ -30,6 +30,7 @@ public class TransitionScreen extends Screen {
 		if (transitionType == Transition.FADE){
 			if (counter == 5){
 				_holder.switchToScreen(newScreen._id);
+				newScreen.switchInto();
 				_holder.switchToScreen(_id);
 			}
 			if (counter == 10){
