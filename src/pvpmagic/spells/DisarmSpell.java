@@ -2,15 +2,12 @@ package pvpmagic.spells;
 
 import java.awt.Color;
 
-import pvpmagic.Player;
-import pvpmagic.Unit;
-import pvpmagic.Vector;
-import pvpmagic.View;
+import pvpmagic.*;
 
 public class DisarmSpell extends Spell {
 
-	public DisarmSpell(Player caster, Vector dir) {
-		super(caster, dir);
+	public DisarmSpell(GameData data, Player caster, Vector dir) {
+		super(data, caster, dir);
 		_size = new Vector(10, 10);
 		setVelocity(4);
 	}

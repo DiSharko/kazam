@@ -8,22 +8,24 @@ public abstract class Spell extends Unit {
 	protected double _damage;
 	protected double _cooldown;
 	
+	public double _castingTime = 5;
+	
 	String _name;
 	
 	double _velocity = 1;
-	
+
 	Vector _dir;
 	
 
-	public Spell(Player caster, Vector dir) {
-		super("spell");
+	public Spell(GameData data, Player caster, Vector dir) {
+		super(data, "spell");
 		_caster = caster;
 		_pos = caster._pos;
 		_dir = dir;
 		setVelocity();
 	}
-	public Spell(Vector pos, Vector dir){
-		super("spell");
+	public Spell(GameData data, Vector pos, Vector dir){
+		super(data, "spell");
 		_pos = pos;
 		_dir = dir;
 		setVelocity();
@@ -36,14 +38,30 @@ public abstract class Spell extends Unit {
 		_vel = _dir.normalize().mult(_velocity);
 	}
 	
-	public static Spell newSpell(String name, Player caster, Vector dir){
+	public static Spell newSpell(GameData data, String name, Player caster, Vector dir){
 		if (name == null){
 			System.out.println("Given a null name!");
 			return null;
 		}
-		if (name.equals("Stun")){ return new StunSpell(caster, dir); }
-		else if (name.equals("Disarm")) { return new DisarmSpell(caster, dir); }
+		/*switch (name) {
+			case "Stun": return new StunSpell(data, caster, dir);
+			case "Disarm": return new DisarmSpell(data, caster, dir);
+			case "Burn": return new BurnSpell(data, caster, dir);
+			case "Root": return new RootSpell(data, caster, dir);
+			case "Blind": return new BlindSpell(data, caster, dir);
+			case "Push": return new PushSpell(data, caster, dir);
+			case "Abracadabra": return new AbracadabraSpell(data, caster, dir);
+			default: System.out.println("Spell name \""+name+"\" not found!");
+		}*/
 		
+		if (name.equals("Stun")){ return new StunSpell(data, caster, dir); }
+		else if (name.equals("Disarm")) { return new DisarmSpell(data, caster, dir); }
+		else if (name.equals("Burn")) { return new BurnSpell(data, caster, dir); }
+		else if (name.equals("Root")) { return new RootSpell(data, caster, dir); }
+		else if (name.equals("Blind")) { return new BlindSpell(data, caster, dir); }
+		else if (name.equals("Push")) { return new PushSpell(data, caster, dir); }
+		else if (name.equals("Abracadabra")) { return new AbracadabraSpell(data, caster, dir); }
+
 		System.out.println("Spell name \""+name+"\" not found!");
 		return null;
 	}

@@ -19,6 +19,11 @@ public class WelcomeScreen extends Screen {
 	}
 
 	@Override
+	public void switchInto(){
+		_holder.setFPS(25);
+	}
+	
+	@Override
 	public void setup() {
 		_interfaceElements = new ArrayList<InterfaceElement>();
 		

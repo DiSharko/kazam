@@ -3,8 +3,8 @@ package pvpmagic;
 import java.awt.Color;
 
 public class Rock extends Unit {
-	public Rock(Vector pos, Vector size){
-		super("rock");
+	public Rock(GameData data, Vector pos, Vector size){
+		super(data, "rock");
 		_pos = pos;
 		_size = size;
 		
