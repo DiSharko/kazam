@@ -13,7 +13,6 @@ public abstract class Spell extends Unit {
 	String _name;
 	
 	double _velocity = 1;
-	fjdslafjalsdjf
 	Vector _dir;
 	
 
