@@ -13,7 +13,7 @@ public class StunSpell extends Spell {
 
 	@Override
 	public void hit(Unit u){
-		//u.stun(10);
+		u.stun(10);
 	}
 	
 	@Override
