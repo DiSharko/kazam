@@ -69,7 +69,7 @@ public class SetupScreen extends Screen {
 
 		// PLAYER NAME
 		TextInputLine playerName = new TextInputLine(this, "playerName", 20);
-		playerName.h = 40;
+		playerName.h = 20;
 		_joinGameElements.add(playerName);
 		_hostGameElements.add(playerName);
 
@@ -129,7 +129,7 @@ public class SetupScreen extends Screen {
 		_hostGameElements.add(gameTypeChooser);
 		_serverElements.add(gameTypeChooser);
 
-		Button selectedGameType = new Button(this, "selectedGameType", 150, 150);
+		Button selectedGameType = new Button(this, "selectedGameType", 165, 165);
 		selectedGameType.setColors(_bgColor, new Color(0.5f,0.5f,0.5f,0.2f), new Color(0.3f,0.3f,0.3f,0.3f), null);
 		_hostGameElements.add(selectedGameType);
 		_serverElements.add(selectedGameType);
@@ -148,7 +148,7 @@ public class SetupScreen extends Screen {
 		_hostGameElements.add(mapChooser);
 		_serverElements.add(mapChooser);
 
-		Button selectedMap = new Button(this, "selectedMap", 150, 150);
+		Button selectedMap = new Button(this, "selectedMap", 165, 165);
 		selectedMap.setColors(_bgColor, new Color(0.5f,0.5f,0.5f,0.2f), new Color(0.3f,0.3f,0.3f,0.3f), null);
 		_hostGameElements.add(selectedMap);
 		_serverElements.add(selectedMap);
@@ -338,34 +338,34 @@ public class SetupScreen extends Screen {
 			
 			if (_currentTab.id.equals("hostTab")){
 				if (e.id.equals("selectedGameType")){
-					e.x = 30;
-					e.y = _tabHeight + 450;
+					e.x = 55;
+					e.y = _tabHeight + 350;
 				} else if (e.id.equals("gameTypeChooser")){
-					e.x = 200;
-					e.y = _tabHeight + 500;
+					e.x = 37;
+					e.y = _tabHeight + 525;
 				} else if (e.id.equals("selectedMap")){
-					e.x = 430;
-					e.y = _tabHeight + 450;
+					e.x = 440;
+					e.y = _tabHeight + 350;
 				} else if (e.id.equals("mapChooser")){
-					e.x = 600;
-					e.y = _tabHeight + 500;
+					e.x = 423;
+					e.y = _tabHeight + 525;
 				}
 			}
 
 
 			if (_currentTab.id.equals("serverTab")){
 				if (e.id.equals("selectedGameType")){
-					e.x = 30;
+					e.x = 55;
 					e.y = _tabHeight + 30;
 				} else if (e.id.equals("gameTypeChooser")){
-					e.x = 200;
-					e.y = _tabHeight + 80;
+					e.x = 37;
+					e.y = _tabHeight + 205;
 				} else if (e.id.equals("selectedMap")){
 					e.x = 430;
 					e.y = _tabHeight + 30;
 				} else if (e.id.equals("mapChooser")){
-					e.x = 600;
-					e.y = _tabHeight + 80;
+					e.x = 412;
+					e.y = _tabHeight + 205;
 				}
 			}
 		}
