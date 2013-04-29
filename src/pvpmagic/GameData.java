@@ -1,11 +1,7 @@
 package pvpmagic;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -26,16 +22,17 @@ public class GameData {
 
 	public void setup(SetupScreen s){
 		if (s._currentTab.id.equals("hostTab") ||  s._currentTab.id.equals("dedicatedServer")){
-			if (s.getElement("mapChooser").name.equals("Random")) {
+			if (s.getElement("selectedMap").name.equals("Random")) {
 				for (int i = 0; i < 20; i++){
 					Vector pos = new Vector(Math.random()*600-300, Math.random()*600-300);
+					
 					_units.add(new Rock(this, pos, Math.random()*50+20));
 				}
 			}
 			else {
-				System.out.println("map name was not random: "+s.getElement("mapChooser").name);
+				System.out.println("map name was not random: "+s.getElement("selectedMap").name);
 				try {
-					readInMap(s.getElement("mapChooser").name);
+					readInMap(s.getElement("selectedMap").name);
 				} catch (IOException e) {
 					System.out.println("IOException in setup.");
 					e.printStackTrace();
@@ -152,14 +149,17 @@ public class GameData {
 	}
 	
 	private void readInMap(String mapname) throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader(new File("media/data/maps/"+mapname+".txt")));
+		BufferedReader br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/data/maps/"+mapname+".txt")));
+		//BufferedReader br = new BufferedReader(new FileReader(new File("/media/data/maps/"+mapname+".txt")));
 		String line; String[] linearr;
 		while((line = br.readLine()) != null) {
 			linearr = line.split(",");
 			if(linearr[0].equals("ROCK")) {
 				//line represents a rock: ROCK,500,500,50
 				Vector pos = new Vector(Double.parseDouble(linearr[1]), Double.parseDouble(linearr[2]));
-				_units.add(new Rock(this, pos, Math.random()*50+20));
+				
+				_units.add(new Rock(this, pos, Double.parseDouble(linearr[3])));
+
 			} else if(linearr[0].equals("SPAWN")) {
 				//line represents a spawn point
 			} else {
