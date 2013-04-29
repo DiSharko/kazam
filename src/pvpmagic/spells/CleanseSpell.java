@@ -1,25 +1,24 @@
 package pvpmagic.spells;
 
 import java.awt.Color;
-
 import pvpmagic.*;
 
-public class ShineSpell extends Spell {
-
-	public ShineSpell(GameData data, Player caster, Vector dir) {
+public class CleanseSpell extends Spell {
+	
+	public CleanseSpell(GameData data, Player caster, Vector dir){
 		super(data, caster, dir);
 		_size = new Vector(10, 10);
-		setVelocity(4);
+		setVelocity(10);
 	}
-	
+
 	@Override
 	public void collide(Collision c){
-		//light area of the map that you are in
+		c.other(this).cleanse();
 	}
 	
 	@Override
 	public void draw(View v){
-		v.getGraphics().setColor(Color.yellow);
+		v.getGraphics().setColor(Color.green);
 		v.fillRect(_pos, _size);
 	}
 }

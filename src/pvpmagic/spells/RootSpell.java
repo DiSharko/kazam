@@ -15,7 +15,7 @@ public class RootSpell extends Spell {
 	
 	@Override
 	public void collide(Collision c){
-		//u.root(10);
+		c.other(this).root(3000);
 	}
 	
 	@Override

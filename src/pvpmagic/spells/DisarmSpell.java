@@ -14,7 +14,8 @@ public class DisarmSpell extends Spell {
 	
 	@Override
 	public void collide(Collision c){
-		c.other(this).silence(10);
+		c.other(this).silence(5000);
+		//TODO: possibly make it so that your wand also gets knocked away
 	}
 	
 	@Override

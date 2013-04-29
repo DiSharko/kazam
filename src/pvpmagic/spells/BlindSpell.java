@@ -15,7 +15,8 @@ public class BlindSpell extends Spell {
 	
 	@Override
 	public void collide(Collision c){
-		//u.blind(10);
+		Unit target = c.other(this);
+		//TODO: reduce targets vision
 	}
 	
 	@Override

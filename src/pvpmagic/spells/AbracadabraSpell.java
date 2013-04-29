@@ -14,6 +14,11 @@ public class AbracadabraSpell extends Spell {
 	}
 	
 	@Override
+	public void collide(Collision c) {
+		c.other(this).changeHealth((-1)*target._maxHealth);
+	}
+	
+	@Override
 	public void draw(View v){
 		v.getGraphics().setColor(Color.black);
 		v.fillRect(_pos, _size);

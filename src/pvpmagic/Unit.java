@@ -1,5 +1,7 @@
 package pvpmagic;
 
+import java.awt.Shape;
+
 
 public abstract class Unit {
 	protected double _health;
@@ -28,9 +30,6 @@ public abstract class Unit {
 	boolean _collidable = true;
 	double _restitution = 0.7;
 	double _mass = 1;
-	
-	public double _health = 100;
-	public double _mana = 100;
 	
 	
 	private String _type;

@@ -15,8 +15,10 @@ public class OpenSpell extends Spell {
 	
 	@Override
 	public void collide(Collision c){
-		//if u.instanceof(door)?
-			//u.open(10);
+		Unit target = c.other(this);
+		//TODO: make door object and do shit with that 
+		//if (target instanceof door)
+			//u.unlock();
 	}
 	
 	@Override
