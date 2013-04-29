@@ -89,6 +89,7 @@ public class GameData {
 					double ve2 = e2._vel.dot(c.mtv(e2).normalize());
 
 					double cor = Math.sqrt(e1._restitution*e2._restitution);
+
 					if (e1._movable && e2._movable){
 						e1._pos = e1._pos.plus(c.mtv(e1).div(2));
 						e2._pos = e2._pos.plus(c.mtv(e2).div(2));
