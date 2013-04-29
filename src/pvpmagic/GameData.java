@@ -84,19 +84,18 @@ public class GameData {
 					double ve2 = e2._vel.dot(c.mtv(e2).normalize());
 
 					double cor = Math.sqrt(e1._restitution*e2._restitution);
-					System.out.println(c.mtv(e2));
 					if (e1._movable && e2._movable){
 						e1._pos = e1._pos.plus(c.mtv(e1).div(2));
 						e2._pos = e2._pos.plus(c.mtv(e2).div(2));
 
-						e1.applyForce(c.mtv(e1).normalize().mult((c.mtv(e1).normalize().dot(e2._vel.minus(e1._vel)))*e1._mass*e2._mass*(0.1+cor)/(e1._mass+e2._mass)));
-						e2.applyForce(c.mtv(e2).normalize().mult((c.mtv(e2).normalize().dot(e1._vel.minus(e2._vel)))*e1._mass*e2._mass*(0.1+cor)/(e1._mass+e2._mass)));
+						e1.applyForce(c.mtv(e1).normalize().mult((c.mtv(e1).normalize().dot(e2._vel.minus(e1._vel)))*e1._mass*e2._mass*(1+cor)/(e1._mass+e2._mass)));
+						e2.applyForce(c.mtv(e2).normalize().mult((c.mtv(e2).normalize().dot(e1._vel.minus(e2._vel)))*e1._mass*e2._mass*(1+cor)/(e1._mass+e2._mass)));
 					} else if (e1._movable){
 						e1._pos = e1._pos.plus(c.mtv(e1));
-						e1.applyForce(c.mtv(e1).normalize().mult((ve2-ve1)*e1._mass*(0.1+cor)));
+						e1.applyForce(c.mtv(e1).normalize().mult((ve2-ve1)*e1._mass*(1+cor)));
 					} else if (e2._movable){
 						e2._pos = e2._pos.plus(c.mtv(e2));
-						e2.applyForce(c.mtv(e2).normalize().mult((ve1-ve2)*e2._mass*(0.1+cor)));
+						e2.applyForce(c.mtv(e2).normalize().mult((ve1-ve2)*e2._mass*(1+cor)));
 					}
 
 					e1.collide(c);
