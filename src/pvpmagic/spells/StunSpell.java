@@ -7,6 +7,7 @@ public class StunSpell extends Spell {
 	
 	public StunSpell(GameData data, Player caster, Vector dir){
 		super(data, caster, dir);
+		_cooldown = 1000;
 		_size = new Vector(10, 10);
 		setVelocity(10);
 	}

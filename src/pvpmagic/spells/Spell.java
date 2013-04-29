@@ -8,7 +8,7 @@ public abstract class Spell extends Unit {
 	
 	protected Player _caster;
 	protected double _damage;
-	protected double _cooldown;
+	public double _cooldown = 0;
 	
 	public double _castingTime = 5;
 	

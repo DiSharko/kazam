@@ -14,6 +14,7 @@ public class Player extends Unit {
 	Spell _spellToCast = null;
 
 	String[] _spells;
+	long[] _spellCastingTimes;
 
 	/* The time at which the most recent spell was cast by
 	   the player. Used for calculation of mana cost. */
@@ -36,6 +37,8 @@ public class Player extends Unit {
 		_shape = new Box(this, new Vector(0,0), _size);
 
 		_spells = spellNames;
+		_spellCastingTimes = new long[_spells.length];
+		
 		_characterName = characterName;
 		_playerName = playerName;
 
@@ -57,8 +60,8 @@ public class Player extends Unit {
 		super.update();
 		
 		//health and mana regeneration
-		_health += .125; //5 per second
-		_mana += .125;
+		changeHealth(0.125);
+		changeMana(0.125);
 		
 		Vector center = _pos.plus(_size.div(2.0));
 		if (_spellCastingTime > 0) _spellCastingTime--;

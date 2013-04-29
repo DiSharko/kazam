@@ -42,11 +42,14 @@ public class GameData {
 		}
 	}
 
-	public void startCastingSpell(Player caster, String name, Vector dir){
+	public void startCastingSpell(Player caster, int spellIndex, Vector dir){
 		if (!caster._isSilenced) {
-			Spell s = Spell.newSpell(this, name, caster, dir);
+			Spell s = Spell.newSpell(this, caster._spells[spellIndex], caster, dir);
 			if (s != null){
-				caster.castSpell(s);
+				if ((System.currentTimeMillis() - caster._spellCastingTimes[spellIndex]) >= s._cooldown) {
+					caster.castSpell(s);
+					caster._spellCastingTimes[spellIndex] = System.currentTimeMillis();
+				}
 			}
 		}
 	}
