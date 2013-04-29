@@ -2,6 +2,9 @@ package pvpmagic;
 
 
 public abstract class Unit {
+	protected double _health = 100;
+	protected double _mana;
+	
 	protected GameData _data;
 	
 	public Vector _pos;
@@ -26,9 +29,6 @@ public abstract class Unit {
 	boolean _collidable = true;
 	double _restitution = 0.7;
 	double _mass = 1;
-	
-	protected double _health = 100;
-	protected double _mana = 100;
 	
 	private String _type;
 	public Unit(GameData data, String type){ _data = data; _type = type; }

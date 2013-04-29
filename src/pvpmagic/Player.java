@@ -5,7 +5,6 @@ import java.awt.Color;
 import pvpmagic.spells.Spell;
 
 public class Player extends Unit {
-
 	String _characterName;
 	String _playerName;
 
@@ -80,8 +79,6 @@ public class Player extends Unit {
 	private void decrementMana() {
 		//Change the mechanics of this to make it decrease
 		//exponentially with quick successions of spells
-		_mana = _mana - 10;
-		if (_mana < 0) _mana = 0;
 	}
 
 	public void castSpell(Spell spell) {
@@ -91,5 +88,10 @@ public class Player extends Unit {
 		_timeLastCast = System.currentTimeMillis();
 		//Need some way of finding out if a spell and unit have crossed paths
 		//Spell.newSpell(_spells[spellIndex], this, pos, dir).hit(target);
+	}
+	
+	public void changeMana(int amount) {
+		_mana += amount;
+		if (_mana < 0) _mana = 0;
 	}
 }
