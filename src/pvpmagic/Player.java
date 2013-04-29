@@ -55,6 +55,7 @@ public class Player extends Unit {
 	@Override
 	public void update(){
 		super.update();
+		
 		//health and mana regeneration
 		_health += .125; //5 per second
 		_mana += .125;

@@ -71,6 +71,8 @@ public class Vector {
 		return tx*x + ty*y;
 	}
 
+	public static final Vector NaN = new Vector(Float.NaN, Float.NaN);
+	public static final Vector ZERO = new Vector(0,0);
 	
 	@Override
 	public String toString(){

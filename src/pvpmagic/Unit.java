@@ -135,4 +135,8 @@ public abstract class Unit {
 		}
 		timedEffects.removeAll(toBeCleansed);
 	}
+	
+	public boolean canCollideWith(Unit u){
+		return true;
+	}
 }
