@@ -74,8 +74,8 @@ public class GameData {
 				Unit e2 = _units.get(j);
 				if (!e2._collidable || e1 == e2 || e2._shape == null) continue;
 				Collision c = Shape.collide(e1._shape, e2._shape);
-
-				if (c != null){
+				
+				if (c != null && !c.mtv(e1).equals(new Vector(Float.NaN, Float.NaN)) && !c.mtv(e2).equals(new Vector(Float.NaN, Float.NaN))){
 					double ve1 = e1._vel.dot(c.mtv(e1).normalize());
 					double ve2 = e2._vel.dot(c.mtv(e2).normalize());
 
@@ -85,15 +85,14 @@ public class GameData {
 						e1._pos = e1._pos.plus(c.mtv(e1).div(2));
 						e2._pos = e2._pos.plus(c.mtv(e2).div(2));
 
-						e1.applyImpulse(c.mtv(e1).normalize().mult((c.mtv(e1).normalize().dot(e2._vel.minus(e1._vel)))*e1._mass*e2._mass*(0.1+cor)/(e1._mass+e2._mass)));
-						e2.applyImpulse(c.mtv(e2).normalize().mult((c.mtv(e2).normalize().dot(e1._vel.minus(e2._vel)))*e1._mass*e2._mass*(0.1+cor)/(e1._mass+e2._mass)));
+						e1.applyForce(c.mtv(e1).normalize().mult((c.mtv(e1).normalize().dot(e2._vel.minus(e1._vel)))*e1._mass*e2._mass*(0.1+cor)/(e1._mass+e2._mass)));
+						e2.applyForce(c.mtv(e2).normalize().mult((c.mtv(e2).normalize().dot(e1._vel.minus(e2._vel)))*e1._mass*e2._mass*(0.1+cor)/(e1._mass+e2._mass)));
 					} else if (e1._movable){
 						e1._pos = e1._pos.plus(c.mtv(e1));
-						e1.applyImpulse(c.mtv(e1).normalize().mult((ve2-ve1)*e1._mass*(0.1+cor)));
+						e1.applyForce(c.mtv(e1).normalize().mult((ve2-ve1)*e1._mass*(0.1+cor)));
 					} else if (e2._movable){
 						e2._pos = e2._pos.plus(c.mtv(e2));
-						e2.applyImpulse(c.mtv(e2).normalize().mult((ve1-ve2)*e2._mass*(0.1+cor)));
-						
+						e2.applyForce(c.mtv(e2).normalize().mult((ve1-ve2)*e2._mass*(0.1+cor)));
 					}
 
 					e1.collide(c);
@@ -112,12 +111,11 @@ public class GameData {
 			if (!e._movable) continue;
 
 			
-			e._vel = e._vel.plus(e._force.div(e._mass)).plus(e._impulse.div(e._mass));
+			e._vel = e._vel.plus(e._force.div(e._mass));
 			
 //			e._vel = new Vector(Math.min(Math.max(e._vel.x, -30), 30),Math.min(Math.max(e._vel.y, -50), 50));
 
 			e._pos = e._pos.plus(e._vel);
-			e._impulse = new Vector(0,0);
 			e._force = new Vector(0,0);
 		}
 	}

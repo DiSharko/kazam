@@ -9,7 +9,7 @@ public abstract class Unit {
 	
 	public Vector _pos;
 	protected Vector _size;
-	protected Vector _vel = new Vector(0,0), _impulse = new Vector(0,0), _force = new Vector(0,0);
+	protected Vector _vel = new Vector(0,0), _force = new Vector(0,0);
 	boolean _movable = true;
 	
 	public void applyForce(Vector _force){
@@ -19,13 +19,6 @@ public abstract class Unit {
 		if (_movable) _force = _force.plus(new Vector(_x, _y));
 	}
 
-	public void applyImpulse(Vector impulse){
-		if (_movable) _impulse = impulse.plus(impulse);
-	}
-	public void applyImpulse(float _x, float _y){
-		if (_movable) _impulse = _impulse.plus(new Vector(_x, _y));
-	}	
-	
 	boolean _collidable = true;
 	double _restitution = 0.7;
 	double _mass = 1;

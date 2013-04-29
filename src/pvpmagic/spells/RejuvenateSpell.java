@@ -13,7 +13,7 @@ public class RejuvenateSpell extends Spell {
 	}
 	
 	@Override
-	public void hit(Unit u){
+	public void collide(Collision c){
 		//u.heal(10);
 	}
 	
