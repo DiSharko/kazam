@@ -5,7 +5,6 @@ import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Ellipse2D;
 
 import screen.Screen;
 import screen.ScreenHolder;
@@ -44,9 +43,12 @@ public class GameScreen extends Screen {
 	
 	@Override
 	protected void draw(Graphics2D g) {
+		_view.setGraphics(g);
+
 		g.setColor(Color.white);
 		g.fillRect(0, 0, _holder._w, _holder._h);
-		_view.setGraphics(g);
+		
+		
 		for (int i = 0; i < _data._units.size(); i++){
 			 Unit u = _data._units.get(i);
 			 u.draw(_view);
@@ -55,6 +57,11 @@ public class GameScreen extends Screen {
 				g.setColor(Shape._debugColor);
 			 	u._shape.draw(_view, true);
 			 }
+		}
+
+		if (Resource._gameImagesAlpha.containsKey("viewField")){
+			int size = (int) Math.min(_holder._w, _holder._h);
+			g.drawImage(Resource._gameImagesAlpha.get("viewField"), (_holder._w-size)/2, (_holder._h-size)/2, size, size, null);
 		}
 	}
 	
@@ -68,6 +75,7 @@ public class GameScreen extends Screen {
 	public void update(){
 		_data.update();
 		_view._camera = _focus._pos;
+		_view._scale = (Math.min(_holder._h, _holder._w))/800.0;
 	}
 	
 	
@@ -126,5 +134,7 @@ public class GameScreen extends Screen {
 	
 	
 	@Override
-	protected void onResize() {}
+	protected void onResize() {
+		if (_view != null) _view._size = new Vector(_holder._w, _holder._h);
+	}
 }

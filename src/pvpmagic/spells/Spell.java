@@ -24,6 +24,7 @@ public abstract class Spell extends Unit {
 		_dir = dir;
 		setVelocity();
 		_size = new Vector(10, 10);
+		_pos = _pos.plus(_vel.mult(_size.mag()*2));
 		_shape = new Box(this, new Vector(0,0), _size);
 	}
 	public Spell(GameData data, Vector pos, Vector dir){
@@ -32,6 +33,7 @@ public abstract class Spell extends Unit {
 		_dir = dir;
 		setVelocity();
 		_size = new Vector(10, 10);
+		_pos = _pos.plus(_vel.mult(_size));
 		_shape = new Box(this, new Vector(0,0), _size);
 	}
 	public void setVelocity(){
