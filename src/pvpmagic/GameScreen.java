@@ -63,6 +63,7 @@ public class GameScreen extends Screen {
 	@Override
 	public void update(){
 		_data.update();
+		_view._camera = _focus._pos;
 	}
 	
 	

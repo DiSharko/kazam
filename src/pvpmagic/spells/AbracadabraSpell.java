@@ -14,11 +14,6 @@ public class AbracadabraSpell extends Spell {
 	}
 	
 	@Override
-	public void hit(Unit u){
-		//u.kill(10);
-	}
-	
-	@Override
 	public void draw(View v){
 		v.getGraphics().setColor(Color.black);
 		v.fillRect(_pos, _size);

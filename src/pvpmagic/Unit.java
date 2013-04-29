@@ -24,8 +24,10 @@ public abstract class Unit {
 	}	
 	
 	boolean _collidable = true;
-	double _restitution = 0;
+	double _restitution = 0.7;
 	double _mass = 1;
+	
+	public double _health = 100;
 	
 	
 	private String _type;
@@ -48,9 +50,6 @@ public abstract class Unit {
 	
 	protected Shape _shape;
 	
-	public void hit(Unit u){
-		// I should do things TO the object I hit (and they will take care of doing things to me).
-	}
 	public void collide(Collision c){
 		Unit u = c.other(this);
 		if (u._movable){

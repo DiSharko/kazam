@@ -55,22 +55,12 @@ public class GameData {
 		// Deleting must be separate, after all updates and collisions
 		for (int i = 0; i < _units.size(); i++){
 			Unit u = _units.get(i);
+			if (u._health <= 0) u._delete = true;
 			if (u._delete){
 				_units.remove(i);
 				i--;
 			} else {
 				u.update();
-			}
-		}
-	}
-	
-	public void oldCollision(){
-		for (Unit u : _units){
-			// Collision
-			for (Unit u2 : _units){
-				if (Function.collides(u._pos, u._size, u2._pos, u2._size)){
-					u.hit(u2);
-				}
 			}
 		}
 	}
@@ -95,16 +85,15 @@ public class GameData {
 						e1._pos = e1._pos.plus(c.mtv(e1).div(2));
 						e2._pos = e2._pos.plus(c.mtv(e2).div(2));
 
-						e1.applyImpulse(c.mtv(e1).normalize().mult((c.mtv(e1).normalize().dot(e2._vel.minus(e1._vel)))*e1._mass*e2._mass*(1+cor)/(e1._mass+e2._mass)));
-						e2.applyImpulse(c.mtv(e2).normalize().mult((c.mtv(e2).normalize().dot(e1._vel.minus(e2._vel)))*e1._mass*e2._mass*(1+cor)/(e1._mass+e2._mass)));
+						e1.applyImpulse(c.mtv(e1).normalize().mult((c.mtv(e1).normalize().dot(e2._vel.minus(e1._vel)))*e1._mass*e2._mass*(0.1+cor)/(e1._mass+e2._mass)));
+						e2.applyImpulse(c.mtv(e2).normalize().mult((c.mtv(e2).normalize().dot(e1._vel.minus(e2._vel)))*e1._mass*e2._mass*(0.1+cor)/(e1._mass+e2._mass)));
 					} else if (e1._movable){
 						e1._pos = e1._pos.plus(c.mtv(e1));
-						e1.applyImpulse(c.mtv(e1).normalize().mult((ve2-ve1)*e1._mass*(1+cor)));
-
+						e1.applyImpulse(c.mtv(e1).normalize().mult((ve2-ve1)*e1._mass*(0.1+cor)));
 					} else if (e2._movable){
 						e2._pos = e2._pos.plus(c.mtv(e2));
-						e2.applyImpulse(c.mtv(e2).normalize().mult((ve1-ve2)*e2._mass*(1+cor)));
-						System.out.println(c.mtv(e2).normalize().mult((ve1-ve2)*e2._mass*(1+cor)));
+						e2.applyImpulse(c.mtv(e2).normalize().mult((ve1-ve2)*e2._mass*(0.1+cor)));
+						
 					}
 
 					e1.collide(c);

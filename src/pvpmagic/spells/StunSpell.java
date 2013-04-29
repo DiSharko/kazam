@@ -12,8 +12,8 @@ public class StunSpell extends Spell {
 	}
 
 	@Override
-	public void hit(Unit u){
-		u.stun(10);
+	public void collide(Collision c){
+		c.other(this).stun(10);
 	}
 	
 	@Override

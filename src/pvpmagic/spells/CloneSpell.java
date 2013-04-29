@@ -14,7 +14,7 @@ public class CloneSpell extends Spell {
 	}
 	
 	@Override
-	public void hit(Unit u){
+	public void collide(Collision c){
 		//do nothing if it hits something, just disappear
 	}
 	

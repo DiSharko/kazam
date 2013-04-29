@@ -14,7 +14,7 @@ public class BurnSpell extends Spell {
 	}
 	
 	@Override
-	public void hit(Unit u){
+	public void collide(Collision c){
 		//u.burn(10);
 	}
 	

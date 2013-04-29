@@ -14,7 +14,7 @@ public class PushSpell extends Spell {
 	}
 	
 	@Override
-	public void hit(Unit u){
+	public void collide(Collision c){
 		//u.push(10);
 	}
 	

@@ -9,6 +9,7 @@ public class Rock extends Unit {
 		_size = size;
 		_movable = false;
 		_shape = new Box(this, new Vector(0,0), size);
+		_restitution = 0.6;
 	}
 	
 	public void draw(View v){
@@ -19,9 +20,11 @@ public class Rock extends Unit {
 	}
 
 	@Override
-	public void hit(Unit u){
+	public void collide(Collision c){
+		Unit u = c.other(this);
 		if (u.type().equals("spell")){
-			u._delete = true;
+			u._health -= 10;
+//			u._delete = true;
 //			System.out.println("I am " + _pos +", "+_size);
 //			System.out.println("Spell is "+ u._pos + ", "+u._size);
 		}
