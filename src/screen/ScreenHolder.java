@@ -51,7 +51,7 @@ public abstract class ScreenHolder extends JPanel implements KeyListener, MouseI
 			repaint();
 			
 			_timer.setInitialDelay(_timerDelay);
-
+			
 			_timer.restart();
 		}
 	});

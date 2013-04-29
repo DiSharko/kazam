@@ -13,8 +13,12 @@ public class ShineSpell extends Spell {
 	}
 	
 	@Override
-	public void hit(Unit u){
-		u.silence(10);
+	public void collide(Collision c){
+<<<<<<< HEAD
+		//light area of the map that you are in
+=======
+		c.other(this).silence(10);
+>>>>>>> 47a379b975c4c4fca136db2b75f8de2fbd657f27
 	}
 	
 	@Override

@@ -1,9 +1,11 @@
 package pvpmagic;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Ellipse2D;
 
 import screen.Screen;
 import screen.ScreenHolder;
@@ -39,14 +41,16 @@ public class GameScreen extends Screen {
 	public void configureGame(SetupScreen s){
 		_focus = _data.addPlayer(s);
 	}
-
+	
 	@Override
 	protected void draw(Graphics2D g) {
+		g.setColor(Color.white);
+		g.fillRect(0, 0, _holder._w, _holder._h);
 		_view.setGraphics(g);
 		for (int i = 0; i < _data._units.size(); i++){
 			 Unit u = _data._units.get(i);
 			 u.draw(_view);
-
+			 
 			 if (u._shape != null) {
 				g.setColor(Shape._debugColor);
 			 	u._shape.draw(_view, true);
