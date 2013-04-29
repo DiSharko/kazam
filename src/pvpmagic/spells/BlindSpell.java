@@ -14,7 +14,7 @@ public class BlindSpell extends Spell {
 	}
 	
 	@Override
-	public void hit(Unit u){
+	public void collide(Collision c){
 		//u.blind(10);
 	}
 	

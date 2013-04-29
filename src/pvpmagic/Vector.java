@@ -62,6 +62,16 @@ public class Vector {
 		return Math.sqrt(Math.pow(x-v.x, 2)+ Math.pow(y-v.y, 2));
 	}
 	
+	
+	public final double dot(Vector v) {
+		return x*v.x + y*v.y;
+	}
+	
+	public final double dot(double tx, double ty) {
+		return tx*x + ty*y;
+	}
+
+	
 	@Override
 	public String toString(){
 		return "("+x+","+y+")";

@@ -14,7 +14,7 @@ public class RootSpell extends Spell {
 	}
 	
 	@Override
-	public void hit(Unit u){
+	public void collide(Collision c){
 		//u.root(10);
 	}
 	

@@ -13,8 +13,8 @@ public class DisarmSpell extends Spell {
 	}
 	
 	@Override
-	public void hit(Unit u){
-		u.silence(10);
+	public void collide(Collision c){
+		c.other(this).silence(10);
 	}
 	
 	@Override

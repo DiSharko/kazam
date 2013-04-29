@@ -88,8 +88,8 @@ public class Player extends Unit {
 		//Spell.newSpell(_spells[spellIndex], this, pos, dir).hit(target);
 	}
 	
-	public void decreaseMana(int amount) {
-		_mana = _mana - amount;
+	public void changeMana(int amount) {
+		_mana += amount;
 		if (_mana < 0) _mana = 0;
 	}
 }

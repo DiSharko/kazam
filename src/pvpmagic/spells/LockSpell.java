@@ -14,7 +14,7 @@ public class LockSpell extends Spell {
 	}
 	
 	@Override
-	public void hit(Unit u){
+	public void collide(Collision c){
 		//if u.instanceof(door)?
 			//u.lock(10);
 	}

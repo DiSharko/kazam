@@ -46,6 +46,11 @@ public class GameScreen extends Screen {
 		for (int i = 0; i < _data._units.size(); i++){
 			 Unit u = _data._units.get(i);
 			 u.draw(_view);
+
+			 if (u._shape != null) {
+				g.setColor(Shape._debugColor);
+			 	u._shape.draw(_view, true);
+			 }
 		}
 	}
 	
@@ -58,6 +63,7 @@ public class GameScreen extends Screen {
 	@Override
 	public void update(){
 		_data.update();
+		_view._camera = _focus._pos;
 	}
 	
 	
