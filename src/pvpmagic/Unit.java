@@ -45,7 +45,7 @@ public abstract class Unit {
 	
 	public void silence(long time){ 
 		if (_canBeSilenced) _isSilenced = true; 
-		timedEffects.add(new RootEffect(numberOfIntervals(time), this));
+		timedEffects.add(new SilenceEffect(numberOfIntervals(time), this));
 	}
 
 	boolean _delete = false;
