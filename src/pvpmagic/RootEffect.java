@@ -15,6 +15,7 @@ public class RootEffect extends TimedEffect {
 		if (_numberOfIntervals > 0) {
 			_target._isRooted = true;
 		} else {
+			System.out.println("FIN ROOT: CAN MOVE AGAIN");
 			_target._isRooted = false;
 			effectCompleted = true;
 		}

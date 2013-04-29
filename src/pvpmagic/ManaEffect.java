@@ -13,10 +13,10 @@ public class ManaEffect extends TimedEffect {
 	
 	public void effect() {
 		effectCompleted = false;
-		System.out.println("MANA NUM INTV: " + _numberOfIntervals + " CHG: " + _changePerInterval);
 		if (_numberOfIntervals > 0) {
 			_target.changeMana(_changePerInterval);
 			_numberOfIntervals -= 1;
+			System.out.println(_numberOfIntervals);
 		} else {
 			effectCompleted = true;
 		}
