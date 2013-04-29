@@ -1,5 +1,6 @@
 package pvpmagic;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 
@@ -94,5 +95,10 @@ public class View {
 	}
 	public Vector screenToGamePoint(Vector screenPoint){
 		return screenPoint.minus(_pos).div(_scale).plus(_camera.minus(_size.div(_scale*2)));
+	}
+
+	public void setColor(Color color) {
+		g.setColor(color);
+		
 	}
 }

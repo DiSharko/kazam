@@ -1,0 +1,3 @@
+0 0 600 600 viewField
+0 600 145 117 rock
+0 717 93 93 StunIcon

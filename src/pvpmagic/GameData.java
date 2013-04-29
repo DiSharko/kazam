@@ -143,7 +143,7 @@ public class GameData {
 
 			e._vel = e._vel.plus(e._force.div(e._mass));
 
-			//			e._vel = new Vector(Math.min(Math.max(e._vel.x, -30), 30),Math.min(Math.max(e._vel.y, -50), 50));
+			// e._vel = new Vector(Math.min(Math.max(e._vel.x, -30), 30),Math.min(Math.max(e._vel.y, -50), 50));
 
 			e._pos = e._pos.plus(e._vel);
 			e._force = new Vector(0,0);
@@ -157,7 +157,7 @@ public class GameData {
 			linearr = line.split(",");
 			if(linearr[0].equals("ROCK")) {
 				//line represents a rock: ROCK,500,500,50
-				Vector pos = new Vector(linearr[1], linearr[2]);
+				Vector pos = new Vector(Double.parseDouble(linearr[1]), Double.parseDouble(linearr[2]));
 				Vector size = new Vector(Math.random()*50+20, Math.random()*50+20);
 				_units.add(new Rock(this, pos, size));
 			} else if(linearr[0].equals("SPAWN")) {
