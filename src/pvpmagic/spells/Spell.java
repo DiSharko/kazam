@@ -4,6 +4,8 @@ import pvpmagic.*;
 
 public abstract class Spell extends Unit {
 	
+	int time = 0;
+	
 	protected Player _caster;
 	protected double _damage;
 	protected double _cooldown;
@@ -24,7 +26,6 @@ public abstract class Spell extends Unit {
 		_dir = dir;
 		setVelocity();
 		_size = new Vector(10, 10);
-		_pos = _pos.plus(_vel.mult(_size.mag()*2));
 		_shape = new Box(this, new Vector(0,0), _size);
 	}
 	public Spell(GameData data, Vector pos, Vector dir){
@@ -33,7 +34,6 @@ public abstract class Spell extends Unit {
 		_dir = dir;
 		setVelocity();
 		_size = new Vector(10, 10);
-		_pos = _pos.plus(_vel.mult(_size));
 		_shape = new Box(this, new Vector(0,0), _size);
 	}
 	public void setVelocity(){
@@ -65,6 +65,12 @@ public abstract class Spell extends Unit {
 	@Override
 	public void update(){
 		super.update();
-		
+		time++;
+	}
+	
+	@Override
+	public boolean canCollideWith(Unit u){
+		if (u == _caster && time < 50) return false;
+		return true;
 	}
 }

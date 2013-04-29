@@ -75,14 +75,16 @@ public class GameData {
 			for (int j = i+1; j < _units.size(); j++){
 				Unit e2 = _units.get(j);
 				if (!e2._collidable || e1 == e2 || e2._shape == null) continue;
+				if (!e1.canCollideWith(e2) || !e2.canCollideWith(e1)) continue;
 				Collision c = Shape.collide(e1._shape, e2._shape);
 				
-				if (c != null && !c.mtv(e1).equals(new Vector(Float.NaN, Float.NaN)) && !c.mtv(e2).equals(new Vector(Float.NaN, Float.NaN))){
+				if (c != null && !c.mtv(e1).equals(Vector.NaN) && !c.mtv(e2).equals(Vector.NaN)
+						&& !c.mtv(e1).equals(Vector.ZERO) && !c.mtv(e2).equals(Vector.ZERO)){
 					double ve1 = e1._vel.dot(c.mtv(e1).normalize());
 					double ve2 = e2._vel.dot(c.mtv(e2).normalize());
 
 					double cor = Math.sqrt(e1._restitution*e2._restitution);
-
+					System.out.println(c.mtv(e2));
 					if (e1._movable && e2._movable){
 						e1._pos = e1._pos.plus(c.mtv(e1).div(2));
 						e2._pos = e2._pos.plus(c.mtv(e2).div(2));

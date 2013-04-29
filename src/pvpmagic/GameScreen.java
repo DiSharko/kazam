@@ -85,6 +85,7 @@ public class GameScreen extends Screen {
 	public void onKeyPressed(KeyEvent e){
 		int key = e.getKeyCode();
 		
+		
 		if (key == KeyEvent.VK_ESCAPE){
 			_holder.showBorder();
 			_holder.switchToScreen("pause");
