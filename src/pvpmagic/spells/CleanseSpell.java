@@ -3,9 +3,9 @@ package pvpmagic.spells;
 import java.awt.Color;
 import pvpmagic.*;
 
-public class StunSpell extends Spell {
+public class CleanseSpell extends Spell {
 	
-	public StunSpell(GameData data, Player caster, Vector dir){
+	public CleanseSpell(GameData data, Player caster, Vector dir){
 		super(data, caster, dir);
 		_size = new Vector(10, 10);
 		setVelocity(10);
@@ -13,10 +13,7 @@ public class StunSpell extends Spell {
 
 	@Override
 	public void collide(Collision c){
-		Unit target = c.other(this);
-		target.root(2000);
-		target.silence(2000);
-		target.changeHealth(-5);
+//		c.other(this).cleanse();
 	}
 	
 	@Override
