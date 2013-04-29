@@ -96,24 +96,22 @@ public class GameScreen extends Screen {
 		}
 		
 		Vector dir = new Vector(_xMouse, _yMouse).minus(_view.gameToScreenPoint(_focus._pos));
-		if (!_focus._isSilenced) {
-			if (key == KeyEvent.VK_Q){
-				_data.startCastingSpell(_focus, _focus._spells[0], dir);
-			} else if (key == KeyEvent.VK_W){
-				_data.startCastingSpell(_focus, _focus._spells[1], dir);
-			} else if (key == KeyEvent.VK_E){
-				_data.startCastingSpell(_focus, _focus._spells[2], dir);
-			} else if (key == KeyEvent.VK_R){
-				_data.startCastingSpell(_focus, _focus._spells[3], dir);
-			} else if (key == KeyEvent.VK_A){
-				_data.startCastingSpell(_focus, _focus._spells[4], dir);
-			} else if (key == KeyEvent.VK_S){
-				_data.startCastingSpell(_focus, _focus._spells[5], dir);
-			} else if (key == KeyEvent.VK_D){
-				_data.startCastingSpell(_focus, _focus._spells[6], dir);			
-			} else if (key == KeyEvent.VK_F){
-				_data.startCastingSpell(_focus, _focus._spells[7], dir);
-			}
+		if (key == KeyEvent.VK_Q){
+			_data.startCastingSpell(_focus, _focus._spells[0], dir);
+		} else if (key == KeyEvent.VK_W){
+			_data.startCastingSpell(_focus, _focus._spells[1], dir);
+		} else if (key == KeyEvent.VK_E){
+			_data.startCastingSpell(_focus, _focus._spells[2], dir);
+		} else if (key == KeyEvent.VK_R){
+			_data.startCastingSpell(_focus, _focus._spells[3], dir);
+		} else if (key == KeyEvent.VK_A){
+			_data.startCastingSpell(_focus, _focus._spells[4], dir);
+		} else if (key == KeyEvent.VK_S){
+			_data.startCastingSpell(_focus, _focus._spells[5], dir);
+		} else if (key == KeyEvent.VK_D){
+			_data.startCastingSpell(_focus, _focus._spells[6], dir);			
+		} else if (key == KeyEvent.VK_F){
+			_data.startCastingSpell(_focus, _focus._spells[7], dir);
 		}
 		
 	}

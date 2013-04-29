@@ -116,4 +116,23 @@ public abstract class Unit {
 	private double changePerInterval(int amount, double numberOfIntervals) {
 		return amount/numberOfIntervals;
 	}
+	public void cleanse() {
+		LinkedList<TimedEffect> toBeCleansed = new LinkedList<TimedEffect>();
+		for (TimedEffect e : timedEffects) {
+			if (e.getClass().equals(HealthEffect.class)) {
+				HealthEffect temp = (HealthEffect) e;
+				if (temp._changePerInterval < 0) {
+					toBeCleansed.add(e);
+				}
+			} else if (e.getClass().equals(ManaEffect.class)) {
+				ManaEffect temp = (ManaEffect) e;
+				if (temp._changePerInterval < 0) {
+					toBeCleansed.add(e);
+				}
+			} else if (e.getClass().equals(SilenceEffect.class) && e.getClass().equals(RootEffect.class)) {
+				toBeCleansed.add(e);
+			}
+		}
+		timedEffects.removeAll(toBeCleansed);
+	}
 }

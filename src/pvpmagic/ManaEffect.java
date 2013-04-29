@@ -2,7 +2,7 @@ package pvpmagic;
 
 public class ManaEffect extends TimedEffect {
 	private double _numberOfIntervals;
-	private double _changePerInterval;
+	public final double _changePerInterval;
 	private Unit _target;
 
 	public ManaEffect(double numberOfIntervals, double changePerInterval, Unit u) {

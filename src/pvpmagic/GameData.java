@@ -38,9 +38,11 @@ public class GameData {
 	}
 
 	public void startCastingSpell(Player caster, String name, Vector dir){
-		Spell s = Spell.newSpell(this, name, caster, dir);
-		if (s != null){
-			caster.castSpell(s);
+		if (!caster._isSilenced) {
+			Spell s = Spell.newSpell(this, name, caster, dir);
+			if (s != null){
+				caster.castSpell(s);
+			}
 		}
 	}
 	public void finishCastingSpell(Spell s){
