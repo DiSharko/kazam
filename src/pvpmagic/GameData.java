@@ -15,26 +15,31 @@ public class GameData {
 		_units = new ArrayList<Unit>();
 		_players = new ArrayList<Player>();
 
-		for (int i = 0; i < 20; i++){
-			Vector pos = new Vector(Math.random()*600-300, Math.random()*600-300);
-			Vector size = new Vector(Math.random()*50+20, Math.random()*50+20);
-			_units.add(new Rock(this, pos, size));
-		}
 	}
 
-	public Player addPlayer(SetupScreen s){
-		String characterName = s.getElement("selectedCharacter").name;
-
-		String[] spells = new String[8];
-		for (int i = 0; i < 8; i++){
-			spells[i] = s._spells[i].name;
+	public void setup(SetupScreen s){
+		if (s._currentTab.id.equals("hostTab") ||  s._currentTab.id.equals("dedicatedServer")){
+			for (int i = 0; i < 20; i++){
+				Vector pos = new Vector(Math.random()*600-300, Math.random()*600-300);
+				Vector size = new Vector(Math.random()*50+20, Math.random()*50+20);
+				_units.add(new Rock(this, pos, size));
+			}
 		}
 
-		Player p = new Player(this, characterName, null, spells);
-		_players.add(p);
-		_units.add(p);
+		if (s._currentTab.id.equals("hostTab")){
+			String characterName = s.getElement("selectedCharacter").name;
 
-		return p;
+			String[] spells = new String[8];
+			for (int i = 0; i < 8; i++){
+				spells[i] = s._spells[i].name;
+			}
+
+			Player p = new Player(this, characterName, null, spells);
+
+			_players.add(p);
+			_units.add(p);
+
+		}
 	}
 
 	public void startCastingSpell(Player caster, int spellIndex, Vector dir){
@@ -56,7 +61,7 @@ public class GameData {
 
 		collideEntities();
 		applyMovement();
-		
+
 		// Deleting must be separate, after all updates and collisions
 		for (int i = 0; i < _units.size(); i++){
 			Unit u = _units.get(i);
@@ -69,8 +74,8 @@ public class GameData {
 			}
 		}
 	}
-	
-	
+
+
 	public void collideEntities(){
 		for (int i = 0; i < _units.size(); i++){
 			Unit e1 = _units.get(i);
@@ -80,7 +85,7 @@ public class GameData {
 				if (!e2._collidable || e1 == e2 || e2._shape == null) continue;
 				if (!e1.canCollideWith(e2) || !e2.canCollideWith(e1)) continue;
 				Collision c = Shape.collide(e1._shape, e2._shape);
-				
+
 				if (c != null && !c.mtv(e1).equals(Vector.NaN) && !c.mtv(e2).equals(Vector.NaN)
 						&& !c.mtv(e1).equals(Vector.ZERO) && !c.mtv(e2).equals(Vector.ZERO)){
 					double ve1 = e1._vel.dot(c.mtv(e1).normalize());
@@ -117,14 +122,14 @@ public class GameData {
 			Unit e = _units.get(i);
 			if (!e._movable) continue;
 
-			
+
 			e._vel = e._vel.plus(e._force.div(e._mass));
-			
-//			e._vel = new Vector(Math.min(Math.max(e._vel.x, -30), 30),Math.min(Math.max(e._vel.y, -50), 50));
+
+			//			e._vel = new Vector(Math.min(Math.max(e._vel.x, -30), 30),Math.min(Math.max(e._vel.y, -50), 50));
 
 			e._pos = e._pos.plus(e._vel);
 			e._force = new Vector(0,0);
 		}
 	}
-	
+
 }

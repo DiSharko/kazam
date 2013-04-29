@@ -167,7 +167,7 @@ public class SetupScreen extends Screen {
 
 
 
-		displayTab(joinTab);
+		displayTab(hostTab);
 	}
 
 
