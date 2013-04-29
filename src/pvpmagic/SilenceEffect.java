@@ -14,8 +14,8 @@ public class SilenceEffect extends TimedEffect {
 		effectCompleted = false;
 		if (_numberOfIntervals > 0) {
 			_target._isSilenced = true;
+			_numberOfIntervals -= 1;
 		} else {
-			System.out.println("FIN SILENCE: CAN CAST AGAIN");
 			_target._isSilenced = false;
 			effectCompleted = true;
 		}

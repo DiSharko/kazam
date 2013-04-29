@@ -16,7 +16,6 @@ public class ManaEffect extends TimedEffect {
 		if (_numberOfIntervals > 0) {
 			_target.changeMana(_changePerInterval);
 			_numberOfIntervals -= 1;
-			System.out.println(_numberOfIntervals);
 		} else {
 			effectCompleted = true;
 		}

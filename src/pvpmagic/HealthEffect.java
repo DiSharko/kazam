@@ -16,9 +16,7 @@ public class HealthEffect extends TimedEffect {
 		if (_numberOfIntervals > 0) {
 			_target.changeHealth(_changePerInterval);
 			_numberOfIntervals -= 1;
-			System.out.println(_numberOfIntervals);
 		} else {
-			System.out.println("HEALTH EFFECT COMPLETED");
 			effectCompleted = true;
 		}
 	}

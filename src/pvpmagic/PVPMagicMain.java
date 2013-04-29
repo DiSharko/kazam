@@ -17,7 +17,6 @@ public class PVPMagicMain extends ScreenHolder {
 
 	public PVPMagicMain(){
 		super();
-		
 		_window.setVisible(true);
 	}
 	
@@ -39,7 +38,7 @@ public class PVPMagicMain extends ScreenHolder {
 		}
 		_window.setResizable(true);
 		_window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		 
 		_window.add(this);
 	}
 
