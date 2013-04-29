@@ -104,7 +104,6 @@ public class Resource {
 
 
 		try {
-
 			Image _tempSheet = new ImageIcon(Resource.class.getResource("/media/images/ui.png")).getImage();
 			BufferedImage _sheet = new BufferedImage(_tempSheet.getWidth(null),_tempSheet.getHeight(null),BufferedImage.TYPE_INT_ARGB);
 			Graphics _g = _sheet.getGraphics();
@@ -117,7 +116,7 @@ public class Resource {
 			while ((_line = _file.readLine()) != null){
 				try {
 					String[] _part = _line.split(" ");
-					_ui.put(_part[4], _sheet.getSubimage(Integer.parseInt(_part[1]), Integer.parseInt(_part[0]), Integer.parseInt(_part[2]), Integer.parseInt(_part[3])));
+					_ui.put(_part[4], _sheet.getSubimage(Integer.parseInt(_part[0]), Integer.parseInt(_part[1]), Integer.parseInt(_part[2]), Integer.parseInt(_part[3])));
 				} catch (NumberFormatException e) {
 					e.printStackTrace();
 				} catch (IndexOutOfBoundsException e){
@@ -132,9 +131,32 @@ public class Resource {
 		}
 		
 		try {
-			_gameImagesAlpha.put("viewField", new ImageIcon(Resource.class.getResource("/media/images/viewField.png")).getImage());
-			_gameImagesAlpha.put("rock", new ImageIcon(Resource.class.getResource("/media/images/rock.png")).getImage());
-		} catch (Exception e){System.out.println("rock not found");}
+			Image _tempSheet = new ImageIcon(Resource.class.getResource("/media/images/gameImagesAlpha.png")).getImage();
+			BufferedImage _sheet = new BufferedImage(_tempSheet.getWidth(null),_tempSheet.getHeight(null),BufferedImage.TYPE_INT_ARGB);
+			Graphics _g = _sheet.getGraphics();
+			_g.drawImage(_tempSheet, 0, 0, null);
+			_g.dispose();
+
+			BufferedReader _file = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/images/gameImagesAlpha.txt")));
+
+			String _line;
+			while ((_line = _file.readLine()) != null){
+				try {
+					String[] _part = _line.split(" ");
+					_gameImagesAlpha.put(_part[4], _sheet.getSubimage(Integer.parseInt(_part[0]), Integer.parseInt(_part[1]), Integer.parseInt(_part[2]), Integer.parseInt(_part[3])));
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+				} catch (IndexOutOfBoundsException e){
+					e.printStackTrace();
+				}
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (NullPointerException e){
+			e.printStackTrace();
+		}
+		
 		
 	}
 }

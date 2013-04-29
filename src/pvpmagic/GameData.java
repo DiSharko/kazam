@@ -125,7 +125,7 @@ public class GameData {
 
 			e._vel = e._vel.plus(e._force.div(e._mass));
 
-			//			e._vel = new Vector(Math.min(Math.max(e._vel.x, -30), 30),Math.min(Math.max(e._vel.y, -50), 50));
+			// e._vel = new Vector(Math.min(Math.max(e._vel.x, -30), 30),Math.min(Math.max(e._vel.y, -50), 50));
 
 			e._pos = e._pos.plus(e._vel);
 			e._force = new Vector(0,0);

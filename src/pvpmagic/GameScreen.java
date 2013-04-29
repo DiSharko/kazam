@@ -97,11 +97,11 @@ public class GameScreen extends Screen {
 		_view._scale = (Math.min(_holder._h, _holder._w))/800.0;
 		
 		if (_focus != null){
+			_healthBar.current = _focus._health;
 			_healthBar.total = _focus._maxHealth;
-			_healthBar.setValue(_focus._health);
 
+			_manaBar.current = _focus._mana;
 			_manaBar.total = _focus._maxMana;
-			_manaBar.setValue(_focus._mana);
 		}
 	}
 	
