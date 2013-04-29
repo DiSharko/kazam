@@ -49,16 +49,6 @@ public abstract class Spell extends Unit {
 			System.out.println("Given a null name!");
 			return null;
 		}
-		/*switch (name) {
-			case "Stun": return new StunSpell(data, caster, dir);
-			case "Disarm": return new DisarmSpell(data, caster, dir);
-			case "Burn": return new BurnSpell(data, caster, dir);
-			case "Root": return new RootSpell(data, caster, dir);
-			case "Blind": return new BlindSpell(data, caster, dir);
-			case "Push": return new PushSpell(data, caster, dir);
-			case "Abracadabra": return new AbracadabraSpell(data, caster, dir);
-			default: System.out.println("Spell name \""+name+"\" not found!");
-		}*/
 		
 		if (name.equals("Stun")){ return new StunSpell(data, caster, dir); }
 		else if (name.equals("Disarm")) { return new DisarmSpell(data, caster, dir); }

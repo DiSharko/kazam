@@ -14,7 +14,7 @@ public class ShineSpell extends Spell {
 	
 	@Override
 	public void collide(Collision c){
-		c.other(this).silence(10);
+		//TODO: must cast light
 	}
 	
 	@Override
