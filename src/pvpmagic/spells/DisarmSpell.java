@@ -8,7 +8,10 @@ public class DisarmSpell extends Spell {
 
 	public DisarmSpell(GameData data, Player caster, Vector dir) {
 		super(data, caster, dir);
+		_name = "Disarm";
 		_size = new Vector(10, 10);
+		_cooldown = 1000;
+		_manaCost = 10;
 		setVelocity(4);
 	}
 	

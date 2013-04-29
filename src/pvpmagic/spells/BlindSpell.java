@@ -9,7 +9,10 @@ public class BlindSpell extends Spell {
 
 	public BlindSpell(GameData data, Player caster, Vector dir) {
 		super(data, caster, dir);
+		_name = "Blind";
 		_size = new Vector(10, 10);
+		_cooldown = 1000;
+		_manaCost = 10;
 		setVelocity(4);
 	}
 	

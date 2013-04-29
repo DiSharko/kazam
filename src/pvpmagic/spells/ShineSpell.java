@@ -8,7 +8,10 @@ public class ShineSpell extends Spell {
 
 	public ShineSpell(GameData data, Player caster, Vector dir) {
 		super(data, caster, dir);
+		_name = "Shine";
 		_size = new Vector(10, 10);
+		_cooldown = 1000;
+		_manaCost = 10;
 		setVelocity(4);
 	}
 	

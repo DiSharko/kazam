@@ -7,7 +7,10 @@ public class CleanseSpell extends Spell {
 	
 	public CleanseSpell(GameData data, Player caster, Vector dir){
 		super(data, caster, dir);
+		_name = "Cleanse";
 		_size = new Vector(10, 10);
+		_cooldown = 1000;
+		_manaCost = 10;
 		setVelocity(10);
 	}
 

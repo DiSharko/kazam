@@ -9,7 +9,10 @@ public class RootSpell extends Spell {
 
 	public RootSpell(GameData data, Player caster, Vector dir) {
 		super(data, caster, dir);
+		_name = "Root";
 		_size = new Vector(10, 10);
+		_cooldown = 1000;
+		_manaCost = 10;
 		setVelocity(4);
 	}
 	

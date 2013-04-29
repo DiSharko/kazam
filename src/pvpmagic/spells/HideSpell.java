@@ -7,7 +7,10 @@ public class HideSpell extends Spell {
 	
 	public HideSpell(GameData data, Player caster, Vector dir){
 		super(data, caster, dir);
+		_name = "Hide";
 		_size = new Vector(10, 10);
+		_cooldown = 1000;
+		_manaCost = 10;
 		setVelocity(10);
 	}
 

@@ -46,9 +46,11 @@ public class GameData {
 		if (!caster._isSilenced) {
 			Spell s = Spell.newSpell(this, caster._spells[spellIndex], caster, dir);
 			if (s != null){
-				if ((System.currentTimeMillis() - caster._spellCastingTimes[spellIndex]) >= s._cooldown) {
+				Long previousCastTime = caster._spellCastingTimes.get(s._name);
+				if (previousCastTime == null) previousCastTime = (long) 0;
+				if ((System.currentTimeMillis() - previousCastTime) >= s._cooldown) {
 					caster.castSpell(s);
-					caster._spellCastingTimes[spellIndex] = System.currentTimeMillis();
+					caster._spellCastingTimes.put(s._name, System.currentTimeMillis());
 				}
 			}
 		}
