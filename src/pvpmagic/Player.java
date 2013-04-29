@@ -5,9 +5,6 @@ import java.awt.Color;
 import pvpmagic.spells.Spell;
 
 public class Player extends Unit {
-	double _health;
-	double _mana;
-
 	String _characterName;
 	String _playerName;
 
