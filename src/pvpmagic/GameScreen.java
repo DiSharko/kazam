@@ -38,7 +38,8 @@ public class GameScreen extends Screen {
 	}
 	
 	public void configureGame(SetupScreen s){
-		_focus = _data.addPlayer(s);
+		_data.setup(s);
+		_focus = _data._players.get(0);
 	}
 	
 	@Override
