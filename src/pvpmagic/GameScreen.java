@@ -5,9 +5,12 @@ import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
+import screen.Bar;
 import screen.Screen;
 import screen.ScreenHolder;
+import screen.InterfaceElement;
 
 public class GameScreen extends Screen {
 
@@ -15,8 +18,12 @@ public class GameScreen extends Screen {
 	Player _focus;
 	View _view;
 	
+	Bar _healthBar;
+	Bar _manaBar;
+	
 	public GameScreen(ScreenHolder holder) {
 		super(holder, "game");
+		_interfaceElements = new ArrayList<InterfaceElement>();
 	}
 	
 	@Override
@@ -40,6 +47,14 @@ public class GameScreen extends Screen {
 	public void configureGame(SetupScreen s){
 		_data.setup(s);
 		_focus = _data._players.get(0);
+		_healthBar = new Bar("health", new Vector(400, 20), _focus._maxHealth);
+		_interfaceElements.add(_healthBar);
+		
+		_manaBar = new Bar("mana", new Vector(400, 20), _focus._maxMana);
+		_manaBar.setColorRange(new Color(0.5f, 0.5f, 1f), null, null, null);
+		_interfaceElements.add(_manaBar);
+		
+		onResize();
 	}
 	
 	@Override
@@ -48,7 +63,6 @@ public class GameScreen extends Screen {
 
 		g.setColor(Color.white);
 		g.fillRect(0, 0, _holder._w, _holder._h);
-		
 		
 		for (int i = 0; i < _data._units.size(); i++){
 			 Unit u = _data._units.get(i);
@@ -64,8 +78,9 @@ public class GameScreen extends Screen {
 			int size = (int) Math.min(_holder._w, _holder._h);
 			g.drawImage(Resource._gameImagesAlpha.get("viewField"), (_holder._w-size)/2, (_holder._h-size)/2, size, size, null);
 		}
+		
 	}
-	
+
 	
 	
 	
@@ -74,9 +89,20 @@ public class GameScreen extends Screen {
 	
 	@Override
 	public void update(){
+		super.update();
+		
 		_data.update();
+		
 		_view._camera = _focus._pos;
 		_view._scale = (Math.min(_holder._h, _holder._w))/800.0;
+		
+		if (_focus != null){
+			_healthBar.total = _focus._maxHealth;
+			_healthBar.setValue(_focus._health);
+
+			_manaBar.total = _focus._maxMana;
+			_manaBar.setValue(_focus._mana);
+		}
 	}
 	
 	
@@ -140,5 +166,16 @@ public class GameScreen extends Screen {
 	@Override
 	protected void onResize() {
 		if (_view != null) _view._size = new Vector(_holder._w, _holder._h);
+		
+		for (InterfaceElement e : _interfaceElements){
+			if (e.id.equals("health")){
+				e.x = _holder._w/2-e.w/2;
+				e.y = _holder._h-60;
+			} else if (e.id.equals("mana")){
+				e.x = _holder._w/2-e.w/2;
+				e.y = _holder._h-30;
+			}
+		}
+		
 	}
 }

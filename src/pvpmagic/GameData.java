@@ -21,7 +21,7 @@ public class GameData {
 		if (s._currentTab.id.equals("hostTab") ||  s._currentTab.id.equals("dedicatedServer")){
 			for (int i = 0; i < 20; i++){
 				Vector pos = new Vector(Math.random()*600-300, Math.random()*600-300);
-				Vector size = new Vector(Math.random()*50+20, Math.random()*50+20);
+				double size = Math.random()*50+20;
 				_units.add(new Rock(this, pos, size));
 			}
 		}
