@@ -24,7 +24,6 @@ public class Player extends Unit {
 
 	public Player(GameData data, String characterName, String playerName, String[] spellNames){
 		super(data, "player");
-		_canBeStunned = true;
 		_canBeRooted = true;
 		_canBeSilenced = true;
 
@@ -86,10 +85,5 @@ public class Player extends Unit {
 		_timeLastCast = System.currentTimeMillis();
 		//Need some way of finding out if a spell and unit have crossed paths
 		//Spell.newSpell(_spells[spellIndex], this, pos, dir).hit(target);
-	}
-	
-	public void changeMana(int amount) {
-		_mana += amount;
-		if (_mana < 0) _mana = 0;
 	}
 }
