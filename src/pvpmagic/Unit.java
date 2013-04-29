@@ -22,6 +22,9 @@ public abstract class Unit {
 	boolean _canBeSilenced = false;
 	double _silencedTime = 0;
 	public void silence(double time){ if (_canBeSilenced) _silencedTime = time; }
+	
+	double _health;
+	double _mana;
 
 	boolean _delete = false;
 	
