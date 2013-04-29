@@ -29,8 +29,7 @@ public class GameData {
 			if (s.getElement("mapChooser").name.equals("Random")) {
 				for (int i = 0; i < 20; i++){
 					Vector pos = new Vector(Math.random()*600-300, Math.random()*600-300);
-					Vector size = new Vector(Math.random()*50+20, Math.random()*50+20);
-					_units.add(new Rock(this, pos, size));
+					_units.add(new Rock(this, pos, Math.random()*50+20));
 				}
 			}
 			else {
@@ -160,8 +159,7 @@ public class GameData {
 			if(linearr[0].equals("ROCK")) {
 				//line represents a rock: ROCK,500,500,50
 				Vector pos = new Vector(Double.parseDouble(linearr[1]), Double.parseDouble(linearr[2]));
-				Vector size = new Vector(Math.random()*50+20, Math.random()*50+20);
-				_units.add(new Rock(this, pos, size));
+				_units.add(new Rock(this, pos, Math.random()*50+20));
 			} else if(linearr[0].equals("SPAWN")) {
 				//line represents a spawn point
 			} else {
