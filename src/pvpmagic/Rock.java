@@ -7,8 +7,8 @@ public class Rock extends Unit {
 		super(data, "rock");
 		_pos = pos;
 		_size = size;
-		
-		
+		_movable = false;
+		_shape = new Box(this, new Vector(0,0), size);
 	}
 	
 	public void draw(View v){

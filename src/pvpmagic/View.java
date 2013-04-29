@@ -2,6 +2,7 @@ package pvpmagic;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Shape;
 
 public class View {
 
@@ -55,6 +56,26 @@ public class View {
 		pos = gameToScreenPoint(pos);
 		r = r*_scale;
 		g.fillOval((int)(pos.x), (int)(pos.y), (int)r, (int)r);
+	}
+	
+	public void drawPolygon(Polygon p){
+		paintPolygon(p, false);
+	}
+	public void fillPolygon(Polygon p){
+		paintPolygon(p, true);
+	}
+	protected void paintPolygon(Polygon p, boolean fill){
+		int npoints = p.points.size();
+		int[] xpoints = new int[npoints];
+		int[] ypoints = new int[npoints];
+		for (int i = 0; i < p.points.size(); i++){
+			Vector absPoint = gameToScreenPoint(p.points.get(i).plus(p.getPosition()));
+			xpoints[i] = (int)absPoint.x;
+			ypoints[i] = (int)absPoint.y;
+		}
+		Shape s = new java.awt.Polygon(xpoints, ypoints, npoints);
+		if (fill && (g != null)) g.fill(s);
+		else if (g != null)  g.draw(s);
 	}
 	
 	
