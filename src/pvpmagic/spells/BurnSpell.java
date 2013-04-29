@@ -18,8 +18,8 @@ public class BurnSpell extends Spell {
 
 	public void collide(Collision c){
 		Unit target = c.other(this);
-		target.changeHealth(-20,5000);
-		target.changeMana(-20,5000);
+		target.changeHealth(-30,5000);
+		target.changeMana(-30,5000);
 	}
 	
 	@Override

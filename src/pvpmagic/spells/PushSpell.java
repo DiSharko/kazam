@@ -16,6 +16,8 @@ public class PushSpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		//TODO: gotta do displacement effects
+		Unit target = c.other(this);
+		target.changeHealth(-5);
 		//c.other(this).applyForce(new Vector());
 	}
 	

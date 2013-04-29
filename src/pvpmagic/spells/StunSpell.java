@@ -13,8 +13,10 @@ public class StunSpell extends Spell {
 
 	@Override
 	public void collide(Collision c){
-		c.other(this).root(2000);
-		c.other(this).silence(2000);
+		Unit target = c.other(this);
+		target.root(2000);
+		target.silence(2000);
+		target.changeHealth(-5);
 	}
 	
 	@Override

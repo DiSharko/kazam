@@ -54,6 +54,10 @@ public class Player extends Unit {
 	@Override
 	public void update(){
 		super.update();
+		//health and mana regeneration
+		_health += .125; //5 per second
+		_mana += .125;
+		
 		Vector center = _pos.plus(_size.div(2.0));
 		if (_spellCastingTime > 0) _spellCastingTime--;
 		else if (_spellToCast != null){
