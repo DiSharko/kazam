@@ -68,6 +68,7 @@ public abstract class Unit {
 		for (TimedEffect e : timedEffects) {
 			e.effect();
 			if (e.effectCompleted) {
+				System.out.println("ENDING TIMED SPELL: HP - " + _health + " MANA - " + _mana);
 				completedEffects.add(e);
 			}
 		}
@@ -82,12 +83,14 @@ public abstract class Unit {
 		_mana += amount;
 		if (_mana < 0) _mana = 0;
 		else if (_mana > _maxMana) _mana = _maxMana;
+		//System.out.println("REDUCED MANA BY: " + amount + " MANA: " + _health);
 	}
 	
 	public void changeHealth(double amount) {
 		_health += amount;
 		if (_health < 0) _health = 0;
 		else if (_health > _maxHealth) _health = _maxHealth;
+		//System.out.println("REDUCED HEALTH BY: " + amount + " HP: " + _health);
 	}
 	
 	/**
@@ -96,8 +99,9 @@ public abstract class Unit {
 	 * @param time Duration of effect in milliseconds
 	 */
 	public void changeMana(int amount, long time) {
+		//System.out.println("STARTING MANA SPELL: HP - " + _health + " MANA - " + _mana);
 		double intervals = numberOfIntervals(time);
-		timedEffects.add(new ManaEffect(changePerInterval(amount, intervals), intervals, this));
+		timedEffects.add(new ManaEffect(intervals,changePerInterval(amount, intervals), this));
 	}
 	/**
 	 * Increase/decrease health over time
@@ -105,8 +109,9 @@ public abstract class Unit {
 	 * @param time Duration of effect in milliseconds
 	 */
 	public void changeHealth(int amount, long time) {
+		//System.out.println("STARTING HEALTH SPELL: HP - " + _health + " MANA - " + _mana);
 		double intervals = numberOfIntervals(time);
-		timedEffects.add(new HealthEffect(changePerInterval(amount, intervals), intervals, this));
+		timedEffects.add(new HealthEffect(intervals, changePerInterval(amount, intervals), this));
 	}
 	
 	private double numberOfIntervals(long time) {
