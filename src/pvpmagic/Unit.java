@@ -2,6 +2,8 @@ package pvpmagic;
 
 
 public abstract class Unit {
+	protected double _health;
+	protected double _mana;
 	protected GameData _data;
 	
 	public Vector _pos;
