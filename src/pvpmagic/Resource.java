@@ -31,6 +31,8 @@ public class Resource {
 	public static ArrayList<String> _gameTypes;
 	public static ArrayList<String> _maps;
 
+	public static HashMap<String, Image> _gameImages;
+	public static HashMap<String, Image> _gameImagesAlpha;
 	public static HashMap<String, Image> _ui;
 
 	public Resource(){
@@ -41,6 +43,9 @@ public class Resource {
 		_spells = new ArrayList<String>();
 		_gameTypes = new ArrayList<String>();
 		_maps = new ArrayList<String>();
+		
+		_gameImages = new HashMap<String, Image>();
+		_gameImagesAlpha = new HashMap<String, Image>();
 		
 		_ui = new HashMap<String, Image>();
 
@@ -125,5 +130,11 @@ public class Resource {
 		} catch (NullPointerException e){
 			e.printStackTrace();
 		}
+		
+		try {
+			_gameImagesAlpha.put("viewField", new ImageIcon(Resource.class.getResource("/media/images/viewField.png")).getImage());
+			_gameImagesAlpha.put("rock", new ImageIcon(Resource.class.getResource("/media/images/rock.png")).getImage());
+		} catch (Exception e){System.out.println("rock not found");}
+		
 	}
 }

@@ -14,7 +14,6 @@ public class ShineSpell extends Spell {
 	
 	@Override
 	public void collide(Collision c){
-		//light area of the map that you are in
 		c.other(this).silence(10);
 	}
 	

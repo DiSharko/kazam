@@ -2,8 +2,6 @@ package pvpmagic;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
-//import java.awt.Polygon;
-//import java.awt.Shape;
 
 public class View {
 
@@ -76,7 +74,7 @@ public class View {
 		}
 		java.awt.Shape s = new java.awt.Polygon(xpoints, ypoints, npoints);
 		if (fill && (g != null)) g.fill(s);
-		else if (g != null)  g.draw(s);
+		else if (g != null) g.draw(s);
 	}
 	
 	

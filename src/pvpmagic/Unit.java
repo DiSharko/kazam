@@ -11,15 +11,15 @@ public abstract class Unit {
 	protected Vector _vel = new Vector(0,0), _force = new Vector(0,0);
 	boolean _movable = true;
 	
-	public void applyForce(Vector _force){
-		if (_movable) _force = _force.plus(_force);
+	public void applyForce(Vector force){
+		if (_movable) _force = _force.plus(force);
 	}
 	public void applyForce(float _x, float _y){
 		if (_movable) _force = _force.plus(new Vector(_x, _y));
 	}
 
 	boolean _collidable = true;
-	double _restitution = 0.7;
+	double _restitution = 0.5;
 	double _mass = 1;
 	
 	public double _maxHealth = 100;
