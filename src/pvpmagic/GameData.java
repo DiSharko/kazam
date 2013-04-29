@@ -1,5 +1,12 @@
 package pvpmagic;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import pvpmagic.spells.Spell;
@@ -19,10 +26,21 @@ public class GameData {
 
 	public void setup(SetupScreen s){
 		if (s._currentTab.id.equals("hostTab") ||  s._currentTab.id.equals("dedicatedServer")){
-			for (int i = 0; i < 20; i++){
-				Vector pos = new Vector(Math.random()*600-300, Math.random()*600-300);
-				Vector size = new Vector(Math.random()*50+20, Math.random()*50+20);
-				_units.add(new Rock(this, pos, size));
+			if (s.getElement("mapChooser").name.equals("Random")) {
+				for (int i = 0; i < 20; i++){
+					Vector pos = new Vector(Math.random()*600-300, Math.random()*600-300);
+					Vector size = new Vector(Math.random()*50+20, Math.random()*50+20);
+					_units.add(new Rock(this, pos, size));
+				}
+			}
+			else {
+				System.out.println("map name was not random: "+s.getElement("mapChooser").name);
+				try {
+					readInMap(s.getElement("mapChooser").name);
+				} catch (IOException e) {
+					System.out.println("IOException in setup.");
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -130,6 +148,25 @@ public class GameData {
 			e._pos = e._pos.plus(e._vel);
 			e._force = new Vector(0,0);
 		}
+	}
+	
+	private void readInMap(String mapname) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(new File("media/data/maps/"+mapname+".txt")));
+		String line; String[] linearr;
+		while((line = br.readLine()) != null) {
+			linearr = line.split(",");
+			if(linearr[0].equals("ROCK")) {
+				//line represents a rock: ROCK,500,500,50
+				Vector pos = new Vector(linearr[1], linearr[2]);
+				Vector size = new Vector(Math.random()*50+20, Math.random()*50+20);
+				_units.add(new Rock(this, pos, size));
+			} else if(linearr[0].equals("SPAWN")) {
+				//line represents a spawn point
+			} else {
+				System.out.println("Not enough types in map file being checked for.");
+			}
+		}
+		br.close();
 	}
 
 }
