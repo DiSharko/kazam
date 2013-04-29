@@ -5,8 +5,6 @@ import java.awt.Color;
 import pvpmagic.spells.Spell;
 
 public class Player extends Unit {
-	double _health;
-	double _mana;
 
 	String _characterName;
 	String _playerName;
@@ -36,6 +34,8 @@ public class Player extends Unit {
 
 		_pos = new Vector(-50, -20);
 		_size = new Vector(20, 20);
+		
+		_shape = new Box(this, new Vector(0,0), _size);
 
 		_spells = spellNames;
 		_characterName = characterName;

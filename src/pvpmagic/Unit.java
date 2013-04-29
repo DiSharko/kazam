@@ -27,8 +27,8 @@ public abstract class Unit {
 	double _restitution = 0.7;
 	double _mass = 1;
 	
-	public double _health = 100;
-	
+	protected double _health = 100;
+	protected double _mana = 100;
 	
 	private String _type;
 	public Unit(GameData data, String type){ _data = data; _type = type; }
