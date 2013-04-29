@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import screen.Button;
 import screen.ChooserScreen;
 import screen.InterfaceElement;
@@ -248,9 +250,13 @@ public class SetupScreen extends Screen {
 		} else if (e.id.equals("mapChooser") || e.id.equals("selectedMap")){
 			_holder.showChooser(_mapChooserScreen);
 		} else if (e.id.equals("play")){
-			_holder.transitionToScreen(Transition.FADE, "game");
-			_holder.getScreen("game").setup();
-			((GameScreen)(_holder.getScreen("game"))).configureGame(this);
+			if (getElement("selectedMap").name == null) {
+				JOptionPane.showMessageDialog(null, "Please choose a map!", "PvP Magic", JOptionPane.ERROR_MESSAGE);
+			} else {
+				_holder.transitionToScreen(Transition.FADE, "game");
+				_holder.getScreen("game").setup();
+				((GameScreen)(_holder.getScreen("game"))).configureGame(this);
+			}
 		}
 	}
 

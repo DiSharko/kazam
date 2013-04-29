@@ -62,7 +62,7 @@ public class GameData {
 			if (s != null){
 				Long previousCastTime = caster._spellCastingTimes.get(s._name);
 				if (previousCastTime == null) previousCastTime = (long) 0;
-				if ((System.currentTimeMillis() - previousCastTime) >= s._cooldown) {
+				if ((System.currentTimeMillis() - previousCastTime) >= s._cooldown && caster._mana > s._manaCost) {
 					caster.castSpell(s);
 					caster._spellCastingTimes.put(s._name, System.currentTimeMillis());
 				}

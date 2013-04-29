@@ -98,7 +98,7 @@ public class Player extends Unit {
 		
 		long score = (long) (System.currentTimeMillis() - specificTimeLastCast - spell._cooldown);
 		if (score > 0 && score < 1000) {
-			multiplier += 0.75;
+			multiplier += 2;
 		}
 		
 		changeMana((-1 * multiplier) * spell._manaCost);
