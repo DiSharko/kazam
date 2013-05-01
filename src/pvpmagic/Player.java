@@ -42,6 +42,8 @@ public class Player extends Unit {
 		
 		_characterName = characterName;
 		_playerName = playerName;
+		
+		this._restitution = 0;
 
 	}
 
