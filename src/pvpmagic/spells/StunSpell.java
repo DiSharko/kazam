@@ -13,6 +13,9 @@ public class StunSpell extends Spell {
 		int w = Resource._gameImagesAlpha.get("StunSpell").getWidth(null);
 		int h = Resource._gameImagesAlpha.get("StunSpell").getHeight(null);
 		_size = new Vector(w*scale, h*scale);
+		_name = "Stun";
+		_cooldown = 1000;
+		_manaCost = 10;
 		setVelocity(10);
 	}
 

@@ -1,6 +1,7 @@
 package pvpmagic;
 
 import java.awt.Color;
+import java.util.HashMap;
 
 import pvpmagic.spells.Spell;
 
@@ -8,13 +9,13 @@ public class Player extends Unit {
 	String _characterName;
 	String _playerName;
 
-	Vector _destination;
+	public Vector _destination;
 
 	double _spellCastingTime = 0;
 	Spell _spellToCast = null;
 
 	String[] _spells;
-	long[] _spellCastingTimes;
+	HashMap<String, Long> _spellCastingTimes;
 
 	/* The time at which the most recent spell was cast by
 	   the player. Used for calculation of mana cost. */
@@ -37,7 +38,7 @@ public class Player extends Unit {
 		_shape = new Circle(this, new Vector(0,0), _size.mag());
 
 		_spells = spellNames;
-		_spellCastingTimes = new long[_spells.length];
+		_spellCastingTimes = new HashMap<String, Long>();
 		
 		_characterName = characterName;
 		_playerName = playerName;
@@ -83,17 +84,35 @@ public class Player extends Unit {
 	}
 
 
-	private void decrementMana() {
+	private void decrementMana(Spell spell) {
 		//Change the mechanics of this to make it decrease
 		//exponentially with quick successions of spells
+		Long specificTimeLastCast = _spellCastingTimes.get(spell._name);
+		if (specificTimeLastCast == null) specificTimeLastCast = (long) 0;
+		
+		double multiplier = 1;
+		if (System.currentTimeMillis() - _timeLastCast < 1000) {
+			multiplier += 0.25;
+		}
+		
+		long score = (long) (System.currentTimeMillis() - specificTimeLastCast - spell._cooldown);
+		if (score > 0 && score < 1000) {
+			multiplier += 2;
+		}
+		
+		changeMana((-1 * multiplier) * spell._manaCost);
 	}
 
 	public void castSpell(Spell spell) {
 		_spellToCast = spell;
 		_spellCastingTime = spell._castingTime;
-		decrementMana();
+		decrementMana(spell);
 		_timeLastCast = System.currentTimeMillis();
 		//Need some way of finding out if a spell and unit have crossed paths
 		//Spell.newSpell(_spells[spellIndex], this, pos, dir).hit(target);
+	}
+
+	public void fear(long time) {
+			timedEffects.add(new FearEffect(numberOfIntervals(time), this));		
 	}
 }

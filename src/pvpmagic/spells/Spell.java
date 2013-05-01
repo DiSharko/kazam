@@ -9,10 +9,11 @@ public abstract class Spell extends Unit {
 	protected Player _caster;
 	protected double _damage;
 	public double _cooldown = 0;
+	public double _manaCost = 0;
 	
 	public double _castingTime = 5;
 	
-	String _name;
+	public String _name;
 	
 	double _velocity = 1;
 

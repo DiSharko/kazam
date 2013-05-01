@@ -10,7 +10,10 @@ public class LockSpell extends Spell {
 
 	public LockSpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
+		_name = "Lock";
 		_size = new Vector(10, 10);
+		_cooldown = 1000;
+		_manaCost = 10;
 		setVelocity(4);
 	}
 	

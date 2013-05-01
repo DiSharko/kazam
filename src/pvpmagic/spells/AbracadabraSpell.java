@@ -10,8 +10,10 @@ public class AbracadabraSpell extends Spell {
 
 	public AbracadabraSpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
+		_name = "Abracadabra";
 		_size = new Vector(10, 10);
 		_cooldown = 5000;
+		_manaCost = 10;
 		setVelocity(4);
 	}
 	

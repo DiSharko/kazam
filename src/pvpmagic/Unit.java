@@ -51,7 +51,7 @@ public abstract class Unit {
 	
 	protected Shape _shape;
 	
-	private LinkedList<TimedEffect> timedEffects = new LinkedList<TimedEffect>();
+	protected LinkedList<TimedEffect> timedEffects = new LinkedList<TimedEffect>();
 	private final int MILLISECONDS_PER_TICK = 25;
 	
 	public void collide(Collision c){
@@ -113,7 +113,7 @@ public abstract class Unit {
 		timedEffects.add(new HealthEffect(intervals, changePerInterval(amount, intervals), this));
 	}
 	
-	private double numberOfIntervals(long time) {
+	protected double numberOfIntervals(long time) {
 		return Math.ceil(time/MILLISECONDS_PER_TICK);
 	}
 	
@@ -123,17 +123,18 @@ public abstract class Unit {
 	public void cleanse() {
 		LinkedList<TimedEffect> toBeCleansed = new LinkedList<TimedEffect>();
 		for (TimedEffect e : timedEffects) {
-			if (e.getClass().equals(HealthEffect.class)) {
+			if (e instanceof HealthEffect) {
 				HealthEffect temp = (HealthEffect) e;
 				if (temp._changePerInterval < 0) {
 					toBeCleansed.add(e);
 				}
-			} else if (e.getClass().equals(ManaEffect.class)) {
+			} else if (e instanceof ManaEffect) {
 				ManaEffect temp = (ManaEffect) e;
 				if (temp._changePerInterval < 0) {
 					toBeCleansed.add(e);
 				}
-			} else if (e.getClass().equals(SilenceEffect.class) && e.getClass().equals(RootEffect.class)) {
+			} else if (e instanceof SilenceEffect || e instanceof RootEffect
+					|| e instanceof FearEffect) {
 				toBeCleansed.add(e);
 			}
 		}
