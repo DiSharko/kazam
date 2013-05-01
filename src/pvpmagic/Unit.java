@@ -2,7 +2,6 @@ package pvpmagic;
 
 import java.util.LinkedList;
 
-
 public abstract class Unit {
 	protected GameData _data;
 	
@@ -27,8 +26,8 @@ public abstract class Unit {
 	
 	protected double _health = _maxHealth;
 	protected double _mana = _maxMana;
-		
-	private String _type;
+	
+	public String _type;
 	public Unit(GameData data, String type){ _data = data; _type = type; }
 	public String type(){ return _type; }
 	

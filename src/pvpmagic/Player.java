@@ -34,7 +34,7 @@ public class Player extends Unit {
 		_pos = new Vector(-50, -20);
 		_size = new Vector(20, 20);
 		
-		_shape = new Box(this, new Vector(0,0), _size);
+		_shape = new Circle(this, new Vector(0,0), _size.mag());
 
 		_spells = spellNames;
 		_spellCastingTimes = new long[_spells.length];

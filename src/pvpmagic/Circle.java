@@ -7,9 +7,9 @@ public class Circle extends Shape {
 	public double _radius;
 
 
-	public Circle(Unit parent, float radius){
+	public Circle(Unit parent, Vector relPos, double radius){
 		_parent = parent;
-		_relPos = new Vector(0,0);
+		_relPos = relPos;
 		_radius = radius;
 	}
 

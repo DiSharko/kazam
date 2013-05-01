@@ -19,23 +19,25 @@ public abstract class Spell extends Unit {
 	Vector _dir;
 	
 
-	public Spell(GameData data, Player caster, Vector dir) {
-		super(data, "spell");
+	public Spell(GameData data, String type, Player caster, Vector dir) {
+		super(data, type);
 		_caster = caster;
 		_pos = caster._pos;
-		_dir = dir;
-		setVelocity();
-		_size = new Vector(10, 10);
-		_shape = new Box(this, new Vector(0,0), _size);
+		setup(dir);
 	}
-	public Spell(GameData data, Vector pos, Vector dir){
-		super(data, "spell");
+	public Spell(GameData data, String type, Vector pos, Vector dir){
+		super(data, type);
 		_pos = pos;
+		setup(dir);
+	}
+	public void setup(Vector dir){
 		_dir = dir;
 		setVelocity();
 		_size = new Vector(10, 10);
-		_shape = new Box(this, new Vector(0,0), _size);
+		double radius = _size.mag()/2;
+		_shape = new Circle(this, new Vector(0,0), radius);
 	}
+	
 	public void setVelocity(){
 		_vel = _dir.normalize().mult(_velocity);
 	}

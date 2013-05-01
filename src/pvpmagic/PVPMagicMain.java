@@ -22,8 +22,8 @@ public class PVPMagicMain extends ScreenHolder {
 	
 	@Override
 	public void createWindow(){
-		_w = 800;
-		_h = 800;
+		_w = 700;
+		_h = 700;
 		_minW = 700;
 		_minH = 700;
 		

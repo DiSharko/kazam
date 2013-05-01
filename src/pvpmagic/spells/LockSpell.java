@@ -6,9 +6,10 @@ import pvpmagic.*;
 
 
 public class LockSpell extends Spell {
+	public static String TYPE = "LockSpell";
 
 	public LockSpell(GameData data, Player caster, Vector dir) {
-		super(data, caster, dir);
+		super(data, TYPE, caster, dir);
 		_size = new Vector(10, 10);
 		setVelocity(4);
 	}

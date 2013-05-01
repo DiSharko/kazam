@@ -8,9 +8,10 @@ import pvpmagic.*;
 
 
 public class BurnSpell extends Spell {
+	public static String TYPE = "BurnSpell";
 
 	public BurnSpell(GameData data, Player caster, Vector dir) {
-		super(data, caster, dir);
+		super(data, TYPE, caster, dir);
 		_size = new Vector(10, 10);
 		setVelocity(4);
 	}
