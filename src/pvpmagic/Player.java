@@ -1,7 +1,6 @@
 package pvpmagic;
 
 import java.awt.Color;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import pvpmagic.spells.Spell;
@@ -10,7 +9,7 @@ public class Player extends Unit {
 	String _characterName;
 	String _playerName;
 
-	Vector _destination;
+	public Vector _destination;
 
 	double _spellCastingTime = 0;
 	Spell _spellToCast = null;
@@ -111,5 +110,9 @@ public class Player extends Unit {
 		_timeLastCast = System.currentTimeMillis();
 		//Need some way of finding out if a spell and unit have crossed paths
 		//Spell.newSpell(_spells[spellIndex], this, pos, dir).hit(target);
+	}
+
+	public void fear(long time) {
+			timedEffects.add(new FearEffect(numberOfIntervals(time), this));		
 	}
 }
