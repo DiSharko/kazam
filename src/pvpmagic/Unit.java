@@ -67,7 +67,6 @@ public abstract class Unit {
 		for (TimedEffect e : timedEffects) {
 			e.effect();
 			if (e.effectCompleted) {
-				System.out.println("ENDING TIMED SPELL: HP - " + _health + " MANA - " + _mana);
 				completedEffects.add(e);
 			}
 		}
@@ -87,8 +86,7 @@ public abstract class Unit {
 	
 	public void changeHealth(double amount) {
 		_health += amount;
-		if (_health < 0) _health = 0;
-		else if (_health > _maxHealth) _health = _maxHealth;
+		if (_health > _maxHealth) _health = _maxHealth;
 		//System.out.println("REDUCED HEALTH BY: " + amount + " HP: " + _health);
 	}
 	
