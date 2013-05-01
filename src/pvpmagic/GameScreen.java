@@ -47,10 +47,10 @@ public class GameScreen extends Screen {
 	public void configureGame(SetupScreen s){
 		_data.setup(s);
 		_focus = _data._players.get(0);
-		_healthBar = new Bar("health", new Vector(400, 20), _focus._maxHealth);
+		_healthBar = new Bar("health", new Vector(400, 15), _focus._maxHealth);
 		_interfaceElements.add(_healthBar);
 		
-		_manaBar = new Bar("mana", new Vector(400, 20), _focus._maxMana);
+		_manaBar = new Bar("mana", new Vector(400, 15), _focus._maxMana);
 		_manaBar.setColorRange(new Color(0.5f, 0.5f, 1f), null, null, null);
 		_interfaceElements.add(_manaBar);
 		
@@ -170,10 +170,10 @@ public class GameScreen extends Screen {
 		for (InterfaceElement e : _interfaceElements){
 			if (e.id.equals("health")){
 				e.x = _holder._w/2-e.w/2;
-				e.y = _holder._h-60;
+				e.y = _holder._h-e.h*2-10;
 			} else if (e.id.equals("mana")){
 				e.x = _holder._w/2-e.w/2;
-				e.y = _holder._h-30;
+				e.y = _holder._h-e.h-5;
 			}
 		}
 		

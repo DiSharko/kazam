@@ -6,9 +6,10 @@ import pvpmagic.*;
 
 
 public class RootSpell extends Spell {
+	public static String TYPE = "RootSpell";
 
 	public RootSpell(GameData data, Player caster, Vector dir) {
-		super(data, caster, dir);
+		super(data, TYPE, caster, dir);
 		_name = "Root";
 		_size = new Vector(10, 10);
 		_cooldown = 1000;

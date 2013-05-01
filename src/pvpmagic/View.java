@@ -49,13 +49,13 @@ public class View {
 	public void drawCircle(Vector pos, double r){
 		pos = gameToScreenPoint(pos);
 		r = r*_scale;
-		g.drawOval((int)(pos.x), (int)(pos.y), (int)r, (int)r);
+		g.drawOval((int)(pos.x), (int)(pos.y), (int)r*2, (int)r*2);
 	}
 	
 	public void fillCircle(Vector pos, double r){
 		pos = gameToScreenPoint(pos);
 		r = r*_scale;
-		g.fillOval((int)(pos.x), (int)(pos.y), (int)r, (int)r);
+		g.fillOval((int)(pos.x), (int)(pos.y), (int)r*2, (int)r*2);
 	}
 	
 	public void drawPolygon(Polygon p){
@@ -99,6 +99,16 @@ public class View {
 
 	public void setColor(Color color) {
 		g.setColor(color);
-		
+	}
+	
+	double _lastAngle;
+	Vector _lastFocus;
+	public void rotate(Vector angle, Vector focus){
+		_lastAngle = -Math.atan(angle.x/angle.y)+(angle.y > 0 ? Math.PI : 0);
+		_lastFocus = gameToScreenPoint(focus);
+		g.rotate(_lastAngle, _lastFocus.x, _lastFocus.y);
+	}
+	public void unrotate(){
+		g.rotate(-_lastAngle, _lastFocus.x, _lastFocus.y);
 	}
 }

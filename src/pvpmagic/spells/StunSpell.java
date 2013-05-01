@@ -1,16 +1,21 @@
 package pvpmagic.spells;
 
-import java.awt.Color;
 import pvpmagic.*;
 
 public class StunSpell extends Spell {
+	public static String TYPE = "StunSpell";
+	double scale = .2;
+	
 	
 	public StunSpell(GameData data, Player caster, Vector dir){
-		super(data, caster, dir);
+		super(data, TYPE, caster, dir);
+		_cooldown = 1000;
+		int w = Resource._gameImagesAlpha.get("StunSpell").getWidth(null);
+		int h = Resource._gameImagesAlpha.get("StunSpell").getHeight(null);
+		_size = new Vector(w*scale, h*scale);
 		_name = "Stun";
 		_cooldown = 1000;
 		_manaCost = 10;
-		_size = new Vector(10, 10);
 		setVelocity(10);
 	}
 
@@ -24,7 +29,9 @@ public class StunSpell extends Spell {
 	
 	@Override
 	public void draw(View v){
-		v.getGraphics().setColor(Color.green);
-		v.fillRect(_pos, _size);
+//		System.out.println(StunSpell._type + ", "+_type);
+		v.rotate(_vel, _pos.plus(5));
+		v.drawImage(Resource._gameImagesAlpha.get("StunSpell"), _pos, _size);
+		v.unrotate();
 	}
 }

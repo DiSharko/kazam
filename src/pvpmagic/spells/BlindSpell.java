@@ -6,9 +6,10 @@ import pvpmagic.*;
 
 
 public class BlindSpell extends Spell {
+	public static String TYPE = "BlindSpell";
 
 	public BlindSpell(GameData data, Player caster, Vector dir) {
-		super(data, caster, dir);
+		super(data, TYPE, caster, dir);
 		_name = "Blind";
 		_size = new Vector(10, 10);
 		_cooldown = 1000;
