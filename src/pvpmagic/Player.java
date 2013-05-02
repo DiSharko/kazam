@@ -128,6 +128,7 @@ public class Player extends Unit {
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
 	public void dropFlag() {
 		if (_flag == null) {
@@ -143,6 +144,8 @@ public class Player extends Unit {
 		}
 	}
 
+=======
+>>>>>>> c6956d54d32e86bec6e3cbce5da881c58dc97a9f
 =======
 >>>>>>> c6956d54d32e86bec6e3cbce5da881c58dc97a9f
 	public void fear(long time) {
