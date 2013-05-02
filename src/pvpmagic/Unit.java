@@ -55,10 +55,10 @@ public abstract class Unit {
 	private final int MILLISECONDS_PER_TICK = 25;
 	
 	public void collide(Collision c){
-		Unit u = c.other(this);
-		if (u._movable){
-			u._pos = u._pos.plus(c.mtv(u).div(2));
-		}
+//		Unit u = c.other(this);
+//		if (u._movable){
+//			u._pos = u._pos.plus(c.mtv(u).div(2));
+//		}
 	}
 	
 	public void update(){
@@ -143,7 +143,10 @@ public abstract class Unit {
 		return true;
 	}
 	
-	public abstract void fromNet(String networkString);
-	
-	public abstract String toNet();
+	public String toNet(){
+		return "";
+	}
+	public void fromNet(String s){
+		
+	}
 }

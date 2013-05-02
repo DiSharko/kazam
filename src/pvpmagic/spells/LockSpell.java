@@ -20,9 +20,10 @@ public class LockSpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
-		//TODO: make door object and do shit with that 
-		//if (target instanceof door)
-			//u.lock();
+		if (target.type().equals("door")) {
+			Door door = (Door) target;
+			door.lock();
+		}
 	}
 	
 	@Override

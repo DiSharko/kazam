@@ -13,16 +13,19 @@ public class GameData {
 	ArrayList<Unit> _units;
 
 	ArrayList<Player> _players;
+	ArrayList<Player> _team1;
+	ArrayList<Player> _team2;
+	
 
 	public GameData(){
 		_units = new ArrayList<Unit>();
 		_players = new ArrayList<Player>();
 
 	}
-
+	
 	public void setup(SetupScreen s){
 		if (s._currentTab.id.equals("hostTab") ||  s._currentTab.id.equals("dedicatedServer")){
-			if (s.getElement("selectedMap").name.equals("Random")) {
+			if (s.getElement("selectedMap").name == null || s.getElement("selectedMap").name.equals("Random")) {
 				for (int i = 0; i < 20; i++){
 					Vector pos = new Vector(Math.random()*600-300, Math.random()*600-300);
 					
@@ -79,9 +82,6 @@ public class GameData {
 
 	public void update(){
 
-		collideEntities();
-		applyMovement();
-
 		// Deleting must be separate, after all updates and collisions
 		for (int i = 0; i < _units.size(); i++){
 			Unit u = _units.get(i);
@@ -93,6 +93,11 @@ public class GameData {
 				u.update();
 			}
 		}
+		
+		// THIS ORDER IS NECESSARY so that players don't get stuck in walls
+		// as they 
+		applyMovement();
+		collideEntities();
 	}
 
 
@@ -154,18 +159,26 @@ public class GameData {
 	
 	private void readInMap(String mapname) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/data/maps/"+mapname+".txt")));
-		//BufferedReader br = new BufferedReader(new FileReader(new File("/media/data/maps/"+mapname+".txt")));
 		String line; String[] linearr;
 		while((line = br.readLine()) != null) {
 			linearr = line.split(",");
 			if(linearr[0].equals("ROCK")) {
-				//line represents a rock: ROCK,500,500,50
+				//line represents a rock: ROCK,500,500,150
 				Vector pos = new Vector(Double.parseDouble(linearr[1]), Double.parseDouble(linearr[2]));
 				
 				_units.add(new Rock(this, pos, Double.parseDouble(linearr[3])));
 
 			} else if(linearr[0].equals("SPAWN")) {
 				//line represents a spawn point
+			} else if(linearr[0].equals("DOOR")) {
+				//line represents a door: DOOR,500,500,250,250,50
+				Vector lockpos = new Vector(Double.parseDouble(linearr[1]), Double.parseDouble(linearr[2]));
+				Vector openpos = new Vector(Double.parseDouble(linearr[3]), Double.parseDouble(linearr[4]));
+				_units.add(new Door(this, lockpos, openpos, Double.parseDouble(linearr[5])));
+			} else if(linearr[0].equals("FLAG")) {
+				//line represents a flag: FLAG,500,500,50
+				Vector pos = new Vector(Double.parseDouble(linearr[1]), Double.parseDouble(linearr[2]));
+				_units.add(new Flag(this, pos, Double.parseDouble(linearr[3])));
 			} else {
 				System.out.println("Not enough types in map file being checked for.");
 			}
