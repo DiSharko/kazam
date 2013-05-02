@@ -117,4 +117,16 @@ public class Player extends Unit {
 	public void fear(long time) {
 			timedEffects.add(new FearEffect(numberOfIntervals(time), this));		
 	}
+
+	@Override
+	public void fromNet(String networkString) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String toNet() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

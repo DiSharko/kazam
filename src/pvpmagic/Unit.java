@@ -142,4 +142,8 @@ public abstract class Unit {
 	public boolean canCollideWith(Unit u){
 		return true;
 	}
+	
+	public abstract void fromNet(String networkString);
+	
+	public abstract String toNet();
 }

@@ -78,6 +78,7 @@ public class Vector {
 	public String toString(){
 		return "("+x+","+y+")";
 	}
+	
 	@Override
 	public boolean equals(Object o){
 		if (o instanceof Vector){
@@ -85,5 +86,9 @@ public class Vector {
 			return (x == v.x && y == v.y);
 		}
 		return false;
+	}
+	
+	public String toNet() {
+		return x + " " + y;
 	}
 }

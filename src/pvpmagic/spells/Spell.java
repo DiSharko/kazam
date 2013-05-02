@@ -77,4 +77,14 @@ public abstract class Spell extends Unit {
 		if (u == _caster && time < 10) return false;
 		return true;
 	}
+	
+	@Override
+	public void fromNet(String networkString) {
+		
+	}
+	
+	@Override
+	public String toNet() {
+		return "d\t" + _dir.toNet();
+	}
 }
