@@ -1,3 +1,7 @@
 0 0 600 600 viewField
 0 600 145 117 rock
 0 717 93 93 StunIcon
+600 0 52 160 StunSpell
+600 160 74 105 BlindSpell
+600 266 90 85 RootSpell
+600 350 66 293 BurnSpell

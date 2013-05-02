@@ -5,9 +5,10 @@ import java.awt.Color;
 import pvpmagic.*;
 
 public class RejuvenateSpell extends Spell {
+	public static String TYPE = "RejuvenateSpell";
 
 	public RejuvenateSpell(GameData data, Player caster, Vector dir) {
-		super(data, caster, dir);
+		super(data, TYPE, caster, dir);
 		_name = "Rejuvenate";
 		_size = new Vector(10, 10);
 		_cooldown = 1000;

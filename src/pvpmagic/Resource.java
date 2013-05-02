@@ -136,9 +136,9 @@ public class Resource {
 			Graphics _g = _sheet.getGraphics();
 			_g.drawImage(_tempSheet, 0, 0, null);
 			_g.dispose();
-
+			
 			BufferedReader _file = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/images/gameImagesAlpha.txt")));
-
+			
 			String _line;
 			while ((_line = _file.readLine()) != null){
 				try {

@@ -2,7 +2,6 @@ package pvpmagic;
 
 import java.util.LinkedList;
 
-
 public abstract class Unit {
 	protected GameData _data;
 	
@@ -27,8 +26,8 @@ public abstract class Unit {
 	
 	protected double _health = _maxHealth;
 	protected double _mana = _maxMana;
-		
-	private String _type;
+	
+	public String _type;
 	public Unit(GameData data, String type){ _data = data; _type = type; }
 	public String type(){ return _type; }
 	
@@ -52,14 +51,14 @@ public abstract class Unit {
 	
 	protected Shape _shape;
 	
-	private LinkedList<TimedEffect> timedEffects = new LinkedList<TimedEffect>();
+	protected LinkedList<TimedEffect> timedEffects = new LinkedList<TimedEffect>();
 	private final int MILLISECONDS_PER_TICK = 25;
 	
 	public void collide(Collision c){
-		Unit u = c.other(this);
-		if (u._movable){
-			u._pos = u._pos.plus(c.mtv(u).div(2));
-		}
+//		Unit u = c.other(this);
+//		if (u._movable){
+//			u._pos = u._pos.plus(c.mtv(u).div(2));
+//		}
 	}
 	
 	public void update(){
@@ -68,7 +67,6 @@ public abstract class Unit {
 		for (TimedEffect e : timedEffects) {
 			e.effect();
 			if (e.effectCompleted) {
-				System.out.println("ENDING TIMED SPELL: HP - " + _health + " MANA - " + _mana);
 				completedEffects.add(e);
 			}
 		}
@@ -88,8 +86,7 @@ public abstract class Unit {
 	
 	public void changeHealth(double amount) {
 		_health += amount;
-		if (_health < 0) _health = 0;
-		else if (_health > _maxHealth) _health = _maxHealth;
+		if (_health > _maxHealth) _health = _maxHealth;
 		//System.out.println("REDUCED HEALTH BY: " + amount + " HP: " + _health);
 	}
 	
@@ -114,7 +111,7 @@ public abstract class Unit {
 		timedEffects.add(new HealthEffect(intervals, changePerInterval(amount, intervals), this));
 	}
 	
-	private double numberOfIntervals(long time) {
+	protected double numberOfIntervals(long time) {
 		return Math.ceil(time/MILLISECONDS_PER_TICK);
 	}
 	
@@ -124,17 +121,18 @@ public abstract class Unit {
 	public void cleanse() {
 		LinkedList<TimedEffect> toBeCleansed = new LinkedList<TimedEffect>();
 		for (TimedEffect e : timedEffects) {
-			if (e.getClass().equals(HealthEffect.class)) {
+			if (e instanceof HealthEffect) {
 				HealthEffect temp = (HealthEffect) e;
 				if (temp._changePerInterval < 0) {
 					toBeCleansed.add(e);
 				}
-			} else if (e.getClass().equals(ManaEffect.class)) {
+			} else if (e instanceof ManaEffect) {
 				ManaEffect temp = (ManaEffect) e;
 				if (temp._changePerInterval < 0) {
 					toBeCleansed.add(e);
 				}
-			} else if (e.getClass().equals(SilenceEffect.class) && e.getClass().equals(RootEffect.class)) {
+			} else if (e instanceof SilenceEffect || e instanceof RootEffect
+					|| e instanceof FearEffect) {
 				toBeCleansed.add(e);
 			}
 		}
@@ -143,5 +141,12 @@ public abstract class Unit {
 	
 	public boolean canCollideWith(Unit u){
 		return true;
+	}
+	
+	public String toNet(){
+		return "";
+	}
+	public void fromNet(String s){
+		
 	}
 }

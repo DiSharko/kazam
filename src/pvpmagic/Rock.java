@@ -4,8 +4,11 @@ import java.util.ArrayList;
 
 
 public class Rock extends Unit {
+	public static String TYPE = "Rock";
+
+	
 	public Rock(GameData data, Vector pos, double size){
-		super(data, "rock");
+		super(data, TYPE);
 		_pos = pos;
 		_size = new Vector(145, 117).normalize().mult(size);
 		_movable = false;

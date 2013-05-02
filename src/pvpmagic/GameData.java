@@ -22,13 +22,14 @@ public class GameData {
 		_players = new ArrayList<Player>();
 
 	}
-
+	
 	public void setup(SetupScreen s){
 		if (s._currentTab.id.equals("hostTab") ||  s._currentTab.id.equals("dedicatedServer")){
-			if (s.getElement("selectedMap").name.equals("Random")) {
+			if (s.getElement("selectedMap").name == null || s.getElement("selectedMap").name.equals("Random")) {
 				for (int i = 0; i < 20; i++){
 					Vector pos = new Vector(Math.random()*600-300, Math.random()*600-300);
-					_units.add(new Rock(this, pos,  Math.random()*50+20));
+					
+					_units.add(new Rock(this, pos, Math.random()*50+20));
 				}
 			}
 			else {
@@ -51,9 +52,13 @@ public class GameData {
 			}
 
 			Player p = new Player(this, characterName, null, spells);
+			Player dummy = new Player(this, "bob", "bobby", null);
 
 			_players.add(p);
+			_players.add(dummy);
 			_units.add(p);
+			_units.add(dummy);
+			dummy._pos = new Vector(-50, -30);
 
 		}
 	}
@@ -64,7 +69,7 @@ public class GameData {
 			if (s != null){
 				Long previousCastTime = caster._spellCastingTimes.get(s._name);
 				if (previousCastTime == null) previousCastTime = (long) 0;
-				if ((System.currentTimeMillis() - previousCastTime) >= s._cooldown) {
+				if ((System.currentTimeMillis() - previousCastTime) >= s._cooldown && caster._mana > s._manaCost) {
 					caster.castSpell(s);
 					caster._spellCastingTimes.put(s._name, System.currentTimeMillis());
 				}
@@ -77,9 +82,6 @@ public class GameData {
 
 	public void update(){
 
-		collideEntities();
-		applyMovement();
-
 		// Deleting must be separate, after all updates and collisions
 		for (int i = 0; i < _units.size(); i++){
 			Unit u = _units.get(i);
@@ -91,6 +93,11 @@ public class GameData {
 				u.update();
 			}
 		}
+		
+		// THIS ORDER IS NECESSARY so that players don't get stuck in walls
+		// as they 
+		applyMovement();
+		collideEntities();
 	}
 
 
@@ -158,7 +165,9 @@ public class GameData {
 			if(linearr[0].equals("ROCK")) {
 				//line represents a rock: ROCK,500,500,150
 				Vector pos = new Vector(Double.parseDouble(linearr[1]), Double.parseDouble(linearr[2]));
+				
 				_units.add(new Rock(this, pos, Double.parseDouble(linearr[3])));
+
 			} else if(linearr[0].equals("SPAWN")) {
 				//line represents a spawn point
 			} else if(linearr[0].equals("DOOR")) {

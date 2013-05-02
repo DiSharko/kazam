@@ -1,7 +1,6 @@
 package pvpmagic;
 
 import java.awt.Color;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import pvpmagic.spells.Spell;
@@ -10,7 +9,7 @@ public class Player extends Unit {
 	String _characterName;
 	String _playerName;
 
-	Vector _destination;
+	public Vector _destination;
 
 	double _spellCastingTime = 0;
 	Spell _spellToCast = null;
@@ -40,13 +39,15 @@ public class Player extends Unit {
 		_pos = new Vector(-50, -20);
 		_size = new Vector(20, 20);
 		
-		_shape = new Box(this, new Vector(0,0), _size);
+		_shape = new Circle(this, new Vector(0,0), _size.mag()/2);
 
 		_spells = spellNames;
 		_spellCastingTimes = new HashMap<String, Long>();
 		
 		_characterName = characterName;
 		_playerName = playerName;
+		
+		this._restitution = 0;
 
 	}
 
@@ -111,7 +112,7 @@ public class Player extends Unit {
 		
 		long score = (long) (System.currentTimeMillis() - specificTimeLastCast - spell._cooldown);
 		if (score > 0 && score < 1000) {
-			multiplier += 0.5;
+			multiplier += 2;
 		}
 		
 		changeMana((-1 * multiplier) * spell._manaCost);
@@ -125,6 +126,7 @@ public class Player extends Unit {
 		//Need some way of finding out if a spell and unit have crossed paths
 		//Spell.newSpell(_spells[spellIndex], this, pos, dir).hit(target);
 	}
+<<<<<<< HEAD
 	
 	public void dropFlag() {
 		if (_flag == null) {
@@ -138,5 +140,10 @@ public class Player extends Unit {
 			_data._units.add(_flag);
 			_flag = null;
 		}
+=======
+
+	public void fear(long time) {
+			timedEffects.add(new FearEffect(numberOfIntervals(time), this));		
+>>>>>>> c6956d54d32e86bec6e3cbce5da881c58dc97a9f
 	}
 }

@@ -6,9 +6,10 @@ import pvpmagic.*;
 
 
 public class AbracadabraSpell extends Spell {
+	public static String TYPE = "AbracadabraSpell";
 
 	public AbracadabraSpell(GameData data, Player caster, Vector dir) {
-		super(data, caster, dir);
+		super(data, TYPE, caster, dir);
 		_name = "Abracadabra";
 		_size = new Vector(10, 10);
 		_cooldown = 5000;
