@@ -126,7 +126,7 @@ public class Player extends Unit {
 		//Need some way of finding out if a spell and unit have crossed paths
 		//Spell.newSpell(_spells[spellIndex], this, pos, dir).hit(target);
 	}
-<<<<<<< HEAD
+
 	
 	public void dropFlag() {
 		if (_flag == null) {
@@ -140,10 +140,9 @@ public class Player extends Unit {
 			_data._units.add(_flag);
 			_flag = null;
 		}
-=======
+	}
 
 	public void fear(long time) {
 			timedEffects.add(new FearEffect(numberOfIntervals(time), this));		
->>>>>>> c6956d54d32e86bec6e3cbce5da881c58dc97a9f
 	}
 }
