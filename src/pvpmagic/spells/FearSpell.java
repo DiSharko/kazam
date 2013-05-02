@@ -32,7 +32,7 @@ public class FearSpell extends Spell {
 	
 	@Override
 	public void draw(View v){
-		v.getGraphics().setColor(Color.yellow);
+		v.getGraphics().setColor(Color.pink);
 		v.fillRect(_pos, _size);
 	}
 

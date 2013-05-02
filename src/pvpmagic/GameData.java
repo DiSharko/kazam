@@ -49,9 +49,13 @@ public class GameData {
 			}
 
 			Player p = new Player(this, characterName, null, spells);
+			Player dummy = new Player(this, "bob", "bobby", null);
 
 			_players.add(p);
+			_players.add(dummy);
 			_units.add(p);
+			_units.add(dummy);
+			dummy._pos = new Vector(-50, -30);
 
 		}
 	}
