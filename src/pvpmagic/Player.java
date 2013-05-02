@@ -16,6 +16,10 @@ public class Player extends Unit {
 	Spell _spellToCast = null;
 
 	String[] _spells;
+	//ArrayList<Carryable> inventory = new ArrayList<Carryable>();
+	Flag _flag = null;
+	Vector _flagSize = new Vector(40,40);
+	
 	HashMap<String, Long> _spellCastingTimes;
 
 	/* The time at which the most recent spell was cast by
@@ -48,8 +52,13 @@ public class Player extends Unit {
 
 	@Override
 	public void draw(View v){
-		v.getGraphics().setColor(Color.blue);
-		v.fillRect(_pos, _size);
+		if (_flag == null) {
+			v.getGraphics().setColor(Color.blue);
+			v.fillRect(_pos, _size);
+		} else {
+			v.getGraphics().setColor(Color.blue);
+			v.fillRect(_pos, _flagSize);
+		}
 	}
 
 	public void stop(){
@@ -60,6 +69,10 @@ public class Player extends Unit {
 	@Override
 	public void update(){
 		super.update();
+		
+		//flag-stun checking
+		if(_isRooted && _isSilenced)
+			dropFlag();
 		
 		//health and mana regeneration
 		changeHealth(0.125);
@@ -111,5 +124,19 @@ public class Player extends Unit {
 		_timeLastCast = System.currentTimeMillis();
 		//Need some way of finding out if a spell and unit have crossed paths
 		//Spell.newSpell(_spells[spellIndex], this, pos, dir).hit(target);
+	}
+	
+	public void dropFlag() {
+		if (_flag == null) {
+			return; //nothing happens
+		} else {
+			double newx = 50 - Math.random()*101;
+			double newy = 50 - Math.random()*101;
+			Vector newpos = new Vector(this._pos.x + newx,this._pos.y + newy);
+			_flag._pos = newpos;
+			_flag._delete = false;
+			_data._units.add(_flag);
+			_flag = null;
+		}
 	}
 }

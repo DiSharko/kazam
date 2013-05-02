@@ -58,6 +58,8 @@ public abstract class Spell extends Unit {
 		else if (name.equals("Blind")) { return new BlindSpell(data, caster, dir); }
 		else if (name.equals("Push")) { return new PushSpell(data, caster, dir); }
 		else if (name.equals("Abracadabra")) { return new AbracadabraSpell(data, caster, dir); }
+		else if (name.equals("Open")) { return new OpenSpell(data, caster, dir); }
+		else if (name.equals("Lock")) { return new LockSpell(data, caster, dir); }
 
 		System.out.println("Spell name \""+name+"\" not found!");
 		return null;
