@@ -19,10 +19,10 @@ public class GameData {
 		_players = new ArrayList<Player>();
 
 	}
-
+	
 	public void setup(SetupScreen s){
 		if (s._currentTab.id.equals("hostTab") ||  s._currentTab.id.equals("dedicatedServer")){
-			if (s.getElement("selectedMap").name.equals("Random")) {
+			if (s.getElement("selectedMap").name == null || s.getElement("selectedMap").name.equals("Random")) {
 				for (int i = 0; i < 20; i++){
 					Vector pos = new Vector(Math.random()*600-300, Math.random()*600-300);
 					
@@ -75,9 +75,6 @@ public class GameData {
 
 	public void update(){
 
-		collideEntities();
-		applyMovement();
-
 		// Deleting must be separate, after all updates and collisions
 		for (int i = 0; i < _units.size(); i++){
 			Unit u = _units.get(i);
@@ -89,6 +86,11 @@ public class GameData {
 				u.update();
 			}
 		}
+		
+		// THIS ORDER IS NECESSARY so that players don't get stuck in walls
+		// as they 
+		applyMovement();
+		collideEntities();
 	}
 
 
