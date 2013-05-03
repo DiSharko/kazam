@@ -1,0 +1,10 @@
+viewField
+rock
+StunIcon
+StunSpell
+RootSpell
+BurnSpell
+hwall
+vwall
+player1_back
+flag

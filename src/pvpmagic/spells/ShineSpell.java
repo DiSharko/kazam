@@ -11,10 +11,10 @@ public class ShineSpell extends Spell {
 		super(data, TYPE, caster, dir);
 		_name = "Shine";
 		_size = new Vector(10, 10);
+		setProperties(_size, 4);
+		
 		_cooldown = 1000;
 		_manaCost = 10;
-		setVelocity(4);
-		setPosition();
 	}
 	
 	@Override

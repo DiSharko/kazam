@@ -20,19 +20,28 @@ public abstract class Spell extends Unit {
 	Vector _dir;
 	
 
-	public Spell(GameData data, String type, Player caster, Vector dir) {
+	public Spell(GameData data, String type, Player caster, Vector target) {
 		super(data, type);
+		_appliesRestitution = false;
 		_caster = caster;
-		_dir = dir;
-//		_shape = new Circle(this, new Vector(0,0), 100);
-//		setPosition();
+		_shape = new Circle(this, new Vector(0,0), 10);
+		
+		_dir = target;
+		// Set initial guess at position for use in dir calculation
 	}
-	public void setPosition(){
-		_pos = _caster._pos.plus(_caster._size.div(2)).minus(_size.div(2)).plus(_vel.normalize().mult(_caster._size.mag()));
-	}
-	public void setVelocity(double velocity){
+	
+	public void setProperties(Vector size, double velocity){
+		_size = size;
 		_velocity = velocity;
-		_vel = _dir.normalize().mult(_velocity);
+
+		// Spell trajectory starts at center of player
+		_pos = _caster._pos.plus(_caster._size.div(2)).minus(_size.div(2));
+		_dir = _dir.minus(_pos).normalize();
+
+		_vel = _dir.mult(_velocity);
+
+		// Adjust spell to start outside player
+		_pos = _caster._pos.plus(_caster._size.div(2)).minus(_size.div(2)).plus(_vel.normalize().mult(_caster._size));
 	}
 	
 	public static Spell newSpell(GameData data, String name, Player caster, Vector dir){

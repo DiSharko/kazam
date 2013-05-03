@@ -12,13 +12,12 @@ public class RootSpell extends Spell {
 	public RootSpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
 		_name = "Root";
-		Image sprite = Resource._gameImagesAlpha.get("RootSpell");
+		Image sprite = Resource._gameImages.get("RootSpell");
 		_size = new Vector(sprite.getWidth(null)*scale, sprite.getHeight(null)*scale);
 		_cooldown = 1000;
 		_manaCost = 10;
 		_shape = new Circle(this, new Vector(0, 0), 12);
-		setVelocity(10);
-		setPosition();
+		setProperties(_size, 10);
 	}
 	
 	@Override
@@ -31,7 +30,7 @@ public class RootSpell extends Spell {
 	@Override
 	public void draw(View v){
 		v.rotate(_vel, _pos.plus(10));
-		v.drawImage(Resource._gameImagesAlpha.get("RootSpell"), _pos, _size);
+		v.drawImage(Resource._gameImages.get("RootSpell"), _pos, _size);
 		v.unrotate();
 	}
 }

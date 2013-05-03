@@ -1,11 +1,14 @@
 package pvpmagic;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.util.HashMap;
 
 import pvpmagic.spells.Spell;
 
 public class Player extends Unit {
+	public static String TYPE = "player";
+	
 	String _characterName;
 	String _playerName;
 
@@ -29,7 +32,7 @@ public class Player extends Unit {
 
 
 	public Player(GameData data, String characterName, String playerName, String[] spellNames){
-		super(data, "player");
+		super(data, TYPE);
 		_canBeRooted = true;
 		_canBeSilenced = true;
 
@@ -39,9 +42,11 @@ public class Player extends Unit {
 		_mana = 100;
 
 		_pos = new Vector(-50, -20);
-		_size = new Vector(20, 20);
+		Image sprite = Resource._gameImages.get("player1_back");
+		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(80);
 		
-		_shape = new Circle(this, new Vector(0,0), _size.mag()/2);
+		double hitBoxScale = 0.9;
+		_shape = new Box(this, _size.mult(1-hitBoxScale).div(2), _size.mult(hitBoxScale));
 
 		_spells = spellNames;
 		_spellCastingTimes = new HashMap<String, Long>();
@@ -50,18 +55,20 @@ public class Player extends Unit {
 		_playerName = playerName;
 		
 		this._restitution = 0;
+		
+		_appliesFriction = true;
 
 	}
 
 	@Override
 	public void draw(View v){
-		if (_flag == null) {
-			v.getGraphics().setColor(Color.blue);
-			v.fillRect(_pos, _size);
-		} else {
-			v.getGraphics().setColor(Color.blue);
-			v.fillRect(_pos, _flagSize);
+		if (_flag != null) {
+			Vector flagPos = _pos.plus(40, 0);
+			v.rotate(new Vector(1.5, -1), flagPos);
+			v.drawImage(Resource._gameImages.get("flag"), flagPos, _flag._size.mult(0.8));
+			v.unrotate();
 		}
+		v.drawImage(Resource._gameImages.get("player1_back"), _pos, _size);
 	}
 
 	public void stop(){
