@@ -15,6 +15,7 @@ public class CloneSpell extends Spell {
 		_cooldown = 1000;
 		_manaCost = 10;
 		setVelocity(4);
+		setPosition();
 	}
 	
 	@Override

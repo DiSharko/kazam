@@ -1,22 +1,24 @@
 package pvpmagic.spells;
 
-import java.awt.Color;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import pvpmagic.*;
 
 
 public class BurnSpell extends Spell {
 	public static String TYPE = "BurnSpell";
 
+	double _scale = .2;
+	
 	public BurnSpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
 		_name = "Burn";
-		_size = new Vector(10, 10);
+		double w = Resource._gameImagesAlpha.get("BurnSpell").getWidth(null);
+		double h = Resource._gameImagesAlpha.get("BurnSpell").getHeight(null);
+		_size = new Vector(w*_scale, h*_scale);
+		_shape = new Circle(this, new Vector(0, 0), 8);
 		_cooldown = 1000;
 		_manaCost = 10;
-		setVelocity(4);
+		setVelocity(15);
+		setPosition();
 	}
 	
 
@@ -29,7 +31,8 @@ public class BurnSpell extends Spell {
 	
 	@Override
 	public void draw(View v){
-		v.getGraphics().setColor(Color.red);
-		v.fillRect(_pos, _size);
+		v.rotate(_vel, _pos.plus(_shape.getBounds()._size.x/2));
+		v.drawImage(Resource._gameImagesAlpha.get("BurnSpell"), _pos, _size);
+		v.unrotate();
 	}
 }

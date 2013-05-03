@@ -161,10 +161,11 @@ public class GameData {
 		BufferedReader br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/data/maps/"+mapname+".txt")));
 		String line; String[] linearr;
 		while((line = br.readLine()) != null) {
+			//FOR NOW, WE ARE ALWAYS MULTIPLYING Y BY NEGATIVE, EVERY SINGLE ONE
 			linearr = line.split(",");
 			if(linearr[0].equals("ROCK")) {
 				//line represents a rock: ROCK,500,500,150
-				Vector pos = new Vector(Double.parseDouble(linearr[1]), Double.parseDouble(linearr[2]));
+				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
 				
 				_units.add(new Rock(this, pos, Double.parseDouble(linearr[3])));
 
@@ -172,12 +173,12 @@ public class GameData {
 				//line represents a spawn point
 			} else if(linearr[0].equals("DOOR")) {
 				//line represents a door: DOOR,500,500,250,250,50
-				Vector lockpos = new Vector(Double.parseDouble(linearr[1]), Double.parseDouble(linearr[2]));
-				Vector openpos = new Vector(Double.parseDouble(linearr[3]), Double.parseDouble(linearr[4]));
+				Vector lockpos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
+				Vector openpos = new Vector(Double.parseDouble(linearr[3]), -1.0*Double.parseDouble(linearr[4]));
 				_units.add(new Door(this, lockpos, openpos, Double.parseDouble(linearr[5])));
 			} else if(linearr[0].equals("FLAG")) {
 				//line represents a flag: FLAG,500,500,50
-				Vector pos = new Vector(Double.parseDouble(linearr[1]), Double.parseDouble(linearr[2]));
+				Vector pos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
 				_units.add(new Flag(this, pos, Double.parseDouble(linearr[3])));
 			} else {
 				System.out.println("Not enough types in map file being checked for.");

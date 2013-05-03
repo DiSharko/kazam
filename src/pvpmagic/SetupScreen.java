@@ -51,7 +51,7 @@ public class SetupScreen extends Screen {
 	public void switchInto(){
 		_holder.setFPS(25);
 	}
-	
+
 	@Override
 	public void setup() {
 		_tabHeight = Resource._borderHeight+55;
@@ -250,13 +250,13 @@ public class SetupScreen extends Screen {
 		} else if (e.id.equals("mapChooser") || e.id.equals("selectedMap")){
 			_holder.showChooser(_mapChooserScreen);
 		} else if (e.id.equals("play")){
-//			if (getElement("selectedMap").name == null) {
-//				JOptionPane.showMessageDialog(null, "Please choose a map!", "PvP Magic", JOptionPane.ERROR_MESSAGE);
-//			} else {
-				_holder.transitionToScreen(Transition.FADE, "game");
-				_holder.getScreen("game").setup();
-				((GameScreen)(_holder.getScreen("game"))).configureGame(this);
-//			}
+			//			if (getElement("selectedMap").name == null) {
+			//				JOptionPane.showMessageDialog(null, "Please choose a map!", "PvP Magic", JOptionPane.ERROR_MESSAGE);
+			//			} else {
+			_holder.transitionToScreen(Transition.FADE, "game");
+			_holder.getScreen("game").setup();
+			((GameScreen)(_holder.getScreen("game"))).configureGame(this);
+			//			}
 		}
 	}
 
@@ -265,20 +265,20 @@ public class SetupScreen extends Screen {
 		if (c._name.equals("characterChooser")){
 			if (c._chosen != null) getElement("selectedCharacter").name = c._chosen.name;
 		} else if (c._name.equals("spellChooser")){
-			if (c._callingElement != null && c._callingElement.id.startsWith("spell_")){
-				if (c._callingElement.name != null && !c._callingElement.equals("")){
-					for (Button b : c._choices.buttons){
-						if (b.name.equals(c._callingElement.name)){
-							b.enabled = true;
+			if (c._callingElement != null && c._callingElement.id.startsWith("spell_")){ // for choosing 1 spell
+				if (c._chosen != null){
+					if (c._callingElement.name != null && !c._callingElement.equals("")){
+						for (Button b : c._choices.buttons){
+							if (b.name.equals(c._callingElement.name)){
+								b.enabled = true;
+							}
 						}
 					}
-				}
-				if (c._chosen != null){
 					c._callingElement.name = c._chosen.name;
 					c._chosen.enabled = false;
 				}
 				_spellChooserScreen._callingElement = null;
-			} else if (c._callingElement.id.equals("spellChooser")){
+			} else if (c._callingElement.id.equals("spellChooser")){ // for choosing all spells
 				for (Button b : _spellChooserScreen._choices.buttons) b.enabled = true;
 				for (int i = 0; i < c._chosens.size(); i++){
 					_spells[i].name = c._chosens.get(i).name;
@@ -295,7 +295,7 @@ public class SetupScreen extends Screen {
 			if (c._chosen != null) getElement("selectedMap").name = c._chosen.name;
 		}
 	}
-	
+
 	@Override
 	public void update(){
 		onResize();
@@ -346,7 +346,7 @@ public class SetupScreen extends Screen {
 					e.h = 20;
 				}
 			}
-			
+
 			if (_currentTab.id.equals("hostTab")){
 				if (e.id.equals("selectedGameType")){
 					e.x = 55;

@@ -13,6 +13,7 @@ public class CleanseSpell extends Spell {
 		_cooldown = 1000;
 		_manaCost = 10;
 		setVelocity(10);
+		setPosition();
 	}
 
 	@Override
