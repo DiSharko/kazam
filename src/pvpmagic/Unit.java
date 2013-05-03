@@ -1,6 +1,5 @@
 package pvpmagic;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
 public abstract class Unit {
@@ -8,7 +7,7 @@ public abstract class Unit {
 	
 	public Vector _pos;
 	public Vector _size;
-	protected Vector _vel = new Vector(0,0), _force = new Vector(0,0);
+	public Vector _vel = new Vector(0,0), _force = new Vector(0,0);
 	boolean _movable = true;
 	
 	public Integer _netID = null;
@@ -54,7 +53,7 @@ public abstract class Unit {
 	
 	protected Shape _shape;
 	
-	protected LinkedList<TimedEffect> timedEffects = new LinkedList<TimedEffect>();
+	public LinkedList<TimedEffect> timedEffects = new LinkedList<TimedEffect>();
 	private final int MILLISECONDS_PER_TICK = 25;
 	
 	public void collide(Collision c){

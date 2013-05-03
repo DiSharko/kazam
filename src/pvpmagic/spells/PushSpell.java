@@ -20,9 +20,16 @@ public class PushSpell extends Spell {
 	
 	@Override
 	public void collide(Collision c){
+		this._health = 0;
 		//TODO: gotta do displacement effects
 		Unit target = c.other(this);
 		target.changeHealth(-5);
+		if (target.type().equals("player") && !target.equals(_caster)) {
+			Player p = (Player) target;
+			Vector f = p._pos.minus(_caster._pos).normalize();
+			p.applyForce(f.mult(30));
+			p._destination = p._pos.plus(f.mult(100));
+		}
 		//c.other(this).applyForce(new Vector());
 	}
 	

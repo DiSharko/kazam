@@ -14,6 +14,7 @@ public abstract class Spell extends Unit {
 	public double _cooldown = 0;
 	public double _manaCost = 0;
 	
+	
 	public double _castingTime = 5;
 	
 	public String _name;
@@ -27,11 +28,14 @@ public abstract class Spell extends Unit {
 		super(data, type);
 		_caster = caster;
 		_dir = dir;
-//		_shape = new Circle(this, new Vector(0,0), 100);
-//		setPosition();
+		_shape = new Circle(this, new Vector(0,0), 10);
+		_size = new Vector(10, 10);
+		setPosition();
 	}
 	public void setPosition(){
-		_pos = _caster._pos.plus(_caster._size.div(2)).minus(_size.div(2)).plus(_vel.normalize().mult(_caster._size.mag()));
+		_pos = _caster._pos.plus(_caster._size.div(2));
+		_pos = _pos.minus(_size.div(2));
+		_pos = _pos.plus(_vel.normalize().mult(_caster._size.mag()));
 	}
 	public void setVelocity(double velocity){
 		_velocity = velocity;
@@ -54,6 +58,8 @@ public abstract class Spell extends Unit {
 		else if (name.equals("Open")) { return new OpenSpell(data, caster, dir); }
 		else if (name.equals("Lock")) { return new LockSpell(data, caster, dir); }
 		else if (name.equals("Fear")) { return new FearSpell(data, caster, dir); }
+		else if (name.equals("Cleanse")) { return new CleanseSpell(data, caster, dir); }
+		else if (name.equals("Summon")) { return new SummonSpell(data, caster, dir); }
 		System.out.println("Spell name \""+name+"\" not found!");
 		return null;
 	}

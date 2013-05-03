@@ -9,10 +9,10 @@ public class Flag extends Unit {
 		super(data, "flag");
 		_pos = pos;
 		_size = new Vector(145, 117).normalize().mult(size);
-		_movable = false;
+		_movable = true;
 		
 		_shape = new Box(this, new Vector(0,0), _size);
-		_restitution = 0.8;
+		_restitution = 0;
 	}
 	
 	public void setShape(){
