@@ -1,5 +1,6 @@
 package pvpmagic;
 
+import java.awt.Image;
 import java.util.ArrayList;
 
 
@@ -10,7 +11,8 @@ public class Rock extends Unit {
 	public Rock(GameData data, Vector pos, double size){
 		super(data, TYPE);
 		_pos = pos;
-		_size = new Vector(145, 117).normalize().mult(size);
+		Image sprite = Resource._gameImagesAlpha.get("rock");
+		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(size);
 		_movable = false;
 		
 		_shape = new Box(this, new Vector(0,0), _size);
@@ -26,11 +28,7 @@ public class Rock extends Unit {
 	}
 	
 	public void draw(View v){
-		setShape();
-//		v.getGraphics().setColor(Color.gray);
-//		v.fillRect(_pos, _size);
-//		v.getGraphics().setColor(Color.DARK_GRAY);
-//		v.drawRect(_pos, _size);
+//		setShape();
 		v.drawImage(Resource._gameImagesAlpha.get("rock"), _pos, _size);
 	}
 
@@ -40,8 +38,6 @@ public class Rock extends Unit {
 		if (u.type().equals("spell")){
 			u._health -= 10;
 //			u._delete = true;
-//			System.out.println("I am " + _pos +", "+_size);
-//			System.out.println("Spell is "+ u._pos + ", "+u._size);
 		}
 	}
 	

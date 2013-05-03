@@ -21,7 +21,7 @@ public class Player extends Unit {
 	   the player. Used for calculation of mana cost. */
 	long _timeLastCast;
 
-	double _velocity = 3;
+	double _velocity = 5;
 
 
 	public Player(GameData data, String characterName, String playerName, String[] spellNames){
@@ -29,6 +29,8 @@ public class Player extends Unit {
 		_canBeRooted = true;
 		_canBeSilenced = true;
 
+		_mass = 3;
+		
 		_health = 100;
 		_mana = 100;
 

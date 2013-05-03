@@ -6,7 +6,7 @@ public abstract class Unit {
 	protected GameData _data;
 	
 	public Vector _pos;
-	protected Vector _size;
+	public Vector _size;
 	protected Vector _vel = new Vector(0,0), _force = new Vector(0,0);
 	boolean _movable = true;
 	
