@@ -18,15 +18,13 @@ public class SummonSpell extends Spell {
 		_size = new Vector(10, 10);
 		_cooldown = 1000;
 		_manaCost = 10;
-		setVelocity(4);
-		setPosition();
 	}
 	
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
 		Vector dir = _caster._pos.minus(target._pos).normalize().mult(3);
-		if (target.type().equals("flag")) {
+		if (target._type.equals("flag")) {
 			target._vel = dir;
 		}
 		//TODO: possibly make it so that your wand also gets knocked away

@@ -18,8 +18,7 @@ public class FearSpell extends Spell {
 		_size = new Vector(10, 10);
 		_cooldown = 1000;
 		_manaCost = 10;
-		setVelocity(4);
-		setPosition();
+		setProperties(_size, 4);
 	}
 	
 	@Override

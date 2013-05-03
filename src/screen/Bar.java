@@ -17,6 +17,8 @@ public class Bar extends InterfaceElement {
 	public Color lowColor = new Color(0.4f, 0.2f, 0f);
 	public Color veryLowColor = new Color(0.3f, 0f, 0f);
 
+	public Color borderColor = Color.black;
+	
 	public double current;
 	public double total;
 
@@ -90,7 +92,7 @@ public class Bar extends InterfaceElement {
 		}
 		g.setColor(color);
 		g.fillRect((int)x, (int)y, (int)(w*current/total), (int)h);
-		g.setColor(Color.white);
+		g.setColor(borderColor);
 		g.drawRect((int)x, (int)y, (int)w, (int)h);
 		g.rotate(angle);
 	}
@@ -104,7 +106,7 @@ public class Bar extends InterfaceElement {
 		}
 		v.setColor(color);
 		v.fillRect(pos, new Vector((float)(size.x*current/total), size.y));
-		v.setColor(Color.white);
+		v.setColor(borderColor);
 		v.drawRect(pos, size);
 	}
 

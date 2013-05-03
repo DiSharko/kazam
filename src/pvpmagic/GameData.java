@@ -81,7 +81,6 @@ public class GameData {
 	}
 
 	public void update(){
-
 		// Deleting must be separate, after all updates and collisions
 		for (int i = 0; i < _units.size(); i++){
 			Unit u = _units.get(i);
@@ -95,7 +94,6 @@ public class GameData {
 		}
 		
 		// THIS ORDER IS NECESSARY so that players don't get stuck in walls
-		// as they 
 		applyMovement();
 		collideEntities();
 	}
@@ -122,14 +120,14 @@ public class GameData {
 						e1._pos = e1._pos.plus(c.mtv(e1).div(2));
 						e2._pos = e2._pos.plus(c.mtv(e2).div(2));
 
-						e1.applyForce(c.mtv(e1).normalize().mult((c.mtv(e1).normalize().dot(e2._vel.minus(e1._vel)))*e1._mass*e2._mass*(1+cor)/(e1._mass+e2._mass)));
-						e2.applyForce(c.mtv(e2).normalize().mult((c.mtv(e2).normalize().dot(e1._vel.minus(e2._vel)))*e1._mass*e2._mass*(1+cor)/(e1._mass+e2._mass)));
+						if (e2._appliesRestitution) e1.applyForce(c.mtv(e1).normalize().mult((c.mtv(e1).normalize().dot(e2._vel.minus(e1._vel)))*e1._mass*e2._mass*(1+cor)/(e1._mass+e2._mass)));
+						if (e1._appliesRestitution) e2.applyForce(c.mtv(e2).normalize().mult((c.mtv(e2).normalize().dot(e1._vel.minus(e2._vel)))*e1._mass*e2._mass*(1+cor)/(e1._mass+e2._mass)));
 					} else if (e1._movable){
 						e1._pos = e1._pos.plus(c.mtv(e1));
-						e1.applyForce(c.mtv(e1).normalize().mult((ve2-ve1)*e1._mass*(1+cor)));
+						if (e2._appliesRestitution) e1.applyForce(c.mtv(e1).normalize().mult((ve2-ve1)*e1._mass*(1+cor)));
 					} else if (e2._movable){
 						e2._pos = e2._pos.plus(c.mtv(e2));
-						e2.applyForce(c.mtv(e2).normalize().mult((ve1-ve2)*e2._mass*(1+cor)));
+						if (e1._appliesRestitution) e2.applyForce(c.mtv(e2).normalize().mult((ve1-ve2)*e2._mass*(1+cor)));
 					}
 
 					e1.collide(c);
@@ -149,8 +147,7 @@ public class GameData {
 
 
 			e._vel = e._vel.plus(e._force.div(e._mass));
-
-			// e._vel = new Vector(Math.min(Math.max(e._vel.x, -30), 30),Math.min(Math.max(e._vel.y, -50), 50));
+			if (e._appliesFriction) e._vel = e._vel.mult(0.99);
 
 			e._pos = e._pos.plus(e._vel);
 			e._force = new Vector(0,0);
@@ -166,20 +163,30 @@ public class GameData {
 			if(linearr[0].equals("ROCK")) {
 				//line represents a rock: ROCK,500,500,150
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				
 				_units.add(new Rock(this, pos, Double.parseDouble(linearr[3])));
-
+			
+			} else if (linearr[0].equals("HWALL")) {
+				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
+				_units.add(new Wall(this, pos, Double.parseDouble(linearr[3]), false));
+				
+			} else if (linearr[0].equals("VWALL")) {
+				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
+				_units.add(new Wall(this, pos, Double.parseDouble(linearr[3]), true));
+				
 			} else if(linearr[0].equals("SPAWN")) {
 				//line represents a spawn point
+			
 			} else if(linearr[0].equals("DOOR")) {
 				//line represents a door: DOOR,500,500,250,250,50
 				Vector lockpos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
 				Vector openpos = new Vector(Double.parseDouble(linearr[3]), -1.0*Double.parseDouble(linearr[4]));
 				_units.add(new Door(this, lockpos, openpos, Double.parseDouble(linearr[5])));
+			
 			} else if(linearr[0].equals("FLAG")) {
 				//line represents a flag: FLAG,500,500,50
 				Vector pos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
 				_units.add(new Flag(this, pos, Double.parseDouble(linearr[3])));
+			
 			} else {
 				System.out.println("Not enough types in map file being checked for.");
 			}

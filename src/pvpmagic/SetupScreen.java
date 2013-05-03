@@ -155,7 +155,7 @@ public class SetupScreen extends Screen {
 		_hostGameElements.add(mapChooser);
 		_serverElements.add(mapChooser);
 
-		Button selectedMap = new Button(this, "selectedMap", 165, 165);
+		Button selectedMap = new Button(this, "selectedMap", 165, 165, "Department of Secrets", -1);
 		selectedMap.setColors(_bgColor, new Color(0.5f,0.5f,0.5f,0.2f), new Color(0.3f,0.3f,0.3f,0.3f), null);
 		_hostGameElements.add(selectedMap);
 		_serverElements.add(selectedMap);

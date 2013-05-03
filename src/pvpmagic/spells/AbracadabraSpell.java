@@ -14,7 +14,7 @@ public class AbracadabraSpell extends Spell {
 		_size = new Vector(10, 10);
 		_cooldown = 5000;
 		_manaCost = 10;
-		setVelocity(4);
+		setProperties(_size, 4);
 	}
 	
 	@Override

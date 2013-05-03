@@ -14,14 +14,13 @@ public class LockSpell extends Spell {
 		_size = new Vector(10, 10);
 		_cooldown = 1000;
 		_manaCost = 10;
-		setVelocity(4);
-		setPosition();
+		setProperties(_size, 4);
 	}
 	
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
-		if (target.type().equals("door")) {
+		if (target._type.equals("door")) {
 			Door door = (Door) target;
 			door.lock();
 		}

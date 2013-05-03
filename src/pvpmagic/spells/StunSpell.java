@@ -12,14 +12,12 @@ public class StunSpell extends Spell {
 	public StunSpell(GameData data, Player caster, Vector dir){
 		super(data, TYPE, caster, dir);
 		_cooldown = 1000;
-		Image sprite = Resource._gameImagesAlpha.get("StunSpell");
-		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(scale);
+		Image sprite = Resource._gameImages.get("StunSpell");
+		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(scale), 10);
 		_name = "Stun";
 		_cooldown = 1000;
 		_manaCost = 10;
 		_shape = new Circle(this, new Vector(0,0), 8);
-		setVelocity(10);
-		setPosition();
 	}
 
 	@Override
@@ -28,13 +26,17 @@ public class StunSpell extends Spell {
 		target.root(2000);
 		target.silence(2000);
 		target.changeHealth(-5);
+		
+		if (target._type.equals(Player.TYPE)){
+			_health = 0;
+		}
 	}
 	
 	@Override
 	public void draw(View v){
 //		System.out.println(StunSpell._type + ", "+_type);
 		v.rotate(_vel, _pos.plus(7));
-		v.drawImage(Resource._gameImagesAlpha.get("StunSpell"), _pos, _size);
+		v.drawImage(Resource._gameImages.get("StunSpell"), _pos, _size);
 		v.unrotate();
 	}
 }

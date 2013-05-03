@@ -10,7 +10,7 @@ public abstract class Shape {
 	public boolean colliding = false;
 	Vector _relPos;
 	
-	static Color _debugColor = new Color(1, 0.1f, 0.1f, 0.7f);
+	static Color _debugColor = new Color(1, 0.1f, 0.1f, 0.5f);
 	
 	public static Double intervalMTV(Vector a, Vector b){
 		double aRight = b.y - a.x;

@@ -14,8 +14,7 @@ public class PushSpell extends Spell {
 		_size = new Vector(10, 10);
 		_cooldown = 1000;
 		_manaCost = 10;
-		setVelocity(4);
-		setPosition();
+		setProperties(_size, 4);
 	}
 	
 	@Override
@@ -24,7 +23,7 @@ public class PushSpell extends Spell {
 		//TODO: gotta do displacement effects
 		Unit target = c.other(this);
 		target.changeHealth(-5);
-		if (target.type().equals("player") && !target.equals(_caster)) {
+		if (target._type.equals("player") && !target.equals(_caster)) {
 			Player p = (Player) target;
 			Vector f = p._pos.minus(_caster._pos).normalize();
 			p.applyForce(f.mult(30));

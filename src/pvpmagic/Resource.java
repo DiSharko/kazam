@@ -1,8 +1,6 @@
 package pvpmagic;
 
-import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -32,7 +30,6 @@ public class Resource {
 	public static ArrayList<String> _maps;
 
 	public static HashMap<String, Image> _gameImages;
-	public static HashMap<String, Image> _gameImagesAlpha;
 	public static HashMap<String, Image> _ui;
 
 	public Resource(){
@@ -45,7 +42,6 @@ public class Resource {
 		_maps = new ArrayList<String>();
 		
 		_gameImages = new HashMap<String, Image>();
-		_gameImagesAlpha = new HashMap<String, Image>();
 		
 		_ui = new HashMap<String, Image>();
 
@@ -103,67 +99,80 @@ public class Resource {
 
 
 
+//		try {
+//			Image tempSheet = new ImageIcon(Resource.class.getResource("/media/images/ui.png")).getImage();
+//			BufferedImage sheet = new BufferedImage(tempSheet.getWidth(null),tempSheet.getHeight(null),BufferedImage.TYPE_INT_ARGB);
+//			Graphics g = sheet.getGraphics();
+//			g.drawImage(tempSheet, 0, 0, null);
+//			g.dispose();
+//
+//			BufferedReader file = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/images/ui.txt")));
+//
+//			String line;
+//			while ((line = file.readLine()) != null){
+//				try {
+//					String[] part = line.split(" ");
+//					_ui.put(part[4], sheet.getSubimage(Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]), Integer.parseInt(part[3])));
+//				} catch (NumberFormatException e) {
+//					e.printStackTrace();
+//				} catch (IndexOutOfBoundsException e){
+//					e.printStackTrace();
+//				}
+//			}
+//
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} catch (NullPointerException e){
+//			e.printStackTrace();
+//		}
+//		
+//		try {
+//			Image tempSheet = new ImageIcon(Resource.class.getResource("/media/images/gameImagesAlpha.png")).getImage();
+//			BufferedImage sheet = new BufferedImage(tempSheet.getWidth(null),tempSheet.getHeight(null),BufferedImage.TYPE_INT_ARGB);
+//			Graphics g = sheet.getGraphics();
+//			g.drawImage(tempSheet, 0, 0, null);
+//			g.dispose();
+//			
+//			BufferedReader file = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/images/gameImagesAlpha.txt")));
+//			
+//			String line;
+//			while ((line = file.readLine()) != null){
+//				try {
+//					String[] part = line.split(" ");
+//					_gameImages.put(part[4], sheet.getSubimage(Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]), Integer.parseInt(part[3])));
+//				} catch (NumberFormatException e) {
+//					e.printStackTrace();
+//				} catch (IndexOutOfBoundsException e){
+//					e.printStackTrace();
+//				}
+//			}
+//
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} catch (NullPointerException e){
+//			e.printStackTrace();
+//		}
+		
+		String line = "";
 		try {
-			Image tempSheet = new ImageIcon(Resource.class.getResource("/media/images/ui.png")).getImage();
-			BufferedImage sheet = new BufferedImage(tempSheet.getWidth(null),tempSheet.getHeight(null),BufferedImage.TYPE_INT_ARGB);
-			Graphics g = sheet.getGraphics();
-			g.drawImage(tempSheet, 0, 0, null);
-			g.dispose();
-
-			BufferedReader file = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/images/ui.txt")));
-
-			String line;
+			BufferedReader file = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/images/game/gameImages.txt")));
 			while ((line = file.readLine()) != null){
-				try {
-					String[] part = line.split(" ");
-					_ui.put(part[4], sheet.getSubimage(Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]), Integer.parseInt(part[3])));
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
-				} catch (IndexOutOfBoundsException e){
-					e.printStackTrace();
-				}
+				_gameImages.put(line, new ImageIcon(Resource.class.getResource("/media/images/game/"+line+".png")).getImage());
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (NullPointerException e){
+			System.out.println(line);
 			e.printStackTrace();
 		}
 		
 		try {
-			Image tempSheet = new ImageIcon(Resource.class.getResource("/media/images/gameImagesAlpha.png")).getImage();
-			BufferedImage sheet = new BufferedImage(tempSheet.getWidth(null),tempSheet.getHeight(null),BufferedImage.TYPE_INT_ARGB);
-			Graphics g = sheet.getGraphics();
-			g.drawImage(tempSheet, 0, 0, null);
-			g.dispose();
-			
-			BufferedReader file = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/images/gameImagesAlpha.txt")));
-			
-			String line;
+			BufferedReader file = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/images/ui/ui.txt")));
 			while ((line = file.readLine()) != null){
-				try {
-					String[] part = line.split(" ");
-					_gameImagesAlpha.put(part[4], sheet.getSubimage(Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]), Integer.parseInt(part[3])));
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
-				} catch (IndexOutOfBoundsException e){
-					e.printStackTrace();
-				}
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (NullPointerException e){
-			e.printStackTrace();
-		}
-		
-		try {
-			BufferedReader file = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/images/other/other.txt")));
-			String line;
-			while ((line = file.readLine()) != null){
-				_gameImagesAlpha.put(line, new ImageIcon(Resource.class.getResource("/media/images/other/"+line+".png")).getImage());
+				_ui.put(line, new ImageIcon(Resource.class.getResource("/media/images/ui/"+line+".png")).getImage());
 			}
 		} catch (IOException e) {
+			System.out.println(line);
 			e.printStackTrace();
 		} catch (NullPointerException e){
 			e.printStackTrace();

@@ -7,8 +7,16 @@ public abstract class Unit {
 	
 	public Vector _pos;
 	public Vector _size;
+
 	public Vector _vel = new Vector(0,0), _force = new Vector(0,0);
+
 	boolean _movable = true;
+	boolean _appliesFriction = false;
+	public boolean _appliesRestitution = true;
+	
+	boolean _collidable = true;
+	double _restitution = 0.5;
+	double _mass = 1;
 	
 	public Integer _netID = null;
 	
@@ -19,9 +27,6 @@ public abstract class Unit {
 		if (_movable) _force = _force.plus(new Vector(_x, _y));
 	}
 
-	boolean _collidable = true;
-	double _restitution = 0.5;
-	double _mass = 1;
 	
 	public double _maxHealth = 100;
 	public double _maxMana = 100;
@@ -31,7 +36,6 @@ public abstract class Unit {
 	
 	public String _type;
 	public Unit(GameData data, String type){ _data = data; _type = type; }
-	public String type(){ return _type; }
 	
 	boolean _canBeRooted = false;
 	boolean _isRooted = false;
