@@ -16,7 +16,7 @@ import screen.InterfaceElement;
 
 public class GameScreen extends Screen {
 
-	boolean DEBUG = true;
+	boolean DEBUG = false;
 
 	GameData _data;
 	Player _focus;
