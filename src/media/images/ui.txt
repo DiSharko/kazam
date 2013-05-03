@@ -1,3 +1,0 @@
-0 0 32 32 fullscreen
-0 32 32 32 close
-0 64 32 32 windowed
