@@ -91,4 +91,15 @@ public class Vector {
 	public String toNet() {
 		return x + " " + y;
 	}
+	
+	public static Vector fromNet(String vectorString) throws IllegalArgumentException {
+		String[] vec = vectorString.split(" ");
+		if (vec.length != 2) {
+			throw new IllegalArgumentException("ERROR: More than 2 values. Invalid vector string.");
+		} else {
+			double x = Double.parseDouble(vec[0]);
+			double y = Double.parseDouble(vec[1]);
+			return new Vector(x, y);
+		}
+	}
 }

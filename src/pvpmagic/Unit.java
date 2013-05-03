@@ -1,5 +1,6 @@
 package pvpmagic;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public abstract class Unit {
@@ -16,6 +17,8 @@ public abstract class Unit {
 	boolean _collidable = true;
 	double _restitution = 0.5;
 	double _mass = 1;
+	
+	public Integer _netID = null;
 	
 	public void applyForce(Vector force){
 		if (_movable) _force = _force.plus(force);
@@ -146,10 +149,7 @@ public abstract class Unit {
 		return true;
 	}
 	
-	public String toNet(){
-		return "";
-	}
-	public void fromNet(String s){
-		
+	public void setNetID(Integer netID) {
+		this._netID = netID;
 	}
 }

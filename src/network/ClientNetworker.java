@@ -1,51 +1,58 @@
 package network;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClientNetworker implements ClientNetworkable {
 
-	private int PORT;
-	private String _hostname;
-	private Socket _initClient;
-	private TCPClientThread _tcpThread;
+	private int _getPort;
+	private int _sendPort;
+	private Socket _clientGet;
+	private Socket _clientSend;
+	private ClientGetThread _getThread;
+	private ClientSendThread _sendThread;
 	private SyncedString _initData;
 	private SyncedString _gameData;
+	private ConcurrentLinkedQueue<SyncedString> _inputs;
+	private AtomicBoolean _connected;
+	private AtomicBoolean _started;
 	
-	public ClientNetworker(int PORT, String hostname, SyncedString initData, SyncedString gameData) {
-		this.PORT = PORT;
-		_hostname = hostname;
+	public ClientNetworker(int getPort, int sendPort, SyncedString initData, SyncedString gameData, ConcurrentLinkedQueue<SyncedString> inputs, 
+			AtomicBoolean connected, AtomicBoolean started) {
+		_getPort = getPort;
+		_sendPort = sendPort;
 		_initData = initData;
 		_gameData = gameData;
+		_inputs = inputs;
+		_connected = connected;
+		_started = started;
 	}
 	
 	@Override
 	public void connect(String hostname, String clientData) throws UnknownHostException, NetworkException {
 		try {
-			// tcp connection for game lobby connection
-			_initClient = new Socket(hostname, PORT);
-			_tcpThread = new TCPClientThread(_initClient,_initData,clientData);
-			_tcpThread.run();
+			// set up input sending connection
+			_clientSend = new Socket(hostname, _sendPort);
+			_sendThread = new ClientSendThread(_clientSend,_inputs,_connected,clientData);
+			_sendThread.start();
+			
+			// set up game state connection
+			_clientGet = new Socket(hostname, _getPort);
+			_getThread = new ClientGetThread(_clientGet,_initData,_gameData,_connected,_started);
+			_getThread.start();
 		} catch (IOException e) {
 			throw new NetworkException(e.getMessage());
 		}
-
 	}
 
 	@Override
 	public void disconnect() {
-		_hostname = null;
-		try {
-			_initClient.close();
-		} catch (IOException e) {
-			
-		}
-		_initData.setData("DISCONNECTED");
+		// close clients
+		_getThread.kill();
+		_sendThread.kill();
 	}
 
 }

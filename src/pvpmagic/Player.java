@@ -1,8 +1,9 @@
 package pvpmagic;
 
-import java.awt.Color;
 import java.awt.Image;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import pvpmagic.spells.Spell;
 
@@ -155,15 +156,78 @@ public class Player extends Unit {
 			timedEffects.add(new FearEffect(numberOfIntervals(time), this));		
 	}
 
-	@Override
-	public void fromNet(String networkString) {
-		// TODO Auto-generated method stub
-		
+	public static void fromNetInit(Integer netID, String networkString, HashMap<Integer, Unit> objectMap, GameData data) {
+		/*String[] netSplit = networkString.split("\t");
+		Player p;
+		String[] spells = netSplit[5].split(", ");
+		Vector dir = Vector.fromNet(netSplit[7]);
+		Vector pos = Vector.fromNet(netSplit[9]);*/
+		//Will have to figure this out, how to put it into GameData
 	}
-
-	@Override
 	public String toNet() {
-		// TODO Auto-generated method stub
-		return null;
+		String lastCastTimes = "";
+		for (Entry<String, Long> e : _spellCastingTimes.entrySet()) {
+			lastCastTimes += e.getKey() + "," + e.getValue() + ".";
+		}
+		return "\tp\t" + _pos.toNet() +
+				"\td\t" + _destination.toNet() +
+				"\tf\t" + _flag._netID +
+				"\th\t" + _health +
+				"\tm\t" + _mana +
+				"\tlct\t" + lastCastTimes.substring(0, lastCastTimes.length() - 1);
+		//Need to figure out string for timed effects
+	}
+	
+	public void fromNet(Integer netID, String networkString, HashMap<Integer, Unit> objectMap, GameData data) {
+		String[] netSplit = networkString.split("\t");
+		Player p;
+		if (validNetworkString(netSplit)) {
+			if ((p = (Player) objectMap.get(netID)) != null) {
+				p._pos = Vector.fromNet(netSplit[1]);
+				p._destination = Vector.fromNet(netSplit[3]);
+				p._flag = (Flag) objectMap.get(Integer.parseInt(netSplit[5]));
+				p._health = Double.parseDouble(netSplit[7]);
+				p._mana = Double.parseDouble(netSplit[9]);
+				
+				String[] lastCastTimes = netSplit[11].split(".");
+				String[] sp;
+				for (String spell : lastCastTimes) {
+					sp = spell.split(",");
+					p._spellCastingTimes.put(sp[0], Long.parseLong(sp[1]));
+				}
+			}
+		}		
+	}
+	
+	public String toNetInit() {
+		String spells = Arrays.toString(_spells);
+		return "cn\t" + _characterName + 
+				"\tpn\t" + _playerName + 
+				"\ts\t" + spells.substring(1, spells.length() - 1) +
+				"\tp\t" + _pos.toNet() +
+				"\td\t" + _destination.toNet();
+	}
+	
+	public Boolean validNetworkStringInit(String[] networkData) {
+		if (networkData.length != 10 || !(networkData[0].equals("n") 
+				&& networkData[2].equals("pn") && networkData[4].equals("s")
+				&& networkData[6].equals("p")) && networkData[8].equals("d")) {
+			System.err.println("ERROR: Invalid String from network - " + Arrays.toString(networkData));
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	public Boolean validNetworkString(String[] networkData) {
+		if (networkData.length != 12 || !(networkData[0].equals("p")
+				&& networkData[2].equals("d") && networkData[4].equals("f")
+				&& networkData[6].equals("h")) && networkData[8].equals("m")
+				&& networkData[10].equals("lct")) {
+			System.err.println("ERROR: Invalid String from network - " + Arrays.toString(networkData));
+			return false;
+		} else {
+			return true;
+		}
 	}
 }
