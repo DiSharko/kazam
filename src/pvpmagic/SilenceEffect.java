@@ -20,5 +20,9 @@ public class SilenceEffect extends TimedEffect {
 			effectCompleted = true;
 		}
 	}
+	
+	public String toNet() {
+		return "n " + Double.toString(_numberOfIntervals) + " t " + _target._netID;
+	}
 
 }

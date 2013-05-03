@@ -74,7 +74,9 @@ public abstract class Spell extends Unit {
 	public static void fromNet(Integer netID, String networkString, HashMap<Integer, Unit> objectMap, GameData data) {
 		String[] netSplit = networkString.split("\t");
 		Player caster; Spell spell;
-		if ((caster = (Player) objectMap.get(Integer.parseInt(netSplit[1]))) == null) {
+		if (validNetworkString(netSplit)) {
+			//invalid, wait for repeat send?
+		} else if ((caster = (Player) objectMap.get(Integer.parseInt(netSplit[1]))) == null) {
 			throw new RuntimeException("ERROR: Player " + netSplit[1] + 
 					" does not exist in objectMap. This should not happen.");
 		} else {
@@ -95,7 +97,7 @@ public abstract class Spell extends Unit {
 		return "n\t" + _name + "\tc\t" + _caster._netID + "\td\t" + _dir.toNet() + "\tp\t" + _pos.toNet();
 	}
 	
-	public Boolean validNetworkString(String[] networkData) {
+	public static Boolean validNetworkString(String[] networkData) {
 		if (networkData.length != 8 || !(networkData[0].equals("n") 
 				&& networkData[2].equals("c") && networkData[4].equals("d")
 				&& networkData[6].equals("p"))) {
