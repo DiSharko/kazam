@@ -89,12 +89,12 @@ public class BorderScreen extends Screen {
 		}
 		
 		_interfaceElements = new ArrayList<InterfaceElement>();
-		Button close = new Button(this, "close", Resource._ui.get("close"));
+		Button close = new Button(this, "close", Resource.get("close"));
 		close.roundness = 0;
 		close.setColors(new Color(0,0,0,0f), new Color(1f,1f,1f,0.3f), new Color(1f, 1f, 1f, 0.4f), new Color(0,0,0,0f));
 		_interfaceElements.add(close);
 		
-		Button fullscreen = new Button(this, "fullscreen", Resource._ui.get("fullscreen"));
+		Button fullscreen = new Button(this, "fullscreen", Resource.get("fullscreen"));
 		fullscreen.roundness = 0;
 		fullscreen.setColors(new Color(0,0,0,0f), new Color(1f,1f,1f,0.3f), new Color(1f, 1f, 1f, 0.4f), new Color(0,0,0,0f));
 		_interfaceElements.add(fullscreen);
@@ -143,13 +143,14 @@ public class BorderScreen extends Screen {
 
 
 	@Override
-	public void onMousePressed(MouseEvent e) {
+	public boolean onMousePressed(MouseEvent e) {
 		super.onMousePressed(e);
 		_mouseDown = true;
 
 		_mouseDownX = e.getX();
 		_mouseDownY = e.getY();
-
+		
+		return true;
 	}
 
 	@Override
@@ -305,10 +306,10 @@ public class BorderScreen extends Screen {
 			System.exit(0);
 		} else if (e.id.equals("fullscreen")){
 			if (_fullscreen){
-				((Button)e).image = Resource._ui.get("fullscreen");
+				((Button)e).image = Resource.get("fullscreen");
 				goWindowed();
 			} else {
-				((Button)e).image = Resource._ui.get("windowed");
+				((Button)e).image = Resource.get("windowed");
 				goFullscreen();
 			}
 		}

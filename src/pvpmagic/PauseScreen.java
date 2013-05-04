@@ -25,10 +25,10 @@ public class PauseScreen extends Screen {
 	@Override
 	public void setup() {
 		_interfaceElements = new ArrayList<InterfaceElement>();
-		Button game = new Button(this, "game", 200, 50, "(R)eturn to Game", KeyEvent.VK_R);
+		Button game = new Button(this, "game", 200, 50, "Return to Game", KeyEvent.VK_R);
 		_interfaceElements.add(game);
 		
-		Button main = new Button(this, "main", 200, 50, "Return to (M)ain", KeyEvent.VK_M);
+		Button main = new Button(this, "main", 200, 50, "Return to Main", KeyEvent.VK_M);
 		_interfaceElements.add(main);
 		
 		onResize();

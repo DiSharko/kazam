@@ -6,37 +6,35 @@ import pvpmagic.*;
 
 public class StunSpell extends Spell {
 	public static String TYPE = "StunSpell";
-	double scale = 50;
 	
 	
 	public StunSpell(GameData data, Player caster, Vector dir){
 		super(data, TYPE, caster, dir);
 		_cooldown = 1000;
-		Image sprite = Resource._gameImages.get("StunSpell");
-		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(scale), 10);
+		Image sprite = Resource.get("StunSpell");
+		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(50), 15);
 		_name = "Stun";
 		_cooldown = 1000;
 		_manaCost = 10;
-		_shape = new Circle(this, new Vector(0,0), 8);
+		_shape = new Circle(this, new Vector(-7,-7), 7);
 	}
 
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
-		target.root(2000);
-		target.silence(2000);
-		target.changeHealth(-5);
-		
 		if (target._type.equals(Player.TYPE)){
+			target.root(2000);
+			target.silence(2000);
+			target.changeHealth(-5);
+		
 			_health = 0;
 		}
 	}
 	
 	@Override
 	public void draw(View v){
-//		System.out.println(StunSpell._type + ", "+_type);
-		v.rotate(_vel, _pos.plus(7));
-		v.drawImage(Resource._gameImages.get("StunSpell"), _pos, _size);
+		v.rotate(_vel, _pos);
+		v.drawImage(Resource.get("StunSpell"), _pos.plus(-7,-7), _size);
 		v.unrotate();
 	}
 }

@@ -1,7 +1,6 @@
 package pvpmagic;
 
 import java.awt.Color;
-import java.util.ArrayList;
 
 
 public class Door extends Unit {

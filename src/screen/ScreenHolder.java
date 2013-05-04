@@ -30,9 +30,9 @@ public abstract class ScreenHolder extends JPanel implements KeyListener, MouseI
 	protected TransitionScreen _transitionScreen;
 	protected ChooserScreen _chooserScreen;
 	protected BorderScreen _borderScreen;
-	
+
 	boolean _showBorder = true;
-	
+
 	public int _w;
 	public int _h;
 
@@ -43,15 +43,15 @@ public abstract class ScreenHolder extends JPanel implements KeyListener, MouseI
 	public void setFPS(int fps){
 		_timerDelay = 1000/fps;
 	}
-	
+
 	Timer _timer = new Timer(_timerDelay, new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			update();
 			repaint();
-			
+
 			_timer.setInitialDelay(_timerDelay);
-			
+
 			_timer.restart();
 		}
 	});
@@ -114,14 +114,14 @@ public abstract class ScreenHolder extends JPanel implements KeyListener, MouseI
 		}
 		return null;
 	}
-	
+
 	public void putScreenAway(){
 		int screen = ((!_showBorder || _borderScreen == null) ? 0 : 1);
 		Screen temp = _screenList.get(screen);
 		_screenList.remove(screen);
 		_screenList.add(temp);
 	}
-	
+
 	public boolean switchToScreen(String _id){
 		for (int i = 0; i < _screenList.size(); i++){
 			if (_screenList.get(i)._id.equals(_id)){
@@ -129,7 +129,7 @@ public abstract class ScreenHolder extends JPanel implements KeyListener, MouseI
 				_screenList.remove(i);
 				_screenList.add(0, temp);
 				temp.switchInto();
-				
+
 				if (_showBorder && _borderScreen != null){
 					_screenList.remove(_borderScreen);
 					_screenList.add(0, _borderScreen);
@@ -146,27 +146,27 @@ public abstract class ScreenHolder extends JPanel implements KeyListener, MouseI
 
 		_transitionScreen.transition(transition, screen);
 		switchToScreen("transition");
-		
+
 		if (_showBorder && _borderScreen != null){
 			_screenList.remove(_borderScreen);
 			_screenList.add(0, _borderScreen);
 		}
-		
+
 		return true;
 	}
-	
+
 	public void showBorder(){
 		_showBorder = true;
 		_screenList.remove(_borderScreen);
 		_screenList.add(0, _borderScreen);
 	}
-	
+
 	public void hideBorder(){
 		_showBorder = false;
 		_screenList.remove(_borderScreen);
 		_screenList.add(_borderScreen);
 	}
-	
+
 	public void showChooser(ChooserScreen c){
 		_chooserScreen.reset(c);
 		switchToScreen("chooser");
@@ -270,49 +270,49 @@ public abstract class ScreenHolder extends JPanel implements KeyListener, MouseI
 		}
 	}
 
-	
+
 	@Override
 	public void windowDeactivated(WindowEvent e){
 		if (_borderScreen != null){
 			_borderScreen._frameColor = Color.darkGray;
 		}
 	}
-	
+
 	@Override
 	public void windowActivated(WindowEvent e){
 		if (_borderScreen != null){
 			_borderScreen._frameColor = Color.black;
 		}
 	}
-	
+
 	@Override
 	public void windowOpened(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowClosing(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowClosed(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowIconified(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

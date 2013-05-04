@@ -5,17 +5,18 @@ import java.util.ArrayList;
 
 
 public class Flag extends Unit {
+	public static String TYPE = "flag";
+	
 	public Flag(GameData data, Vector pos, double size){
-		super(data, "flag");
+		super(data, TYPE);
 		_pos = pos;
 		
-		Image sprite = Resource._gameImages.get("flag");
+		Image sprite = Resource.get("flag");
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(90);
 		
-		_movable = false;
-		
 		_shape = new Box(this, new Vector(0,0), _size);
-		_restitution = 0;
+		_restitution = 0.5;
+		_appliesFriction = true;
 	}
 	
 	public void setShape(){
@@ -27,7 +28,7 @@ public class Flag extends Unit {
 	}
 	
 	public void draw(View v){
-		v.drawImage(Resource._gameImages.get("flag"), _pos, _size);
+		v.drawImage(Resource.get("flag"), _pos, _size);
 	}
 
 	@Override

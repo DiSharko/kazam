@@ -105,7 +105,15 @@ public class ChooserScreen extends Screen {
 			for (int i = 0; i < _chosens.size(); i++){
 				String label = ""+i;
 				if (_choiceNumberings != null && _choiceNumberings.length >= _totalToChoose) label = _choiceNumberings[i];
-				g.drawString(label, (int)(_chosens.get(i).x+_chosens.get(i).w-20), (int)(_chosens.get(i).y+_chosens.get(i).h-5));
+				g.drawString(label, (int)(_chosens.get(i).x+10), (int)(_chosens.get(i).y+23));
+			}
+		}
+		if (_choices != null){
+			g.setColor(new Color(1f, 0f, 0f, 0.5f));
+			for (Button b : _choices.buttons){
+				if (!b.enabled){
+					g.fillRoundRect((int)b.x, (int)b.y, (int)b.w, (int)b.h, b.roundness, b.roundness);
+				}
 			}
 		}
 	}
