@@ -175,6 +175,15 @@ public class GameData {
 
 			} else if(linearr[0].equals("SPAWN")) {
 				//line represents a spawn point
+				
+			} else if (linearr[0].equals("HWALL")) {
+				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
+				_units.add(new Wall(this, pos, Double.parseDouble(linearr[3]), false));
+				
+			} else if (linearr[0].equals("VWALL")) {
+				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
+				_units.add(new Wall(this, pos, Double.parseDouble(linearr[3]), true));
+				
 			} else if(linearr[0].equals("DOOR")) {
 				//line represents a door: DOOR,500,500,250,250,50
 				Vector lockpos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
