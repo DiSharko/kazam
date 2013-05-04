@@ -155,12 +155,7 @@ public class GameData {
 
 
 			e._vel = e._vel.plus(e._force.div(e._mass));
-<<<<<<< HEAD
-
-			// e._vel = new Vector(Math.min(Math.max(e._vel.x, -30), 30),Math.min(Math.max(e._vel.y, -50), 50));
-=======
 			if (e._appliesFriction) e._vel = e._vel.mult(0.96);
->>>>>>> a82fe96af70c5d89720750117ef780c7b59e7777
 
 			e._pos = e._pos.plus(e._vel);
 			e._force = new Vector(0,0);
