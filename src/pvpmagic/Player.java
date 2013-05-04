@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import pvpmagic.spells.FlashSpell;
 import pvpmagic.spells.Spell;
 
 public class Player extends Unit {
@@ -129,6 +130,10 @@ public class Player extends Unit {
 	}
 
 	public void castSpell(Spell spell) {
+		if (spell._name.equals("Flash")) {
+			FlashSpell f = (FlashSpell) spell;
+			f.flash();
+		}
 		_spellToCast = spell;
 		_spellCastingTime = spell._castingTime;
 		decrementMana(spell);
