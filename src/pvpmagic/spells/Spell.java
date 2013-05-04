@@ -53,7 +53,6 @@ public abstract class Spell extends Unit {
 			System.out.println("Given a null name!");
 			return null;
 		}
-		
 		if (name.equals("Stun")){ return new StunSpell(data, caster, dir); }
 		else if (name.equals("Disarm")) { return new DisarmSpell(data, caster, dir); }
 		else if (name.equals("Burn")) { return new BurnSpell(data, caster, dir); }
@@ -67,6 +66,10 @@ public abstract class Spell extends Unit {
 		else if (name.equals("Rejuvenate")) { return new RejuvenateSpell(data, caster, dir); }
 		else if (name.equals("Cleanse")) { return new CleanseSpell(data, caster, dir); }
 		else if (name.equals("Summon")) { return new SummonSpell(data, caster, dir); }
+		else if (name.equals("Clone")) { return new CloneSpell(data, caster, dir); }
+		else if (name.equals("Hide")) { return new HideSpell(data, caster, dir); }
+		else if (name.equals("Flash")) {  return new FlashSpell(data, caster, dir); }
+
 		System.out.println("Spell name \""+name+"\" not found!");
 		return null;
 	}

@@ -53,7 +53,7 @@ public abstract class Unit {
 		timedEffects.add(new SilenceEffect(numberOfIntervals(time), this));
 	}
 
-	boolean _delete = false;
+	protected boolean _delete = false;
 	
 	protected Shape _shape;
 	
