@@ -1,6 +1,8 @@
 package pvpmagic;
 
+import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -29,9 +31,15 @@ public class Resource {
 	public static ArrayList<String> _gameTypes;
 	public static ArrayList<String> _maps;
 
-	public static HashMap<String, Image> _gameImages;
-	public static HashMap<String, Image> _ui;
-
+	private static HashMap<String, Image> _images;
+	public static Image get(String imageName){
+		if (_images.containsKey(imageName)){
+			return _images.get(imageName);
+		}
+		return null;
+	}
+	
+	
 	public Resource(){
 		if (_useNativeBorder) _borderHeight = 0;
 		else _borderHeight = BorderScreen._topBarHeight;
@@ -41,10 +49,8 @@ public class Resource {
 		_gameTypes = new ArrayList<String>();
 		_maps = new ArrayList<String>();
 		
-		_gameImages = new HashMap<String, Image>();
+		_images = new HashMap<String, Image>();
 		
-		_ui = new HashMap<String, Image>();
-
 		try {
 			BufferedReader charactersFile = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/data/characters.txt")));
 			String line;
@@ -54,8 +60,6 @@ public class Resource {
 
 		} catch (IOException e){ e.printStackTrace();
 		} catch (NullPointerException e){ e.printStackTrace();
-		} catch (IndexOutOfBoundsException e){ e.printStackTrace();
-		} catch (NumberFormatException e) { e.printStackTrace();
 		}
 
 
@@ -67,8 +71,6 @@ public class Resource {
 			}
 		} catch (IOException e){ e.printStackTrace();
 		} catch (NullPointerException e){ e.printStackTrace();
-		} catch (IndexOutOfBoundsException e){ e.printStackTrace();
-		} catch (NumberFormatException e) { e.printStackTrace();
 		}
 
 
@@ -80,8 +82,6 @@ public class Resource {
 			}
 		} catch (IOException e){ e.printStackTrace();
 		} catch (NullPointerException e){ e.printStackTrace();
-		} catch (IndexOutOfBoundsException e){ e.printStackTrace();
-		} catch (NumberFormatException e) { e.printStackTrace();
 		}
 
 
@@ -93,88 +93,34 @@ public class Resource {
 			}
 		} catch (IOException e){ e.printStackTrace();
 		} catch (NullPointerException e){ e.printStackTrace();
-		} catch (IndexOutOfBoundsException e){ e.printStackTrace();
-		} catch (NumberFormatException e) { e.printStackTrace();
 		}
 
-
-
-//		try {
-//			Image tempSheet = new ImageIcon(Resource.class.getResource("/media/images/ui.png")).getImage();
-//			BufferedImage sheet = new BufferedImage(tempSheet.getWidth(null),tempSheet.getHeight(null),BufferedImage.TYPE_INT_ARGB);
-//			Graphics g = sheet.getGraphics();
-//			g.drawImage(tempSheet, 0, 0, null);
-//			g.dispose();
-//
-//			BufferedReader file = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/images/ui.txt")));
-//
-//			String line;
-//			while ((line = file.readLine()) != null){
-//				try {
-//					String[] part = line.split(" ");
-//					_ui.put(part[4], sheet.getSubimage(Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]), Integer.parseInt(part[3])));
-//				} catch (NumberFormatException e) {
-//					e.printStackTrace();
-//				} catch (IndexOutOfBoundsException e){
-//					e.printStackTrace();
-//				}
-//			}
-//
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} catch (NullPointerException e){
-//			e.printStackTrace();
-//		}
-//		
-//		try {
-//			Image tempSheet = new ImageIcon(Resource.class.getResource("/media/images/gameImagesAlpha.png")).getImage();
-//			BufferedImage sheet = new BufferedImage(tempSheet.getWidth(null),tempSheet.getHeight(null),BufferedImage.TYPE_INT_ARGB);
-//			Graphics g = sheet.getGraphics();
-//			g.drawImage(tempSheet, 0, 0, null);
-//			g.dispose();
-//			
-//			BufferedReader file = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/images/gameImagesAlpha.txt")));
-//			
-//			String line;
-//			while ((line = file.readLine()) != null){
-//				try {
-//					String[] part = line.split(" ");
-//					_gameImages.put(part[4], sheet.getSubimage(Integer.parseInt(part[0]), Integer.parseInt(part[1]), Integer.parseInt(part[2]), Integer.parseInt(part[3])));
-//				} catch (NumberFormatException e) {
-//					e.printStackTrace();
-//				} catch (IndexOutOfBoundsException e){
-//					e.printStackTrace();
-//				}
-//			}
-//
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} catch (NullPointerException e){
-//			e.printStackTrace();
-//		}
+		
+		
 		
 		String line = "";
 		try {
-			BufferedReader file = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/images/game/gameImages.txt")));
+			BufferedReader file = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/images/index.txt")));
 			while ((line = file.readLine()) != null){
-				_gameImages.put(line, new ImageIcon(Resource.class.getResource("/media/images/game/"+line+".png")).getImage());
+				String[] parts = line.split("/");
+				String name = parts[parts.length-1];
+				Image image = new ImageIcon(Resource.class.getResource("/media/images/"+line+".png")).getImage();
+				_images.put(name, image);
+				if (parts[0].equals("spells") && !parts[1].equals("icon")){
+					Image icon = get("icon");
+					BufferedImage newIcon = new BufferedImage(icon.getWidth(null), icon.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+					Graphics g = newIcon.getGraphics();
+					g.drawImage(icon, 0, 0, null);
+					Vector size = new Vector(image.getWidth(null), image.getHeight(null)).normalize().mult(newIcon.getWidth()*0.7);
+					g.drawImage(image, (int) (newIcon.getWidth()/2-size.x/2), (int) (newIcon.getHeight()/2-size.y/2)-15, (int)size.x, (int)size.y, null);
+					g.dispose();
+					_images.put(name+"Icon", newIcon);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (NullPointerException e){
-			System.out.println(line);
-			e.printStackTrace();
-		}
-		
-		try {
-			BufferedReader file = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/images/ui/ui.txt")));
-			while ((line = file.readLine()) != null){
-				_ui.put(line, new ImageIcon(Resource.class.getResource("/media/images/ui/"+line+".png")).getImage());
-			}
-		} catch (IOException e) {
-			System.out.println(line);
-			e.printStackTrace();
-		} catch (NullPointerException e){
+			System.out.println("Couldn't find "+line);
 			e.printStackTrace();
 		}
 		

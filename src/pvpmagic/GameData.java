@@ -63,9 +63,9 @@ public class GameData {
 		}
 	}
 
-	public void startCastingSpell(Player caster, int spellIndex, Vector dir){
+	public void startCastingSpell(Player caster, String spellName, Vector dir){
 		if (!caster._isSilenced) {
-			Spell s = Spell.newSpell(this, caster._spells[spellIndex], caster, dir);
+			Spell s = Spell.newSpell(this, spellName, caster, dir);
 			if (s != null){
 				Long previousCastTime = caster._spellCastingTimes.get(s._name);
 				if (previousCastTime == null) previousCastTime = (long) 0;
@@ -81,7 +81,13 @@ public class GameData {
 	}
 
 	public void update(){
-
+		String[] useableSpells = {"Burn", "Open", "Summon", "Rejuvenate"};
+		if (Math.random() < 0.1){
+			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*4)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
+		}
+		if (Math.random() < 0.09){
+			_players.get(1)._mana += 15;
+		}
 		// Deleting must be separate, after all updates and collisions
 		for (int i = 0; i < _units.size(); i++){
 			Unit u = _units.get(i);
@@ -149,8 +155,12 @@ public class GameData {
 
 
 			e._vel = e._vel.plus(e._force.div(e._mass));
+<<<<<<< HEAD
 
 			// e._vel = new Vector(Math.min(Math.max(e._vel.x, -30), 30),Math.min(Math.max(e._vel.y, -50), 50));
+=======
+			if (e._appliesFriction) e._vel = e._vel.mult(0.96);
+>>>>>>> a82fe96af70c5d89720750117ef780c7b59e7777
 
 			e._pos = e._pos.plus(e._vel);
 			e._force = new Vector(0,0);

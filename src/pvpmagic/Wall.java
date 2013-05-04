@@ -13,7 +13,7 @@ public class Wall extends Unit {
 		super(data, TYPE);
 		_pos = pos;
 		VERTICAL = vertical; //true is vertical, false is horizontal
-		Image sprite = Resource._gameImages.get(VERTICAL ? VWALL : HWALL);
+		Image sprite = Resource.get(VERTICAL ? VWALL : HWALL);
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(size);
 		
 		_movable = false;
@@ -23,11 +23,15 @@ public class Wall extends Unit {
 	}
 	
 	public void draw(View v){
-		v.drawImage(Resource._gameImages.get(VERTICAL ? VWALL : HWALL), _pos, _size);
+		v.drawImage(Resource.get(VERTICAL ? VWALL : HWALL), _pos, _size);
 	}
 
 	@Override
 	public void collide(Collision c){
 		//nothing happens when something collides with it
-	}	
+	}
+	
+	@Override
+	public void changeHealth(double health){}
+
 }

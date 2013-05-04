@@ -1,0 +1,17 @@
+misc/viewField
+misc/rock
+spells/icon
+spells/StunSpell
+spells/RootSpell
+spells/BurnSpell
+spells/RejuvenateSpell
+spells/OpenSpell
+spells/SummonSpell
+misc/hwall
+misc/vwall
+misc/player1_back
+misc/flag
+misc/menu
+ui/fullscreen
+ui/close
+ui/windowed

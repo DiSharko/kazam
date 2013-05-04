@@ -6,8 +6,6 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 import screen.Button;
 import screen.ChooserScreen;
 import screen.InterfaceElement;
@@ -17,7 +15,6 @@ import screen.TextInputLine;
 import screen.TransitionScreen.Transition;
 
 public class SetupScreen extends Screen {
-
 
 	ArrayList<InterfaceElement> _tabs;
 	ArrayList<InterfaceElement> _joinGameElements;
@@ -103,7 +100,10 @@ public class SetupScreen extends Screen {
 		_spellChooserScreen._caller = this;
 		for (int i = 0; i < Resource._spells.size(); i++){
 			String name = Resource._spells.get(i);
-			_spellChooserScreen._choices.addButton(new Button(null, name, 100, 100, name, -1));
+			Button choice = new Button(null, name, Resource.get(name+"SpellIcon"));
+			choice.name = name;
+			choice.namePositionFractionY = 0.8;
+			_spellChooserScreen._choices.addButton(choice);
 		}
 
 		_spellAllChooserScreen = new ChooserScreen(_holder, "spellChooser");
@@ -113,13 +113,17 @@ public class SetupScreen extends Screen {
 		_spellAllChooserScreen._choiceNumberings = new String[]{"Q", "W", "E", "R", "A", "S", "D", "F"};
 		for (int i = 0; i < Resource._spells.size(); i++){
 			String name = Resource._spells.get(i);
-			_spellAllChooserScreen._choices.addButton(new Button(null, name, 100, 100, name, -1));
+			Button choice = new Button(null, name, Resource.get(name+"SpellIcon"));
+			choice.name = name;
+			choice.namePositionFractionY = 0.83;
+			_spellAllChooserScreen._choices.addButton(choice);
 		}
 
 		_spells = new Button[8];
 		for (int i = 0; i < _spells.length; i++){
 			Button b = new Button(this, "spell_"+i, 80, 80);
 			b.setColors(_bgColor, new Color(0.5f,0.5f,0.5f,0.2f), new Color(0.3f,0.3f,0.3f,0.3f), null);
+			b.namePositionFractionY = 0.83;
 			_spells[i] = b;
 			_joinGameElements.add(b);
 			_hostGameElements.add(b);
@@ -221,7 +225,7 @@ public class SetupScreen extends Screen {
 		char[] spellKeys = {'Q','W','E','R','A','S','D','F'};
 		g.setColor(Color.black);
 		for (int i = 0; i < _spells.length && _spells[i].visible; i++){
-			g.drawString(""+spellKeys[i], (int)(_spells[i].x+_spells[i].w-20), (int)(_spells[i].y+_spells[i].h-5));
+			g.drawString(""+spellKeys[i], (int)(_spells[i].x+10), (int)(_spells[i].y+23));
 		}
 
 		if (_currentTab.id.equals("joinTab") || _currentTab.id.equals("hostTab")){
@@ -275,6 +279,7 @@ public class SetupScreen extends Screen {
 						}
 					}
 					c._callingElement.name = c._chosen.name;
+					((Button)c._callingElement).image = Resource.get(c._callingElement.name + "SpellIcon");
 					c._chosen.enabled = false;
 				}
 				_spellChooserScreen._callingElement = null;
@@ -282,6 +287,7 @@ public class SetupScreen extends Screen {
 				for (Button b : _spellChooserScreen._choices.buttons) b.enabled = true;
 				for (int i = 0; i < c._chosens.size(); i++){
 					_spells[i].name = c._chosens.get(i).name;
+					_spells[i].image = Resource.get(_spells[i].name + "SpellIcon");
 					for (Button b : _spellChooserScreen._choices.buttons){
 						if (_spells[i].name.equals(b.name)){
 							b.enabled = false;

@@ -30,7 +30,7 @@ public class Player extends Unit {
 	   the player. Used for calculation of mana cost. */
 	long _timeLastCast;
 
-	double _velocity = 6;
+	double _velocity = 8;
 
 
 	public Player(GameData data, String characterName, String playerName, String[] spellNames){
@@ -44,10 +44,10 @@ public class Player extends Unit {
 		_mana = 100;
 
 		_pos = new Vector(-50, -20);
-		Image sprite = Resource._gameImages.get("player1_back");
+		Image sprite = Resource.get("player1_back");
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(80);
-		
-		double hitBoxScale = 0.9;
+	
+		double hitBoxScale = 1;
 		_shape = new Box(this, _size.mult(1-hitBoxScale).div(2), _size.mult(hitBoxScale));
 
 		_spells = spellNames;
@@ -67,10 +67,10 @@ public class Player extends Unit {
 		if (_flag != null) {
 			Vector flagPos = _pos.plus(40, 0);
 			v.rotate(new Vector(1.5, -1), flagPos);
-			v.drawImage(Resource._gameImages.get("flag"), flagPos, _flag._size.mult(0.8));
+			v.drawImage(Resource.get("flag"), flagPos, _flag._size.mult(0.8));
 			v.unrotate();
 		}
-		v.drawImage(Resource._gameImages.get("player1_back"), _pos, _size);
+		v.drawImage(Resource.get("player1_back"), _pos, _size);
 	}
 
 	public void stop(){

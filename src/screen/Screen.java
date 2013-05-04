@@ -136,11 +136,11 @@ public abstract class Screen {
 
 	//	protected abstract void onMouseClicked(MouseEvent e);
 
-	protected void onMousePressed(MouseEvent event){
+	protected boolean onMousePressed(MouseEvent event){
 		_xMouse = event.getX();
 		_yMouse = event.getY();
+		boolean found = false;
 		if (_interfaceElements != null){
-			boolean found = false;
 			for (int i = 0; i < _interfaceElements.size(); i++){
 				InterfaceElement e = _interfaceElements.get(i);
 				if (!e.enabled || !e.visible) continue;
@@ -158,6 +158,7 @@ public abstract class Screen {
 
 			if (!found && keyboardFocus != null) keyboardFocus.onReleased(true);
 		}
+		return found;
 	}
 
 

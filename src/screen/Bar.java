@@ -10,7 +10,7 @@ public class Bar extends InterfaceElement {
 
 	int angle = 0;
 
-	public Color bgColor;
+	public Color bgColor = Color.white;
 
 	public Color fullColor = new Color(0f, 0.4f, 0f);
 	public Color midColor = new Color(0.6f, 0.6f, 0f);
@@ -24,6 +24,8 @@ public class Bar extends InterfaceElement {
 
 	private double drawValue;
 
+	public String name = "";
+	
 	public Bar(String _id, Vector _size, double _total){
 		type = "bar";
 
@@ -85,7 +87,6 @@ public class Bar extends InterfaceElement {
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.rotate(angle);
 		if (bgColor != null){
 			g.setColor(bgColor);
 			g.fillRect((int)x, (int)y, (int)w, (int)h);
@@ -94,7 +95,12 @@ public class Bar extends InterfaceElement {
 		g.fillRect((int)x, (int)y, (int)(w*current/total), (int)h);
 		g.setColor(borderColor);
 		g.drawRect((int)x, (int)y, (int)w, (int)h);
-		g.rotate(angle);
+		
+		
+		g.setColor(Color.black);
+		int nameWidth = (int)g.getFontMetrics().getStringBounds(name, g).getWidth();
+		int nameHeight = (int)g.getFontMetrics().getStringBounds(name, g).getHeight();
+		g.drawString(name, (int)(x+w/2-nameWidth/2), (int)(y+h/2+nameHeight/2-1));
 	}
 
 	public void draw(View v) {
