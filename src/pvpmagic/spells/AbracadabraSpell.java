@@ -1,6 +1,7 @@
 package pvpmagic.spells;
 
 import java.awt.Color;
+import java.awt.Image;
 
 import pvpmagic.*;
 
@@ -14,7 +15,11 @@ public class AbracadabraSpell extends Spell {
 		_size = new Vector(10, 10);
 		_cooldown = 5000;
 		_manaCost = 10;
-		setProperties(_size, 4);
+		
+		Image sprite = Resource.get("AbracadabraSpell");
+		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70), 14);
+		
+		_shape = new Circle(this, new Vector(-8, -8), 8);
 	}
 	
 	@Override
@@ -25,7 +30,8 @@ public class AbracadabraSpell extends Spell {
 	
 	@Override
 	public void draw(View v){
-		v.getGraphics().setColor(Color.black);
-		v.fillRect(_pos, _size);
+		v.rotate(_vel, _pos);
+		v.drawImage(Resource.get("AbracadabraSpell"), _pos.plus(-8,-8), _size);
+		v.unrotate();
 	}
 }

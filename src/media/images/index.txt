@@ -5,8 +5,10 @@ spells/StunSpell
 spells/RootSpell
 spells/BurnSpell
 spells/RejuvenateSpell
+spells/LockSpell
 spells/OpenSpell
 spells/SummonSpell
+spells/AbracadabraSpell
 misc/hwall
 misc/vwall
 misc/player1_back
