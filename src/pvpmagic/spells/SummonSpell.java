@@ -24,6 +24,8 @@ public class SummonSpell extends Spell {
 		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(100), 20);
 		_shape = new Circle(this, new Vector(-10, -10), 10);
 		
+		_appliesRestitution = false;
+		
 		_restitution = 0.6;
 	}
 	
@@ -33,6 +35,7 @@ public class SummonSpell extends Spell {
 		Vector dir = _caster._pos.minus(target._pos).normalize().mult(10);
 		if (target._type.equals("flag")) {
 			System.out.println(dir);
+			System.out.println("here");
 			target.applyForce(dir);
 			_health = 0;
 		}
