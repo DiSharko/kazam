@@ -1,5 +1,7 @@
 package pvpmagic;
 
+import java.awt.AlphaComposite;
+import java.awt.Composite;
 import java.awt.Image;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,10 +19,12 @@ public class Player extends Unit {
 
 	double _spellCastingTime = 0;
 	Spell _spellToCast = null;
+	double _hidden = 1.0;
+	Composite _old;
 
 	String[] _spells;
 	//ArrayList<Carryable> inventory = new ArrayList<Carryable>();
-	Flag _flag = null;
+	public Flag _flag = null;
 	Vector _flagSize = new Vector(40,40);
 	
 	HashMap<String, Long> _spellCastingTimes;
@@ -69,7 +73,15 @@ public class Player extends Unit {
 			v.drawImage(Resource._gameImages.get("flag"), flagPos, _flag._size.mult(0.8));
 			v.unrotate();
 		}
-		v.drawImage(Resource._gameImages.get("player1_back"), _pos, _size);
+		_old = v.getGraphics().getComposite();
+		if (_hidden < 1) {
+			AlphaComposite ac = java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden);
+			v.getGraphics().setComposite(ac);
+			v.drawImage(Resource._gameImages.get("player1_back"), _pos, _size);
+		} else if (_hidden == 1) {
+			v.drawImage(Resource._gameImages.get("player1_back"), _pos, _size);
+		}
+		v.getGraphics().setComposite(_old);
 	}
 
 	public void stop(){
@@ -153,7 +165,11 @@ public class Player extends Unit {
 	}
 
 	public void fear(long time) {
-			timedEffects.add(new FearEffect(numberOfIntervals(time), this));		
+		timedEffects.add(new FearEffect(numberOfIntervals(time), this));		
+	}
+	
+	public void hide(long time) {
+		timedEffects.add(new HideEffect(numberOfIntervals(time), this));
 	}
 
 	public static void fromNetInit(Integer netID, String networkString, HashMap<Integer, Unit> objectMap, GameData data) {

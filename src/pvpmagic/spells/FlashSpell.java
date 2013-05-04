@@ -3,10 +3,10 @@ package pvpmagic.spells;
 import pvpmagic.*;
 
 
-public class CloneSpell extends Spell {
-	public static String TYPE = "CloneSpell";
+public class FlashSpell extends Spell {
+	public static String TYPE = "FlashSpell";
 
-	public CloneSpell(GameData data, Player caster, Vector dir) {
+	public FlashSpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
 		_name = "Clone";
 		_size = new Vector(10, 10);
