@@ -13,9 +13,4 @@ public class HideSpell extends Spell {
 		_caster.hide(3500);
 		this._delete = true;
 	}
-	
-	@Override
-	public void draw(View v){
-		//nothing gets drawn
-	}
 }

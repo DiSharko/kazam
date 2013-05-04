@@ -152,9 +152,6 @@ public class GameData {
 		for (int i = 0; i < _units.size(); i++){
 			Unit e = _units.get(i);
 			if (!e._movable) continue;
-			
-			System.out.println("type:"+e._type);
-			System.out.println("type pos:"+e._pos);
 
 			e._vel = e._vel.plus(e._force.div(e._mass));
 			if (e._appliesFriction) e._vel = e._vel.mult(0.96);

@@ -26,6 +26,7 @@ public class Player extends Unit {
 	String[] _spells;
 	//ArrayList<Carryable> inventory = new ArrayList<Carryable>();
 	public Flag _flag = null;
+
 	Vector _flagSize = new Vector(40,40);
 	
 	HashMap<String, Long> _spellCastingTimes;
