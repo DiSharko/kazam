@@ -16,11 +16,11 @@ public class ClientNetworker implements ClientNetworkable {
 	private ClientSendThread _sendThread;
 	private SyncedString _initData;
 	private SyncedString _gameData;
-	private ConcurrentLinkedQueue<SyncedString> _inputs;
+	private ConcurrentLinkedQueue<String> _inputs;
 	private AtomicBoolean _connected;
 	private AtomicBoolean _started;
 	
-	public ClientNetworker(int getPort, int sendPort, SyncedString initData, SyncedString gameData, ConcurrentLinkedQueue<SyncedString> inputs, 
+	public ClientNetworker(int getPort, int sendPort, SyncedString initData, SyncedString gameData, ConcurrentLinkedQueue<String> inputs, 
 			AtomicBoolean connected, AtomicBoolean started) {
 		_getPort = getPort;
 		_sendPort = sendPort;
