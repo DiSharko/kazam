@@ -1,8 +1,10 @@
 package screen;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 
+import pvpmagic.Resource;
 import pvpmagic.Vector;
 import pvpmagic.View;
 
@@ -98,6 +100,7 @@ public class Bar extends InterfaceElement {
 		
 		
 		g.setColor(Color.black);
+		g.setFont(new Font(Resource._buttonFontName, Font.PLAIN, 17));
 		int nameWidth = (int)g.getFontMetrics().getStringBounds(name, g).getWidth();
 		int nameHeight = (int)g.getFontMetrics().getStringBounds(name, g).getHeight();
 		g.drawString(name, (int)(x+w/2-nameWidth/2), (int)(y+h/2+nameHeight/2-1));

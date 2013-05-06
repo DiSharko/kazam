@@ -21,7 +21,6 @@ public class Player extends Unit {
 	double _spellCastingTime = 0;
 	Spell _spellToCast = null;
 	double _hidden = 1.0;
-	Composite _old;
 
 	String[] _spells;
 	//ArrayList<Carryable> inventory = new ArrayList<Carryable>();
@@ -74,15 +73,16 @@ public class Player extends Unit {
 			v.drawImage(Resource.get("flag"), flagPos, _flag._size.mult(0.8));
 			v.unrotate();
 		}
-		_old = v.getGraphics().getComposite();
 		if (_hidden < 1) {
-			AlphaComposite ac = java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden);
-			v.getGraphics().setComposite(ac);
+			Composite old = v.getGraphics().getComposite();
+			
+			v.getGraphics().setComposite(java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden));
 			v.drawImage(Resource.get("player1_back"), _pos, _size);
+			
+			v.getGraphics().setComposite(old);
 		} else if (_hidden == 1) {
 			v.drawImage(Resource.get("player1_back"), _pos, _size);
 		}
-		v.getGraphics().setComposite(_old);
 	}
 
 	public void stop(){

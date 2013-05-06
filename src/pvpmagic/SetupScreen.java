@@ -222,10 +222,9 @@ public class SetupScreen extends Screen {
 		g.setColor(_tabColor);
 		g.fillRect(0, _tabHeight, w, 20);
 
-		char[] spellKeys = {'Q','W','E','R','A','S','D','F'};
 		g.setColor(Color.black);
 		for (int i = 0; i < _spells.length && _spells[i].visible; i++){
-			g.drawString(""+spellKeys[i], (int)(_spells[i].x+10), (int)(_spells[i].y+23));
+			g.drawString(""+Resource._spellKeys[i], (int)(_spells[i].x+10), (int)(_spells[i].y+23));
 		}
 
 		if (_currentTab.id.equals("joinTab") || _currentTab.id.equals("hostTab")){

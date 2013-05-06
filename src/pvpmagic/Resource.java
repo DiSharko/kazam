@@ -15,6 +15,7 @@ import screen.BorderScreen;
 
 public class Resource {
 
+	public static char[] _spellKeys = {'Q','W','E','R','A','S','D','F'};
 
 	public static boolean _useNativeBorder = false;
 	public static int _borderHeight;
