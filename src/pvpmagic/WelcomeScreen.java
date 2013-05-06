@@ -45,6 +45,8 @@ public class WelcomeScreen extends Screen {
 		onResize();
 	}
 
+	
+	int chrisTime = 0;
 	@Override
 	protected void draw(Graphics2D g) {
 		g.setColor(Color.gray);
@@ -79,6 +81,18 @@ public class WelcomeScreen extends Screen {
 				bx += 12;
 				bw = 210;
 				message = "Networking Programmer";
+				chrisTime++;
+				if (chrisTime > 20){
+					bx += 50;
+					bw = 115;
+					message = "Just Kidding";
+				}
+				if (chrisTime > 40){
+					bx += 10;
+					bw = 70;
+					message = "Retard";
+				}
+				
 			} else if (hoverElement.id.equals("Miraj Shah")){
 				bx += 80;
 				bw = 70;

@@ -16,8 +16,8 @@ public class BurnSpell extends Spell {
 		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(80), 25);
 		
 		_shape = new Circle(this, new Vector(-8, -8), 8);
-		_cooldown = 1000;
-		_manaCost = 10;
+		_cooldown = 1500;
+		_manaCost = 12;
 	}
 	
 

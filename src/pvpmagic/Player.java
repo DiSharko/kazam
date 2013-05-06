@@ -49,7 +49,7 @@ public class Player extends Unit {
 
 		_pos = new Vector(-50, -20);
 		Image sprite = Resource.get("player1_back");
-		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(80);
+		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70);
 	
 		double hitBoxScale = 1;
 		_shape = new Box(this, _size.mult(1-hitBoxScale).div(2), _size.mult(hitBoxScale));
