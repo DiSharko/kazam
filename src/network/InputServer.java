@@ -57,9 +57,9 @@ public class InputServer extends Thread {
 				
 				// fork input handler if not started
 				if (!_started.get()) {
+					_idCounter--;
 					InputHandler inputHandler = new InputHandler(clientConnection,_inputs,_running,_idCounter);
 					inputHandler.start();
-					_idCounter++;
 				} else { // else close socket
 					try {
 						clientConnection.close();
