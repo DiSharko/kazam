@@ -9,6 +9,7 @@ spells/LockSpell
 spells/OpenSpell
 spells/SummonSpell
 spells/AbracadabraSpell
+spells/ShieldSpell
 misc/hwall
 misc/vwall
 misc/player1_back
