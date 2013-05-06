@@ -36,7 +36,6 @@ public class Player extends Unit {
 
 	double _velocity = 8;
 
-
 	public Player(GameData data, String characterName, String playerName, String[] spellNames){
 		super(data, TYPE);
 		_canBeRooted = true;
@@ -177,57 +176,68 @@ public class Player extends Unit {
 	public void hide(long time) {
 		timedEffects.add(new HideEffect(numberOfIntervals(time), this));
 	}
-
-	public static void fromNetInit(Integer netID, String networkString, HashMap<Integer, Unit> objectMap, GameData data) {
-		/*String[] netSplit = networkString.split("\t");
-		Player p;
-		String[] spells = netSplit[5].split(", ");
-		Vector dir = Vector.fromNet(netSplit[7]);
-		Vector pos = Vector.fromNet(netSplit[9]);*/
-		//Will have to figure this out, how to put it into GameData
-	}
+	
 	public String toNet() {
 		String lastCastTimes = "";
 		for (Entry<String, Long> e : _spellCastingTimes.entrySet()) {
 			lastCastTimes += e.getKey() + "," + e.getValue() + ".";
 		}
-		return "\tp\t" + _pos.toNet() +
-				"\td\t" + _destination.toNet() +
-				"\tf\t" + _flag._netID +
-				"\th\t" + _health +
-				"\tm\t" + _mana +
-				"\tlct\t" + lastCastTimes.substring(0, lastCastTimes.length() - 1);
+		return _netID + 
+				"\t" + _type + 
+				"\t" + _pos.toNet() +
+				"\t" + _destination.toNet() +
+				"\t" + _flag._netID +
+				"\t" + _health +
+				"\t" + _mana +
+				"\t" + lastCastTimes.substring(0, lastCastTimes.length() - 1);
 		//Need to figure out string for timed effects
+		//Timed effects to and fromNet helpers for each effect must be written,
+		//when fromNet is called, throw away previous timed effects
+		//list, and instantiate new ones with (this) as target
 	}
 	
-	public void fromNet(Integer netID, String networkString, HashMap<Integer, Unit> objectMap, GameData data) {
-		String[] netSplit = networkString.split("\t");
-		Player p;
-		if (validNetworkString(netSplit)) {
-			if ((p = (Player) objectMap.get(netID)) != null) {
-				p._pos = Vector.fromNet(netSplit[1]);
-				p._destination = Vector.fromNet(netSplit[3]);
-				p._flag = (Flag) objectMap.get(Integer.parseInt(netSplit[5]));
-				p._health = Double.parseDouble(netSplit[7]);
-				p._mana = Double.parseDouble(netSplit[9]);
-				
-				String[] lastCastTimes = netSplit[11].split(".");
-				String[] sp;
-				for (String spell : lastCastTimes) {
-					sp = spell.split(",");
-					p._spellCastingTimes.put(sp[0], Long.parseLong(sp[1]));
-				}
+	public void fromNet(String[] networkString) {
+		if (validNetworkString(networkString)) {
+			this._pos = Vector.fromNet(networkString[2]);
+			this._destination = Vector.fromNet(networkString[3]);
+			//p._flag = (Flag) objectMap.get(Integer.parseInt(networkString[5]));
+			this._health = Double.parseDouble(networkString[5]);
+			this._mana = Double.parseDouble(networkString[6]);
+
+			String[] lastCastTimes = networkString[7].split(".");
+			String[] sp;
+			for (String spell : lastCastTimes) {
+				sp = spell.split(",");
+				this._spellCastingTimes.put(sp[0], Long.parseLong(sp[1]));
 			}
-		}		
-	}
+		}
+	}		
 	
 	public String toNetInit() {
-		String spells = Arrays.toString(_spells);
-		return "cn\t" + _characterName + 
-				"\tpn\t" + _playerName + 
-				"\ts\t" + spells.substring(1, spells.length() - 1) +
-				"\tp\t" + _pos.toNet() +
-				"\td\t" + _destination.toNet();
+		String spells = "";
+		for (int i = 0; i < _spells.length; i++) {
+			spells += _spells[i] + " ";
+		}
+		return _netID +
+				"\t" + _type +
+				"\t" + _characterName + 
+				"\t" + _playerName + 
+				"\t" + spells.substring(0, spells.length() - 1) +
+				"\t" + _pos.toNet() +
+				"\t" + _destination.toNet();
+	}
+	
+	//networkString format = [id, type, <any data from toNetInit, split on tabs>...]
+	public static Player fromNetInit(String[] networkString) {
+		if (networkString[1].equals("player")) {
+			String[] spells = networkString[4].split(" ");
+			Player p = new Player(null, networkString[2], networkString[3], spells);
+			p._destination = Vector.fromNet(networkString[6]);
+			p._pos = Vector.fromNet(networkString[5]);
+			p._netID = Integer.parseInt(networkString[0]);
+			return p;
+		}
+		return null;
 	}
 	
 	public Boolean validNetworkStringInit(String[] networkData) {
@@ -242,10 +252,7 @@ public class Player extends Unit {
 	}
 	
 	public Boolean validNetworkString(String[] networkData) {
-		if (networkData.length != 12 || !(networkData[0].equals("p")
-				&& networkData[2].equals("d") && networkData[4].equals("f")
-				&& networkData[6].equals("h")) && networkData[8].equals("m")
-				&& networkData[10].equals("lct")) {
+		if (networkData.length != 7) {
 			System.err.println("ERROR: Invalid String from network - " + Arrays.toString(networkData));
 			return false;
 		} else {
