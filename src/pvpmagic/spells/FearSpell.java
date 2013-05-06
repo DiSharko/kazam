@@ -1,10 +1,12 @@
 package pvpmagic.spells;
 
-import java.awt.Color;
+import java.awt.Image;
 
+import pvpmagic.Circle;
 import pvpmagic.Collision;
 import pvpmagic.GameData;
 import pvpmagic.Player;
+import pvpmagic.Resource;
 import pvpmagic.Unit;
 import pvpmagic.Vector;
 import pvpmagic.View;
@@ -15,10 +17,12 @@ public class FearSpell extends Spell {
 	public FearSpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
 		_name = "Fear";
-		_size = new Vector(10, 10);
 		_cooldown = 1000;
 		_manaCost = 10;
-		setProperties(_size, 4);
+		Image sprite = Resource.get("FearSpell");
+		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(50), 15);
+	
+		_shape = new Circle(this, new Vector(-9,-9), 9);
 	}
 	
 	@Override
@@ -32,8 +36,9 @@ public class FearSpell extends Spell {
 	
 	@Override
 	public void draw(View v){
-		v.getGraphics().setColor(Color.pink);
-		v.fillRect(_pos, _size);
+		v.rotate(_vel, _pos);
+		v.drawImage(Resource.get("FearSpell"), _pos.plus(-9,-9), _size);
+		v.unrotate();
 	}
 
 }

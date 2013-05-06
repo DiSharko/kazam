@@ -18,10 +18,17 @@ public abstract class InterfaceElement {
 	public double x, y, w, h;
 
 	// COLOR SETTINGS ///////////////
-	protected Color borderColor 		= 	Color.black;
-	protected Color color 		 	= 	new Color(1f,1f,1f);
-	protected Color mouseOverColor 	= 	new Color(.6f,.6f,.6f,.2f);
-	protected Color selectColor 	= 	new Color(.4f,.4f,.4f,.2f);
+	public Color borderColor 		= 	Color.black;
+	public Color color 		 	= 	new Color(1f,1f,1f);
+	public Color mouseOverColor 	= 	new Color(.6f,.6f,.6f,.2f);
+	public Color selectColor 	= 	new Color(.4f,.4f,.4f,.2f);
+	
+//	protected Color borderColor 		= 	Color.black;
+//	protected Color color 		 	= 	new Color(39/255f,47/255f,217/255f);
+//	protected Color mouseOverColor 	= 	new Color(.7f,.7f,.7f,.1f);
+//	protected Color selectColor 	= 	new Color(.9f,.9f,.9f,.1f);
+//	
+	
 	public void setColors(Color _color, Color _mouseOverColor, Color _selectColor, Color _borderColor){
 		if (_color != null) color = _color;
 		if (_mouseOverColor != null) mouseOverColor = _mouseOverColor;

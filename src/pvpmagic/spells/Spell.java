@@ -26,6 +26,7 @@ public abstract class Spell extends Unit {
 
 	public Spell(GameData data, String type, Player caster, Vector target) {
 		super(data, type);
+		if (data == null || type == null || caster == null || target == null) return;
 		_appliesRestitution = false;
 		_caster = caster;
 		_shape = new Circle(this, new Vector(0,0), 10);
@@ -35,6 +36,7 @@ public abstract class Spell extends Unit {
 	}
 	
 	public void setProperties(Vector size, double velocity){
+		if (_caster == null || _dir == null) return;
 		_size = size;
 		_velocity = velocity;
 		
