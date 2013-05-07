@@ -3,8 +3,7 @@ package network;
 import java.util.Arrays;
 import java.util.List;
 
-import pvpmagic.Player;
-import pvpmagic.Unit;
+import pvpmagic.*;
 
 public class Coder {
 
@@ -68,4 +67,29 @@ public class Coder {
 		return game;
 	}
 	
+	 //eventString is in the format netID \t timestamp \t <data>
+	public void handleEvent(String[] eventString, Player p, GameData data) {
+	   Vector target = Vector.fromNet(eventString[4]);
+	   if (eventString[3].equals("Q")) {
+	     data.startCastingSpell(p, p._spells[0], target);
+	   } else if (eventString[3].equals("W")){
+	     data.startCastingSpell(p, p._spells[1], target);
+	   } else if (eventString[3].equals("E")){
+	     data.startCastingSpell(p, p._spells[2], target);
+	   } else if (eventString[3].equals("R")){
+	     data.startCastingSpell(p, p._spells[3], target);
+	   } else if (eventString[3].equals("A")){
+	     data.startCastingSpell(p, p._spells[4], target);
+	   } else if (eventString[3].equals("S")){
+	     data.startCastingSpell(p, p._spells[5], target);
+	   } else if (eventString[3].equals("D")){
+	     data.startCastingSpell(p, p._spells[6], target);  
+	   } else if (eventString[3].equals("F")){
+	     data.startCastingSpell(p, p._spells[7], target);
+	   } else if (eventString[4].equals("CLICK")) {
+	     if (!p._isRooted) {
+	       p._destination = target;
+	     }
+	   }
+	 }
 }

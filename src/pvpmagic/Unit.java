@@ -70,7 +70,7 @@ public abstract class Unit {
 	 * Root effects
 	 */
 	boolean _canBeRooted = false;
-	boolean _isRooted = false;
+	public boolean _isRooted = false;
 	
 	public void root(long time){
 		if (_canBeRooted) _isRooted = true;

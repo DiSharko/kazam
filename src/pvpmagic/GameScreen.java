@@ -24,7 +24,7 @@ public class GameScreen extends Screen {
 	boolean DEBUG = false;
 
 	String _eventNetString = "";
-	PriorityBlockingQueue<String> _netInputs = new PriorityBlockingQueue<String>();
+	public PriorityBlockingQueue<String> _netInputs = new PriorityBlockingQueue<String>();
 
 
 	GameData _data;
@@ -234,20 +234,28 @@ public class GameScreen extends Screen {
 		Vector target = _view.screenToGamePoint(new Vector(_xMouse, _yMouse));
 		if (key == KeyEvent.VK_Q){
 			_data.startCastingSpell(_focus, _focus._spells[0], target);
+			_eventNetString = "Q\t" + target.toNet();
 		} else if (key == KeyEvent.VK_W){
 			_data.startCastingSpell(_focus, _focus._spells[1], target);
+			_eventNetString = "W\t" + target.toNet();
 		} else if (key == KeyEvent.VK_E){
 			_data.startCastingSpell(_focus, _focus._spells[2], target);
+			_eventNetString = "E\t" + target.toNet();
 		} else if (key == KeyEvent.VK_R){
 			_data.startCastingSpell(_focus, _focus._spells[3], target);
+			_eventNetString = "R\t" + target.toNet();
 		} else if (key == KeyEvent.VK_A){
 			_data.startCastingSpell(_focus, _focus._spells[4], target);
+			_eventNetString = "A\t" + target.toNet();
 		} else if (key == KeyEvent.VK_S){
 			_data.startCastingSpell(_focus, _focus._spells[5], target);
+			_eventNetString = "S\t" + target.toNet();
 		} else if (key == KeyEvent.VK_D){
-			_data.startCastingSpell(_focus, _focus._spells[6], target);			
+			_data.startCastingSpell(_focus, _focus._spells[6], target);
+			 _eventNetString = "D\t" + target.toNet();
 		} else if (key == KeyEvent.VK_F){
 			_data.startCastingSpell(_focus, _focus._spells[7], target);
+			_eventNetString = "F\t" + target.toNet();
 		}
 
 		if (key == 192) DEBUG = !DEBUG;
@@ -260,6 +268,8 @@ public class GameScreen extends Screen {
 		}
 		if (key == KeyEvent.VK_P){
 			System.out.println(_view.screenToGamePoint(new Vector(_xMouse, _yMouse)));
+			
+		_netInputs.add(_eventNetString);
 		}
 
 	}
@@ -267,10 +277,13 @@ public class GameScreen extends Screen {
 	@Override
 	public boolean onMousePressed(MouseEvent e){
 		if (!super.onMousePressed(e)){
+			_eventNetString = System.currentTimeMillis() + "\t";
 			Vector point = _view.screenToGamePoint(new Vector(e.getX(), e.getY()));
+			_eventNetString = "CLICK\t" + point.toNet();
 			if (!_focus._isRooted) {
 				_focus._destination = point;
 			}
+			_netInputs.add(_eventNetString);
 		}
 		return true;
 	}

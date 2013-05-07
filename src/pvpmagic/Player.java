@@ -25,7 +25,7 @@ public class Player extends Unit {
 	double _hidden = 1.0;
 	Composite _old;
 
-	String[] _spells;
+	public String[] _spells;
 	//ArrayList<Carryable> inventory = new ArrayList<Carryable>();
 	public Flag _flag = null;
 
