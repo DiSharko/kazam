@@ -4,11 +4,11 @@ import java.awt.Image;
 import java.util.ArrayList;
 
 
-public class FlagPedastal extends Unit {
+public class FlagPedestal extends Unit {
 	public static String TYPE = "FlagZone";
-	Flag _score = null;
+	Flag _flag = null;
 	
-	public FlagPedastal(GameData data, Vector pos, double size){
+	public FlagPedestal(GameData data, Vector pos, double size){
 		super(data, TYPE);
 		_pos = pos;
 		Image sprite = Resource.get("rock");
@@ -28,7 +28,7 @@ public class FlagPedastal extends Unit {
 	}
 	
 	public void draw(View v){
-		if (_score == null)
+		if (this._flag == null)
 			v.drawImage(Resource.get("rock"), _pos, _size);
 		else
 			v.drawImage(Resource.get("hwall"), _pos, _size);
@@ -43,7 +43,7 @@ public class FlagPedastal extends Unit {
 		if (u._type.equals("player")) {
 			Player p = (Player) u;
 			if (p._flag != null){
-				_score = p._flag;
+				this._flag = p._flag;
 				p._flag = null;
 			}
 		}

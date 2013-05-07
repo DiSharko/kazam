@@ -6,17 +6,18 @@ public class RootEffect extends TimedEffect {
 	public RootEffect(double numberOfIntervals, Unit u) {
 		_numberOfIntervals = numberOfIntervals;
 		_target = u;
+		_type = TYPE;
 	}
 
 	@Override
 	public void effect() {
-		effectCompleted = false;
+		_effectCompleted = false;
 		if (_numberOfIntervals > 0) {
 			_target._isRooted = true;
 			_numberOfIntervals -= 1;
 		} else {
 			_target._isRooted = false;
-			effectCompleted = true;
+			_effectCompleted = true;
 		}
 	}
 

@@ -6,22 +6,19 @@ public class SilenceEffect extends TimedEffect {
 	public SilenceEffect(double numberOfIntervals, Unit u) {
 		_numberOfIntervals = numberOfIntervals;
 		_target = u;
+		_type = TYPE;
 	}
 
 	@Override
 	public void effect() {
-		effectCompleted = false;
+		_effectCompleted = false;
 		if (_numberOfIntervals > 0) {
 			_target._isSilenced = true;
 			_numberOfIntervals -= 1;
 		} else {
 			_target._isSilenced = false;
-			effectCompleted = true;
+			_effectCompleted = true;
 		}
-	}
-	
-	public String toNet() {
-		return "n " + Double.toString(_numberOfIntervals) + " t " + _target._netID;
 	}
 
 }

@@ -6,11 +6,12 @@ public class ConfuseEffect extends TimedEffect {
 	public ConfuseEffect(double numberOfIntervals, Player u) {
 		_numberOfIntervals = numberOfIntervals;
 		_target = u;
+		_type = TYPE;
 	}
 
 	@Override
 	public void effect() {
-		effectCompleted = false;
+		_effectCompleted = false;
 		if (_numberOfIntervals > 0) {
 			_target._isSilenced = true;
 			_target._isRooted = true;
@@ -24,7 +25,8 @@ public class ConfuseEffect extends TimedEffect {
 		} else {
 			_target._isSilenced = false;
 			_target._isRooted = false;
-			effectCompleted = true;
+			_effectCompleted = true;
+			((Player) _target)._destination = null;
 		}
 	}
 

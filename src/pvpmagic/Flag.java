@@ -34,6 +34,9 @@ public class Flag extends Unit {
 	}
 
 	@Override
+	public void changeHealth(double h){};
+	
+	@Override
 	public void collide(Collision c){
 		Unit u = c.other(this);
 		if (u._type.equals("player")){

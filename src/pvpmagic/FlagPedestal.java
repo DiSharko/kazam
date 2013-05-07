@@ -28,7 +28,7 @@ public class FlagPedestal extends Unit {
 	}
 	
 	public void draw(View v){
-		if (this._flag == null)
+		if (_flag == null)
 			v.drawImage(Resource.get("rock"), _pos, _size);
 		else
 			v.drawImage(Resource.get("hwall"), _pos, _size);
@@ -43,7 +43,7 @@ public class FlagPedestal extends Unit {
 		if (u._type.equals("player")) {
 			Player p = (Player) u;
 			if (p._flag != null){
-				this._flag = p._flag;
+				_flag = p._flag;
 				p._flag = null;
 			}
 		}

@@ -46,7 +46,6 @@ public class WelcomeScreen extends Screen {
 	}
 
 	
-	int chrisTime = 0;
 	@Override
 	protected void draw(Graphics2D g) {
 		g.setColor(Color.gray);
@@ -55,14 +54,9 @@ public class WelcomeScreen extends Screen {
 		g.setFont(new Font("Helvetica", Font.PLAIN, 72));
 		String s = "Kazam";
 		int sWidth = (int)g.getFontMetrics().getStringBounds(s, g).getWidth();
-		g.setColor(new Color((float)Math.random(), (float)Math.random(), (float)Math.random()));
 		
-		int disp = 7;
-		g.drawString(s, (int)(_holder._w/2-sWidth/2)+(int)(Math.random()*disp), 150+(int)(Math.random()*disp));
-		g.setColor(new Color((float)Math.random(), (float)Math.random(), (float)Math.random()));
-		g.drawString(s, (int)(_holder._w/2-sWidth/2)+(int)(Math.random()*disp), 150+(int)(Math.random()*disp));
-		g.setColor(new Color((float)Math.random(), (float)Math.random(), (float)Math.random()));
-		g.drawString(s, (int)(_holder._w/2-sWidth/2)+(int)(Math.random()*disp), 150+(int)(Math.random()*disp));
+		g.setColor(Color.black);
+		g.drawString(s, (int)(_holder._w/2-sWidth/2), 150);
 
 		if (hoverElement != null){
 			int bx = (int) hoverElement.x;
@@ -81,22 +75,11 @@ public class WelcomeScreen extends Screen {
 				bx += 12;
 				bw = 210;
 				message = "Networking Programmer";
-				chrisTime++;
-				if (chrisTime > 20){
-					bx += 50;
-					bw = 115;
-					message = "Just Kidding";
-				}
-				if (chrisTime > 40){
-					bx += 10;
-					bw = 70;
-					message = "Retard";
-				}
 				
 			} else if (hoverElement.id.equals("Miraj Shah")){
-				bx += 80;
-				bw = 70;
-				message = "Retard";
+				bx += 25;
+				bw = 182;
+				message = "Content Programmer";
 			}
 			if (!message.equals("")){
 				int h = 30;

@@ -13,11 +13,12 @@ public class HideEffect extends TimedEffect {
 		_appearVals = 40.0;
 		_disappearVals = _numberOfIntervals - _appearVals + 1;
 		_increment = 1.0/_appearVals;
+		_type = TYPE;
 	}
 
 	@Override
 	public void effect() {
-		effectCompleted = false;
+		_effectCompleted = false;
 		if (_numberOfIntervals > _disappearVals) {
 			((Player) _target)._hidden -= _increment;
 			_numberOfIntervals -= 1;
@@ -25,7 +26,7 @@ public class HideEffect extends TimedEffect {
 			((Player) _target)._hidden = 0.0;
 			_numberOfIntervals -= 1;
 		} else if (_numberOfIntervals <= 0.0) {
-			effectCompleted = true;
+			_effectCompleted = true;
 			((Player) _target)._hidden = 1.0;
 		} else if (_numberOfIntervals < _appearVals) {
 			((Player) _target)._hidden += _increment;

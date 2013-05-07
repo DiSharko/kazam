@@ -90,6 +90,13 @@ public class View {
 		g.drawImage(i, (int)(pos.x), (int)(pos.y), (int)(size.x), (int)(size.y), null);
 	}
 	
+	public void drawImage(Image i, Vector pos, int size){
+		pos = gameToScreenPoint(pos);
+		size *= _scale;
+		Vector iSize = new Vector(i.getWidth(null), i.getHeight(null)).normalize().mult(size);
+		g.drawImage(i, (int)(pos.x), (int)(pos.y), (int)iSize.x, (int)iSize.y, null);
+	}
+	
 	public Vector gameToScreenPoint(Vector gamePoint){
 		return gamePoint.minus(_camera.minus(_size.div(_scale*2))).mult(_scale).plus(_pos);
 	}

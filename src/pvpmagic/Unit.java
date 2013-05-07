@@ -1,5 +1,6 @@
 package pvpmagic;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public abstract class Unit {
@@ -63,7 +64,7 @@ public abstract class Unit {
 	/**
 	 * Effects that occur over time 
 	 */
-	public LinkedList<TimedEffect> timedEffects = new LinkedList<TimedEffect>();
+	public LinkedList<TimedEffect> _timedEffects = new LinkedList<TimedEffect>();
 	private final int MILLISECONDS_PER_TICK = 25;
 	
 	public void die() {
@@ -74,12 +75,12 @@ public abstract class Unit {
 	 * Root effects
 	 */
 	boolean _canBeRooted = false;
-	boolean _isRooted = false;
+	public boolean _isRooted = false;
 	
 	public void root(long time){
 		if (_canBeRooted) _isRooted = true;
 		_vel = new Vector(0,0);
-		timedEffects.add(new RootEffect(numberOfIntervals(time), this));
+		_timedEffects.add(new RootEffect(numberOfIntervals(time), this));
 	}
 	
 	/**
@@ -90,7 +91,7 @@ public abstract class Unit {
 	
 	public void silence(long time){ 
 		if (_canBeSilenced) _isSilenced = true; 
-		timedEffects.add(new SilenceEffect(numberOfIntervals(time), this));
+		_timedEffects.add(new SilenceEffect(numberOfIntervals(time), this));
 	}
 
 	public void collide(Collision c){
@@ -103,14 +104,14 @@ public abstract class Unit {
 	public void update(){
 		LinkedList<TimedEffect> completedEffects = new LinkedList<TimedEffect>();
 		
-		for (TimedEffect e : timedEffects) {
+		for (TimedEffect e : _timedEffects) {
 			e.effect();
-			if (e.effectCompleted) {
+			if (e._effectCompleted) {
 				completedEffects.add(e);
 			}
 		}
 		
-		timedEffects.removeAll(completedEffects);
+		_timedEffects.removeAll(completedEffects);
 	
 	}
 	
@@ -137,7 +138,7 @@ public abstract class Unit {
 	public void changeMana(int amount, long time) {
 		//System.out.println("STARTING MANA SPELL: HP - " + _health + " MANA - " + _mana);
 		double intervals = numberOfIntervals(time);
-		timedEffects.add(new ManaEffect(intervals,changePerInterval(amount, intervals), this));
+		_timedEffects.add(new ManaEffect(intervals,changePerInterval(amount, intervals), this));
 	}
 	/**
 	 * Increase/decrease health over time
@@ -147,7 +148,7 @@ public abstract class Unit {
 	public void changeHealth(int amount, long time) {
 		//System.out.println("STARTING HEALTH SPELL: HP - " + _health + " MANA - " + _mana);
 		double intervals = numberOfIntervals(time);
-		timedEffects.add(new HealthEffect(intervals, changePerInterval(amount, intervals), this));
+		_timedEffects.add(new HealthEffect(intervals, changePerInterval(amount, intervals), this));
 	}
 	
 	protected double numberOfIntervals(long time) {
@@ -159,7 +160,7 @@ public abstract class Unit {
 	}
 	public void cleanse() {
 		LinkedList<TimedEffect> toBeCleansed = new LinkedList<TimedEffect>();
-		for (TimedEffect e : timedEffects) {
+		for (TimedEffect e : _timedEffects) {
 			if (e instanceof HealthEffect) {
 				HealthEffect temp = (HealthEffect) e;
 				if (temp._changePerInterval < 0) {
@@ -176,8 +177,7 @@ public abstract class Unit {
 			}
 		}
 		
-		System.out.println("TO BE CLEANSED: " + toBeCleansed.toString());
-		timedEffects.removeAll(toBeCleansed);
+		_timedEffects.removeAll(toBeCleansed);
 	}
 	
 	public boolean canCollideWith(Unit u){
@@ -199,7 +199,7 @@ public abstract class Unit {
 				"\t" + _isSilenced;
 				
 	}
-	public void fromNet(String[] networkString) {
+	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
 		//TO-DO: VALIDATION ON STRING
 		_pos = Vector.fromNet(networkString[0]);
 		_size = Vector.fromNet(networkString[1]); 

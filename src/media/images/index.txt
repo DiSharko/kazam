@@ -1,6 +1,8 @@
 misc/viewField
 misc/rock
 misc/pillar
+misc/door_closed
+misc/door_open
 spells/icon
 spells/StunSpell
 spells/RootSpell
@@ -19,6 +21,10 @@ misc/vwall
 misc/player1_back
 misc/flag
 misc/menu
+misc/confuseEffect
+misc/burnEffect
+misc/silenceEffect
+misc/rootEffect
 ui/fullscreen
 ui/close
 ui/windowed
