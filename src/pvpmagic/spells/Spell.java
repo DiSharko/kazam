@@ -86,7 +86,7 @@ public abstract class Spell extends Unit {
 	
 	@Override
 	public boolean canCollideWith(Unit u){
-		if (u == _caster && time < 10000) return false;
+		if (u == _caster && time < 15) return false;
 		return true;
 	}
 	@Override
