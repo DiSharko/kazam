@@ -14,7 +14,7 @@ import pvpmagic.spells.Spell;
 
 public class Player extends Unit {
 	public static String TYPE = "player";
-	
+
 	String _characterName;
 	String _playerName;
 
@@ -29,7 +29,7 @@ public class Player extends Unit {
 	public Flag _flag = null;
 
 	Vector _flagSize = new Vector(40,40);
-	
+
 	HashMap<String, Long> _spellCastingTimes;
 
 	/* The time at which the most recent spell was cast by
@@ -44,31 +44,35 @@ public class Player extends Unit {
 		_canBeSilenced = true;
 
 		_mass = 3;
-		
+
 		_health = 100;
 		_mana = 100;
 
 		_pos = new Vector(-50, -20);
 		Image sprite = Resource.get("player1_back");
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70);
-	
+
 		double hitBoxScale = .7;
 		_shape = new Box(this, _size.mult(0, (1-hitBoxScale)/2), _size.mult(1, hitBoxScale));
 
 		_spells = spellNames;
 		_spellCastingTimes = new HashMap<String, Long>();
-		
+
 		_characterName = characterName;
 		_playerName = playerName;
-		
+
 		this._restitution = 0;
-		
+
 		_appliesFriction = true;
 
 	}
 
 	@Override
 	public void draw(View v){
+		if (_isRooted){
+			v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
+		}
+
 		if (_flag != null) {
 			Vector flagPos = _pos.plus(40, 0);
 			v.rotate(new Vector(1.5, -1), flagPos);
@@ -77,21 +81,26 @@ public class Player extends Unit {
 		}
 		if (_hidden < 1) {
 			Composite old = v.getGraphics().getComposite();
-			
+
 			v.getGraphics().setComposite(java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden));
 			v.drawImage(Resource.get("player1_back"), _pos, _size);
-			
+
 			v.getGraphics().setComposite(old);
 		} else if (_hidden == 1) {
 			v.drawImage(Resource.get("player1_back"), _pos, _size);
 		}
-		
+
+		if (_isSilenced){
+			v.drawImage(Resource.get("silenceEffect"), _pos.plus(30, -10), 30);
+		}
 		for (TimedEffect e : _timedEffects){
 			if (e._type.equals(FearEffect.TYPE)){
 				v.drawImage(Resource.get("confuseEffect"), _pos.plus(10, -30), 30);
+			} else if (e._type.equals(HealthEffect.TYPE)){
+				v.drawImage(Resource.get("burnEffect"), _pos.plus(3, _size.y-35), 50);
 			}
 		}
-		
+
 	}
 
 	public void stop(){
@@ -102,15 +111,15 @@ public class Player extends Unit {
 	@Override
 	public void update(){
 		super.update();
-		
+
 		//flag-stun checking
 		if(_isRooted && _isSilenced)
 			dropFlag();
-		
+
 		//health and mana regeneration
 		changeHealth(0.125);
 		changeMana(0.125);
-		
+
 		Vector center = _pos.plus(_size.div(2.0));
 		if (_spellCastingTime > 0) _spellCastingTime--;
 		else if (_spellToCast != null){
@@ -136,21 +145,22 @@ public class Player extends Unit {
 		//exponentially with quick successions of spells
 		Long specificTimeLastCast = _spellCastingTimes.get(spell._name);
 		if (specificTimeLastCast == null) specificTimeLastCast = (long) 0;
-		
+
 		double multiplier = 1;
 		if (System.currentTimeMillis() - _timeLastCast < 1000) {
 			multiplier += 0.25;
 		}
-		
+
 		long score = (long) (System.currentTimeMillis() - specificTimeLastCast - spell._cooldown);
 		if (score > 0 && score < 1000) {
 			multiplier += 2;
 		}
-		
+
 		changeMana((-1 * multiplier) * spell._manaCost);
 	}
 
 	public void castSpell(Spell spell) {
+		_spellCastingTimes.put(spell._name, System.currentTimeMillis());
 		if (spell._name.equals("Flash")) {
 			FlashSpell s = (FlashSpell) spell;
 			s.flash();
@@ -166,7 +176,7 @@ public class Player extends Unit {
 		//Spell.newSpell(_spells[spellIndex], this, pos, dir).hit(target);
 	}
 
-	
+
 	public void dropFlag() {
 		if (_flag == null) {
 			return; //nothing happens
@@ -184,7 +194,7 @@ public class Player extends Unit {
 	public void fear(long time) {
 		_timedEffects.add(new FearEffect(numberOfIntervals(time), this));		
 	}
-	
+
 	public void hide(long time) {
 		_timedEffects.add(new HideEffect(numberOfIntervals(time), this));
 	}
@@ -207,7 +217,7 @@ public class Player extends Unit {
 				"\t" + _mana +
 				"\t" + lastCastTimes.substring(0, lastCastTimes.length() - 1) +
 				"\t" + timedEffectsStr.substring(0, timedEffectsStr.length() - 1);
-		
+
 		//when fromNet is called, throw away previous timed effects
 		//list, and instantiate new ones with (this) as target
 	}
@@ -233,10 +243,10 @@ public class Player extends Unit {
 				ef = TimedEffect.fromNet(effect, this);
 				if (ef != null) _timedEffects.add(ef);
 			}
-			
+
 		}
 	}		
-	
+
 	public String toNetInit() {
 		String spells = "";
 		for (int i = 0; i < _spells.length; i++) {
@@ -250,7 +260,7 @@ public class Player extends Unit {
 				"\t" + _pos.toNet() +
 				"\t" + _destination.toNet();
 	}
-	
+
 	//networkString format = [id, type, <any data from toNetInit split on tabs>...]
 	public static Player fromNetInit(String[] networkString) {
 		if (networkString[1].equals("player") && validNetworkString(networkString, true)) {
@@ -262,9 +272,9 @@ public class Player extends Unit {
 			return p;
 		}
 		throw new RuntimeException("Called Player.fromNetInit on string: " 
-		+ Arrays.toString(networkString));
+				+ Arrays.toString(networkString));
 	}
-	
+
 	public static Boolean validNetworkString(String[] networkData, Boolean init) {
 		if ((init && networkData.length != 6) || (!init && networkData.length != 9)) {
 			System.err.println("ERROR: Invalid String from network - " + Arrays.toString(networkData));

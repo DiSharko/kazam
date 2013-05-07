@@ -128,21 +128,26 @@ public class GameScreen extends Screen {
 				g.setFont(new Font("Helvetica", Font.PLAIN, 16));
 				g.drawString(""+Resource._spellKeys[i], x+6, y+17);
 
+				Spell proto = Spell.newSpell(_data, _focus._spells[i], null, null);
 				if (_focus._spellCastingTimes.containsKey(_focusSpellButtons[i].name)){
-					Spell proto = Spell.newSpell(_data, _focus._spells[i], null, null);
 					double timeSinceCast = System.currentTimeMillis() - _focus._spellCastingTimes.get(_focusSpellButtons[i].name);
 					double cooldown = proto._cooldown;
-					
+
 					if (timeSinceCast < cooldown){
 						double fraction = (cooldown-timeSinceCast)/cooldown;
 						g.setColor(new Color(0,0,1,0.4f));
 						g.fillRoundRect(x, y, (int)(_spellButtonSize*fraction), _spellButtonSize, 15, 15);
-					} else if (proto._manaCost > _focus._mana){
-						g.setColor(new Color(1,0.7f,0.7f,0.7f));
-						g.fillRoundRect(x, y, _spellButtonSize, _spellButtonSize, 15, 15);
 					}
 				}
+				if (proto._manaCost > _focus._mana){
+					g.setColor(new Color(1,0.7f,0.7f,0.7f));
+					g.fillRoundRect(x, y, _spellButtonSize, _spellButtonSize, 15, 15);
+				}
+				if (_focus._isSilenced){
+					g.drawImage(Resource.get("silenceEffect"), x, y, 60, 45, null);
+				}
 			}
+
 		}
 
 	}
@@ -182,9 +187,9 @@ public class GameScreen extends Screen {
 
 		_view._camera = _focus._pos;
 		_view._scale = (Math.min(_holder._h, _holder._w))/600.0;
-		
-//		_view._camera = new Vector(1000,-200);
-//		_view._scale = 0.4;
+
+		//		_view._camera = new Vector(1000,-200);
+		//		_view._scale = 0.4;
 
 		if (_focus != null){
 			_healthBar.current = _focus._health;
@@ -241,7 +246,7 @@ public class GameScreen extends Screen {
 		}
 
 		if (key == 192) DEBUG = !DEBUG;
-		
+
 		if (key == KeyEvent.VK_G){
 			try {
 				_data._units = new ArrayList<Unit>();

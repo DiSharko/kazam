@@ -64,14 +64,13 @@ public class GameData {
 	}
 
 	public void startCastingSpell(Player caster, String spellName, Vector dir){
-		if (!caster._isSilenced) {
+		if (!caster._isSilenced && caster._spellToCast == null) {
 			Spell s = Spell.newSpell(this, spellName, caster, dir);
 			if (s != null){
 				Long previousCastTime = caster._spellCastingTimes.get(s._name);
 				if (previousCastTime == null) previousCastTime = (long) 0;
 				if ((System.currentTimeMillis() - previousCastTime) >= s._cooldown && caster._mana > s._manaCost) {
 					caster.castSpell(s);
-					caster._spellCastingTimes.put(s._name, System.currentTimeMillis());
 				}
 			}
 		}
@@ -83,13 +82,16 @@ public class GameData {
 
 	public void update(){
 		
-		String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Fear"};
+//		String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Fear"};
 //		if (Math.random() < 0.1){
 //			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*useableSpells.length)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
 //		}
-		if (Math.random() < 0.09){
-			_players.get(1)._mana += 15;
-		}
+//		if (Math.random() < 0.09){
+//			_players.get(1)._mana += 15;
+//		}
+		
+		
+		
 		// Deleting must be separate, after all updates and collisions
 		for (int i = 0; i < _units.size(); i++){
 			Unit u = _units.get(i);
@@ -172,7 +174,6 @@ public class GameData {
 			if(linearr[0].equals("ROCK")) {
 				//line represents a rock: ROCK,500,500,150
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-
 				_units.add(new Rock(this, pos, Double.parseDouble(linearr[3])));
 
 			} else if(linearr[0].equals("SPAWN")) {
@@ -194,10 +195,12 @@ public class GameData {
 				//line represents a door: DOOR,500,500,50
 				Vector lockpos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
 				_units.add(new Door(this, lockpos, Double.parseDouble(linearr[3])));
+				
 			} else if(linearr[0].equals("FLAG")) {
 				//line represents a flag: FLAG,500,500,50
 				Vector pos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
 				_units.add(new Flag(this, pos, Double.parseDouble(linearr[3])));
+				
 			} else {
 				System.out.println("Not enough types in map file being checked for.");
 			}

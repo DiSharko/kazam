@@ -22,6 +22,9 @@ misc/player1_back
 misc/flag
 misc/menu
 misc/confuseEffect
+misc/burnEffect
+misc/silenceEffect
+misc/rootEffect
 ui/fullscreen
 ui/close
 ui/windowed
