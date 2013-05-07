@@ -133,7 +133,7 @@ public class SetupScreen extends Screen {
 		spellChooser.setColors(_bgColor, new Color(0.5f,0.5f,0.5f,0.2f), new Color(0.3f,0.3f,0.3f,0.3f), null);
 		_joinGameElements.add(spellChooser);
 		_hostGameElements.add(spellChooser);
-
+		
 		// GAME TYPES
 //		Button gameTypeChooser = new Button(this, "gameTypeChooser", 200, 50, "Choose Game Type", -1);
 //		gameTypeChooser.setColors(_bgColor, new Color(0.5f,0.5f,0.5f,0.2f), new Color(0.3f,0.3f,0.3f,0.3f), null);
@@ -151,7 +151,6 @@ public class SetupScreen extends Screen {
 //			String name = Resource._gameTypes.get(i);
 //			_gameTypeChooserScreen._choices.addButton(new Button(null, name, 100, 100, name, -1));
 //		}
-
 
 		// MAPS
 		Button mapChooser = new Button(this, "mapChooser", 200, 50, "Choose Map", -1);

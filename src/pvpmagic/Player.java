@@ -70,8 +70,12 @@ public class Player extends Unit {
 
 	@Override
 	public void draw(View v){
-		if (_isRooted){
-			v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
+		
+		for (TimedEffect e : _timedEffects){
+			if (!e._display) continue;
+			if (e._type.equals(RootEffect.TYPE)){
+				v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
+			}
 		}
 
 		if (_flag != null) {
@@ -103,11 +107,14 @@ public class Player extends Unit {
 		}
 
 		if (_isSilenced){
-			v.drawImage(Resource.get("silenceEffect"), _pos.plus(30, -10), 30);
+			
 		}
 		for (TimedEffect e : _timedEffects){
+			if (!e._display) continue;
 			if (e._type.equals(ConfuseEffect.TYPE)){
 				v.drawImage(Resource.get("confuseEffect"), _pos.plus(10, -30), 30);
+			} else if (e._type.equals(SilenceEffect.TYPE)){
+				v.drawImage(Resource.get("silenceEffect"), _pos.plus(30, -10), 30);
 			} else if (e._type.equals(HealthEffect.TYPE)){
 				v.drawImage(Resource.get("burnEffect"), _pos.plus(3, _size.y-35), 50);
 			}

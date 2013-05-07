@@ -11,13 +11,13 @@ public class RootEffect extends TimedEffect {
 
 	@Override
 	public void effect() {
-		effectCompleted = false;
+		_effectCompleted = false;
 		if (_numberOfIntervals > 0) {
 			_target._isRooted = true;
 			_numberOfIntervals -= 1;
 		} else {
 			_target._isRooted = false;
-			effectCompleted = true;
+			_effectCompleted = true;
 		}
 	}
 

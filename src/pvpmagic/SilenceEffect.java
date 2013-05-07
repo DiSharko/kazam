@@ -11,13 +11,13 @@ public class SilenceEffect extends TimedEffect {
 
 	@Override
 	public void effect() {
-		effectCompleted = false;
+		_effectCompleted = false;
 		if (_numberOfIntervals > 0) {
 			_target._isSilenced = true;
 			_numberOfIntervals -= 1;
 		} else {
 			_target._isSilenced = false;
-			effectCompleted = true;
+			_effectCompleted = true;
 		}
 	}
 
