@@ -21,7 +21,7 @@ public class FlagTeamData extends TeamData{
 		if (_team1Ped._score != null) {
 			_team1Score += 1;
 			_team1Ped._score._pos = _team1Ped._score._originalPos;
-			_team2Ped._score._delete = false;
+			_team1Ped._score._delete = false;
 			_team1Ped._score._data._units.add(_team1Ped._score);
 			_team1Ped._score = null;
 		} else if (_team2Ped._score != null) {

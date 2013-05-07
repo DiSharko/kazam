@@ -213,6 +213,7 @@ public class GameData {
 					data.setTeam2Ped(pd);
 				}
 			} else {
+				System.out.println(line);
 				System.out.println("Not enough types in map file being checked for.");
 			}
 		}
