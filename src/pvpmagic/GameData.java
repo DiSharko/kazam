@@ -9,19 +9,24 @@ import pvpmagic.spells.Spell;
 
 
 public class GameData {
-
+	private final int NEEDED = 3;
 	ArrayList<Unit> _units;
-
 	ArrayList<Player> _players;
+
 	TeamData _teamdata;
 	
 	int _lastTick;
 	int _clientTick;
 
+	ArrayList<TeamData> _teams;
+	ArrayList<Player> _spawning;
+
+
 	public GameData(){
 		_units = new ArrayList<Unit>();
 		_players = new ArrayList<Player>();
-		_teamdata = new FlagTeamData(3);
+		_teams = new ArrayList<TeamData>();
+		_spawning = new ArrayList<Player>();
 	}
 
 	public void setup(SetupScreen s){
@@ -57,6 +62,10 @@ public class GameData {
 
 			_players.add(p);
 			_players.add(dummy);
+			
+			_teams.get(0).addPlayer(p);
+			_teams.get(1).addPlayer(dummy);
+			
 			_units.add(p);
 			_units.add(dummy);
 			dummy._pos = new Vector(-50, -30);
@@ -86,7 +95,14 @@ public class GameData {
 
 
 	public void update(){
-
+		String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Fear", "Abracadabra"};
+		if (Math.random() < 0.1){
+			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*useableSpells.length)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
+		}
+		if (Math.random() < 0.09){
+			_players.get(1)._mana += 15;
+		}
+		
 		//		String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Fear"};
 		//		if (Math.random() < 0.1){
 		//			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*useableSpells.length)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
@@ -99,7 +115,7 @@ public class GameData {
 		// Deleting must be separate, after all updates and collisions
 		for (int i = 0; i < _units.size(); i++){
 			Unit u = _units.get(i);
-			if (u._health <= 0) u._delete = true;
+			if (u._health <= 0) u.die();
 			if (u._delete){
 				_units.remove(i);
 				i--;
@@ -107,10 +123,34 @@ public class GameData {
 				u.update();
 			}
 		}
-		_teamdata.update();
-		if(_teamdata.getWinTeam() != null) {
-			//one team has won!!!
-			System.out.println(_teamdata.getWinTeam()+" has won the game!");
+		
+		//update teams' teamdatas, then check if anyone has one
+		for (TeamData td : _teams) td.update();
+		for (TeamData td : _teams) {
+			td.update();
+			if(td._teamScore == NEEDED) {
+				//one team has won!!!
+				System.out.println("Team "+td.TEAM_NUM+" has won the game!");
+			}
+		}
+		
+		//update spawing players
+		Player p;
+		for(int i = 0; i < _spawning.size(); i++) {
+			p = _spawning.get(i);
+			if (p._spawnTimer == 0) {
+				//done spawning
+				System.out.println("player done spawning");
+				p._pos = p._spawn;
+				p._delete = false;
+				p._health = p._maxHealth;
+				p._health = p._maxMana;
+				_units.add(p);
+				_spawning.remove(i);
+				i--;
+			} else {
+				p._spawnTimer -= 1;
+			}
 		}
 		// THIS ORDER IS NECESSARY so that players don't get stuck in walls
 		// as they 
@@ -176,6 +216,18 @@ public class GameData {
 	public void readInMap(String mapname) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/data/maps/"+mapname+".txt")));
 		String line; String[] linearr;
+		
+		line = br.readLine();
+		linearr = line.split(",");
+		if(linearr[0].equals("NUMTEAMS")) {
+			for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
+				_teams.add(new FlagTeamData(i));
+			}
+		} else {
+			System.out.println("NUMBER OF TEAMS NOT IN MAP, invalid map file.");
+			System.exit(1);
+		}
+		
 		while((line = br.readLine()) != null) {
 			//FOR NOW, WE ARE ALWAYS MULTIPLYING Y BY NEGATIVE, EVERY SINGLE ONE
 			linearr = line.split(",");
@@ -186,7 +238,8 @@ public class GameData {
 
 			} else if(linearr[0].equals("SPAWN")) {
 				//line represents a spawn point
-
+				Vector spawn = new Vector(Double.parseDouble(linearr[2]),-1.0*Double.parseDouble(linearr[3]));
+				_teams.get(Integer.parseInt(linearr[1])).addSpawn(spawn);
 			} else if (linearr[0].equals("PILLAR")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
 				_units.add(new Pillar(this, pos, Double.parseDouble(linearr[3])));
@@ -213,13 +266,9 @@ public class GameData {
 				Vector pos = new Vector(Double.parseDouble(linearr[2]), -1.0*Double.parseDouble(linearr[3]));
 				FlagPedestal pd = new FlagPedestal(this, pos, Double.parseDouble(linearr[4]));
 				_units.add(pd);
-				FlagTeamData data = (FlagTeamData) _teamdata;
-				if (linearr[1].equals("TEAM1")) {
-					data.setTeam1Ped(pd);
-				} else {
-					data.setTeam2Ped(pd);
-				}
 
+				FlagTeamData ft = (FlagTeamData) _teams.get(Integer.parseInt(linearr[1]));
+				ft.setPed(pd);
 			} else {
 				System.out.println(line);
 				System.out.println("Not enough types in map file being checked for.");

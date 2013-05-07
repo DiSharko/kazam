@@ -1,5 +1,6 @@
 package pvpmagic;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public abstract class Unit {
@@ -65,6 +66,10 @@ public abstract class Unit {
 	 */
 	public LinkedList<TimedEffect> _timedEffects = new LinkedList<TimedEffect>();
 	private final int MILLISECONDS_PER_TICK = 25;
+	
+	public void die() {
+		this._delete = true;
+	}
 	
 	/**
 	 * Root effects
@@ -194,7 +199,7 @@ public abstract class Unit {
 				"\t" + _isSilenced;
 				
 	}
-	public void fromNet(String[] networkString) {
+	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
 		//TO-DO: VALIDATION ON STRING
 		_pos = Vector.fromNet(networkString[0]);
 		_size = Vector.fromNet(networkString[1]); 

@@ -1,6 +1,7 @@
 package pvpmagic.spells;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 import pvpmagic.*;
 
@@ -85,16 +86,18 @@ public abstract class Spell extends Unit {
 	
 	@Override
 	public boolean canCollideWith(Unit u){
-		if (u == _caster && time < 10000) return false;
+		if (u == _caster && time < 15) return false;
 		return true;
 	}
 	@Override
-	public void fromNet(String[] networkString) {
+	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
 		if (validNetworkString(networkString)) {
 			Vector dir = Vector.fromNet(networkString[4]);
 			Vector pos = Vector.fromNet(networkString[5]);
 			_pos = pos;
-			_casterNetID = Integer.parseInt(networkString[3]);
+			_caster = (Player) objectMap.get(Integer.parseInt(networkString[3]));
+			if (_caster == null) 
+				throw new RuntimeException("Caster is null. String: " + Arrays.toString(networkString));
 			_dir = dir;
 			_pos = pos;
 		}
