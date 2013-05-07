@@ -28,7 +28,7 @@ public class FlagTeamData extends TeamData{
 		} else if (_team2Ped._flag != null) {
 			_team2Score += 1;
 			_team2Ped._flag._pos = _team2Ped._flag._originalPos;
-			_team1Ped._flag._vel = new Vector(0,0);
+			_team2Ped._flag._vel = new Vector(0,0);
 			_team2Ped._flag._delete = false;
 			_team2Ped._flag._data._units.add(_team2Ped._flag);
 			_team2Ped._flag = null;
