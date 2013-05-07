@@ -27,7 +27,7 @@ public class OpenSpell extends Spell {
 		if (target._type.equals("door")) {
 			Door door = (Door) target;
 			door.open();
-			_delete = true;
+			_health = 0;
 		}
 	}
 	

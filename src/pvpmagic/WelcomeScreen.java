@@ -45,7 +45,7 @@ public class WelcomeScreen extends Screen {
 		onResize();
 	}
 
-
+	
 	@Override
 	protected void draw(Graphics2D g) {
 		g.setColor(Color.gray);

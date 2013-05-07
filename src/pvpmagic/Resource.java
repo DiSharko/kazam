@@ -20,7 +20,7 @@ public class Resource {
 	public static boolean _useNativeBorder = false;
 	public static int _borderHeight;
 
-	public static String _title = "PvP Magic, the world's lamest name for a game ever";
+	public static String _title = "Kazam";
 
 
 	public static int _fps = 0;

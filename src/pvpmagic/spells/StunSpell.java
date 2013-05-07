@@ -14,8 +14,8 @@ public class StunSpell extends Spell {
 		Image sprite = Resource.get("StunSpell");
 		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(50), 15);
 		_name = "Stun";
-		_cooldown = 1000;
-		_manaCost = 10;
+		_cooldown = 1500;
+		_manaCost = 12;
 		_shape = new Circle(this, new Vector(-7,-7), 7);
 	}
 
