@@ -31,7 +31,6 @@ public class FearSpell extends Spell {
 		if (target instanceof Player) {
 			Player p = (Player) target;
 			p.fear(3000);
-			_health = 0;
 		}
 	}
 	

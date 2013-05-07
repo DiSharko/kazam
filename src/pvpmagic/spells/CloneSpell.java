@@ -1,4 +1,5 @@
 package pvpmagic.spells;
+
 import pvpmagic.*;
 
 

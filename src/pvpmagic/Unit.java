@@ -1,6 +1,5 @@
 package pvpmagic;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
 public abstract class Unit {
@@ -90,7 +89,6 @@ public abstract class Unit {
 		_timedEffects.add(new SilenceEffect(numberOfIntervals(time), this));
 	}
 
-
 	public void collide(Collision c){
 //		Unit u = c.other(this);
 //		if (u._movable){
@@ -169,7 +167,7 @@ public abstract class Unit {
 					toBeCleansed.add(e);
 				}
 			} else if (e instanceof SilenceEffect || e instanceof RootEffect
-					|| e instanceof FearEffect) {
+					|| e instanceof ConfuseEffect) {
 				toBeCleansed.add(e);
 			}
 		}
@@ -197,7 +195,7 @@ public abstract class Unit {
 				"\t" + _isSilenced;
 				
 	}
-	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
+	public void fromNet(String[] networkString) {
 		//TO-DO: VALIDATION ON STRING
 		_pos = Vector.fromNet(networkString[0]);
 		_size = Vector.fromNet(networkString[1]); 

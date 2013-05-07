@@ -13,14 +13,13 @@ public class GameData {
 	ArrayList<Unit> _units;
 
 	ArrayList<Player> _players;
-	ArrayList<Player> _team1;
-	ArrayList<Player> _team2;
+	TeamData _teamdata;
 
 
 	public GameData(){
 		_units = new ArrayList<Unit>();
 		_players = new ArrayList<Player>();
-
+		_teamdata = new FlagTeamData(3);
 	}
 
 	public void setup(SetupScreen s){
@@ -81,17 +80,16 @@ public class GameData {
 
 
 	public void update(){
-		
-//		String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Fear"};
-//		if (Math.random() < 0.1){
-//			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*useableSpells.length)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
-//		}
-//		if (Math.random() < 0.09){
-//			_players.get(1)._mana += 15;
-//		}
-		
-		
-		
+
+		//		String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Fear"};
+		//		if (Math.random() < 0.1){
+		//			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*useableSpells.length)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
+		//		}
+		//		if (Math.random() < 0.09){
+		//			_players.get(1)._mana += 15;
+		//		}
+
+
 		// Deleting must be separate, after all updates and collisions
 		for (int i = 0; i < _units.size(); i++){
 			Unit u = _units.get(i);
@@ -103,7 +101,11 @@ public class GameData {
 				u.update();
 			}
 		}
-
+		_teamdata.update();
+		if(_teamdata.getWinTeam() != null) {
+			//one team has won!!!
+			System.out.println(_teamdata.getWinTeam()+" has won the game!");
+		}
 		// THIS ORDER IS NECESSARY so that players don't get stuck in walls
 		// as they 
 		applyMovement();
@@ -182,7 +184,7 @@ public class GameData {
 			} else if (linearr[0].equals("PILLAR")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
 				_units.add(new Pillar(this, pos, Double.parseDouble(linearr[3])));
-				
+
 			} else if (linearr[0].equals("HWALL")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
 				_units.add(new Wall(this, pos, Double.parseDouble(linearr[3]), false));
@@ -192,16 +194,28 @@ public class GameData {
 				_units.add(new Wall(this, pos, Double.parseDouble(linearr[3]), true));
 
 			} else if(linearr[0].equals("DOOR")) {
-				//line represents a door: DOOR,500,500,50
+				//line represents a door: DOOR,500,500,250,250,50
 				Vector lockpos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
 				_units.add(new Door(this, lockpos, Double.parseDouble(linearr[3])));
-				
+
 			} else if(linearr[0].equals("FLAG")) {
 				//line represents a flag: FLAG,500,500,50
 				Vector pos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
 				_units.add(new Flag(this, pos, Double.parseDouble(linearr[3])));
-				
+
+			} else if (linearr[0].equals("PEDASTAL")) {
+				Vector pos = new Vector(Double.parseDouble(linearr[2]), -1.0*Double.parseDouble(linearr[3]));
+				FlagPedestal pd = new FlagPedestal(this, pos, Double.parseDouble(linearr[4]));
+				_units.add(pd);
+				FlagTeamData data = (FlagTeamData) _teamdata;
+				if (linearr[1].equals("TEAM1")) {
+					data.setTeam1Ped(pd);
+				} else {
+					data.setTeam2Ped(pd);
+				}
+
 			} else {
+				System.out.println(line);
 				System.out.println("Not enough types in map file being checked for.");
 			}
 		}

@@ -23,6 +23,7 @@ public class Player extends Unit {
 	double _spellCastingTime = 0;
 	Spell _spellToCast = null;
 	double _hidden = 1.0;
+	Composite _old;
 
 	String[] _spells;
 	//ArrayList<Carryable> inventory = new ArrayList<Carryable>();
@@ -54,7 +55,7 @@ public class Player extends Unit {
 
 		double hitBoxScale = .7;
 		_shape = new Box(this, _size.mult(0, (1-hitBoxScale)/2), _size.mult(1, hitBoxScale));
-
+	
 		_spells = spellNames;
 		_spellCastingTimes = new HashMap<String, Long>();
 
@@ -79,6 +80,17 @@ public class Player extends Unit {
 			v.drawImage(Resource.get("flag"), flagPos, _flag._size.mult(0.8));
 			v.unrotate();
 		}
+
+		_old = v.getGraphics().getComposite();
+		if (_hidden < 1) {
+			AlphaComposite ac = java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden);
+			v.getGraphics().setComposite(ac);
+			v.drawImage(Resource.get("player1_back"), _pos, _size);
+		} else if (_hidden == 1) {
+			v.drawImage(Resource.get("player1_back"), _pos, _size);
+		}
+		v.getGraphics().setComposite(_old);
+		v.drawImage(Resource.get("player1_back"), _pos, _size);
 		if (_hidden < 1) {
 			Composite old = v.getGraphics().getComposite();
 
@@ -94,7 +106,7 @@ public class Player extends Unit {
 			v.drawImage(Resource.get("silenceEffect"), _pos.plus(30, -10), 30);
 		}
 		for (TimedEffect e : _timedEffects){
-			if (e._type.equals(FearEffect.TYPE)){
+			if (e._type.equals(ConfuseEffect.TYPE)){
 				v.drawImage(Resource.get("confuseEffect"), _pos.plus(10, -30), 30);
 			} else if (e._type.equals(HealthEffect.TYPE)){
 				v.drawImage(Resource.get("burnEffect"), _pos.plus(3, _size.y-35), 50);
@@ -192,7 +204,7 @@ public class Player extends Unit {
 	}
 
 	public void fear(long time) {
-		_timedEffects.add(new FearEffect(numberOfIntervals(time), this));		
+		_timedEffects.add(new ConfuseEffect(numberOfIntervals(time), this));		
 	}
 
 	public void hide(long time) {
@@ -217,16 +229,18 @@ public class Player extends Unit {
 				"\t" + _mana +
 				"\t" + lastCastTimes.substring(0, lastCastTimes.length() - 1) +
 				"\t" + timedEffectsStr.substring(0, timedEffectsStr.length() - 1);
-
+		
+		//Need to figure out string for timed effects
+		//Timed effects to and fromNet helpers for each effect must be written,
 		//when fromNet is called, throw away previous timed effects
 		//list, and instantiate new ones with (this) as target
 	}
 	@Override
-	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
-		if (validNetworkString(networkString, false)) {
+	public void fromNet(String[] networkString) {
+		if (validNetworkString(networkString)) {
 			this._pos = Vector.fromNet(networkString[2]);
 			this._destination = Vector.fromNet(networkString[3]);
-			this._flag = (Flag) objectMap.get(Integer.parseInt(networkString[4]));
+			//p._flag = (Flag) objectMap.get(Integer.parseInt(networkString[5]));
 			this._health = Double.parseDouble(networkString[5]);
 			this._mana = Double.parseDouble(networkString[6]);
 
@@ -263,7 +277,7 @@ public class Player extends Unit {
 
 	//networkString format = [id, type, <any data from toNetInit split on tabs>...]
 	public static Player fromNetInit(String[] networkString) {
-		if (networkString[1].equals("player") && validNetworkString(networkString, true)) {
+		if (networkString[1].equals("player")) {
 			String[] spells = networkString[4].split(" ");
 			Player p = new Player(null, networkString[2], networkString[3], spells);
 			p._destination = Vector.fromNet(networkString[6]);
@@ -275,8 +289,19 @@ public class Player extends Unit {
 				+ Arrays.toString(networkString));
 	}
 
-	public static Boolean validNetworkString(String[] networkData, Boolean init) {
-		if ((init && networkData.length != 6) || (!init && networkData.length != 9)) {
+	public Boolean validNetworkStringInit(String[] networkData) {
+		if (networkData.length != 10 || !(networkData[0].equals("n") 
+				&& networkData[2].equals("pn") && networkData[4].equals("s")
+				&& networkData[6].equals("p")) && networkData[8].equals("d")) {
+			System.err.println("ERROR: Invalid String from network - " + Arrays.toString(networkData));
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	public Boolean validNetworkString(String[] networkData) {
+		if (networkData.length != 7) {
 			System.err.println("ERROR: Invalid String from network - " + Arrays.toString(networkData));
 			return false;
 		} else {
