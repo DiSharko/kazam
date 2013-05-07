@@ -1,24 +1,31 @@
 package pvpmagic;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public abstract class TeamData {
-	protected final int NEEDED;
-	protected HashMap<Vector,Player> spawnMapTeam1;
-	protected HashMap<Vector,Player> spawnMapTeam2;
-	protected int _team1Score = 0;
-	protected int _team2Score = 0;
-	protected String _winTeam = null;
+	protected ArrayList<Vector> _spawnList;
+	protected ArrayList<Player> _playerList;
+	protected int _teamScore = 0;
+	protected final int TEAM_NUM;
 	
-	public TeamData (int winNum) {
-		spawnMapTeam1 = new HashMap<Vector,Player>();
-		spawnMapTeam2 = new HashMap<Vector,Player>();
-		NEEDED = winNum;
+	private int spawnIndex;
+	
+	public TeamData (int teamNum) {
+		_spawnList = new ArrayList<Vector>();
+		_playerList = new ArrayList<Player>();
+		TEAM_NUM = teamNum;
 	}
 	
 	public abstract void update();
 	
-	public String getWinTeam() {
-		return this._winTeam;
+	public void addSpawn(Vector pos) {
+		_spawnList.add(pos);
+	}
+	
+	public void addPlayer(Player player) {
+		spawnIndex = _playerList.size();
+		_playerList.add(player);
+		player._spawn = _spawnList.get(spawnIndex);
+		player._teamNum = TEAM_NUM;
 	}
 }

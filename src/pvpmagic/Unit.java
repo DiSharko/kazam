@@ -66,6 +66,10 @@ public abstract class Unit {
 	public LinkedList<TimedEffect> timedEffects = new LinkedList<TimedEffect>();
 	private final int MILLISECONDS_PER_TICK = 25;
 	
+	public void die() {
+		this._delete = true;
+	}
+	
 	/**
 	 * Root effects
 	 */

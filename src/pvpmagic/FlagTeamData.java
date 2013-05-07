@@ -1,42 +1,25 @@
 package pvpmagic;
 
 public class FlagTeamData extends TeamData{
-	private FlagPedastal _team1Ped;
-	private FlagPedastal _team2Ped;
+	private FlagPedestal _pedestal;
 	 	
-	public FlagTeamData(int winNum) {
-		super(winNum);
+	public FlagTeamData(int teamNum) {
+		super(teamNum);
 	}
 	
-	public void setTeam1Ped (FlagPedastal ped) {
-		_team1Ped = ped;
-	}
-	public void setTeam2Ped (FlagPedastal ped) {
-		_team2Ped = ped;
+	public void setPed (FlagPedestal ped) {
+		_pedestal = ped;
 	}
 
 	@Override
 	public void update() {
 		//update scores
-		if (_team1Ped._score != null) {
-			_team1Score += 1;
-			_team1Ped._score._pos = _team1Ped._score._originalPos;
-			_team1Ped._score._delete = false;
-			_team1Ped._score._data._units.add(_team1Ped._score);
-			_team1Ped._score = null;
-		} else if (_team2Ped._score != null) {
-			_team2Score += 1;
-			_team2Ped._score._pos = _team2Ped._score._originalPos;
-			_team2Ped._score._delete = false;
-			_team2Ped._score._data._units.add(_team2Ped._score);
-			_team2Ped._score = null;
-		}
-		
-		//check if someone has won
-		if (_team1Score == NEEDED) {
-			_winTeam = "Team 1";
-		} else if (_team2Score == NEEDED) {
-			_winTeam = "Team 2";
+		if (_pedestal._flag != null) {
+			_teamScore += 1;
+			_pedestal._flag._pos = _pedestal._flag._originalPos;
+			_pedestal._flag._delete = false;
+			_pedestal._flag._data._units.add(_pedestal._flag);
+			_pedestal._flag = null;
 		}
 	}
 }

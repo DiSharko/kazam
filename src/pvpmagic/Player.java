@@ -14,6 +14,9 @@ import pvpmagic.spells.Spell;
 
 public class Player extends Unit {
 	public static String TYPE = "player";
+	public Vector _spawn;
+	public int _teamNum;
+	public int _spawnTimer = 0;
 	
 	String _characterName;
 	String _playerName;
@@ -104,6 +107,15 @@ public class Player extends Unit {
 		_vel = new Vector(0,0);
 	}
 
+	@Override
+	public void die() {
+		System.out.println("player died");
+		super.die();
+		dropFlag();
+		_spawnTimer = 100;
+		_data._spawning.add(this);
+	}
+	
 	@Override
 	public void update(){
 		super.update();
