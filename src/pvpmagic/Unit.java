@@ -1,5 +1,6 @@
 package pvpmagic;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public abstract class Unit {
@@ -194,7 +195,7 @@ public abstract class Unit {
 				"\t" + _isSilenced;
 				
 	}
-	public void fromNet(String[] networkString) {
+	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
 		//TO-DO: VALIDATION ON STRING
 		_pos = Vector.fromNet(networkString[0]);
 		_size = Vector.fromNet(networkString[1]); 
