@@ -101,7 +101,7 @@ public abstract class Unit {
 		
 		for (TimedEffect e : _timedEffects) {
 			e.effect();
-			if (e.effectCompleted) {
+			if (e._effectCompleted) {
 				completedEffects.add(e);
 			}
 		}

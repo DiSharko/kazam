@@ -11,12 +11,12 @@ public class HealthEffect extends TimedEffect {
 	}
 	
 	public void effect() {
-		effectCompleted = false;
+		_effectCompleted = false;
 		if (_numberOfIntervals > 0) {
 			_target.changeHealth(_changePerInterval);
 			_numberOfIntervals -= 1;
 		} else {
-			effectCompleted = true;
+			_effectCompleted = true;
 		}
 	}
 

@@ -1,11 +1,12 @@
 package pvpmagic;
 
 public abstract class TimedEffect {
-	Boolean effectCompleted;
+	Boolean _effectCompleted;
 	Double _numberOfIntervals;
 	Double _changePerInterval = null;
 	Unit _target;
 	public String _type;
+	boolean _display = true;
 	
 	public static String TYPE;
 	
@@ -35,7 +36,7 @@ public abstract class TimedEffect {
 	
 	public String toNet() {
 		return TYPE + 
-				"," + effectCompleted +
+				"," + _effectCompleted +
 				"," + _numberOfIntervals +
 				"," + _changePerInterval +
 				"," + _target._netID;
