@@ -5,7 +5,6 @@ public abstract class TimedEffect {
 	Double _numberOfIntervals;
 	Double _changePerInterval = null;
 	Unit _target;
-	public static String TYPE;
 	
 	public String _type;
 	
@@ -35,7 +34,7 @@ public abstract class TimedEffect {
 	}
 	
 	public String toNet() {
-		return TYPE + 
+		return _type + 
 				"," + effectCompleted +
 				"," + _numberOfIntervals +
 				"," + _changePerInterval +
@@ -60,6 +59,6 @@ public abstract class TimedEffect {
 	
 	@Override
 	public String toString() {
-		return TYPE;
+		return _type;
 	}
 }

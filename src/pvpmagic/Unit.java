@@ -174,7 +174,6 @@ public abstract class Unit {
 			}
 		}
 		
-		System.out.println("TO BE CLEANSED: " + toBeCleansed.toString());
 		_timedEffects.removeAll(toBeCleansed);
 	}
 	

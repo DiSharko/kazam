@@ -26,6 +26,7 @@ public class FearEffect extends TimedEffect {
 			_target._isSilenced = false;
 			_target._isRooted = false;
 			effectCompleted = true;
+			((Player) _target)._destination = null;
 		}
 	}
 

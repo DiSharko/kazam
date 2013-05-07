@@ -23,7 +23,7 @@ public class GameScreen extends Screen {
 
 	boolean DEBUG = false;
 	String _eventNetString = "";
-	PriorityBlockingQueue<String> _netInputs;
+	PriorityBlockingQueue<String> _netInputs = new PriorityBlockingQueue<String>();
 
 	GameData _data;
 	Player _focus;
