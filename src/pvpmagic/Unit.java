@@ -1,5 +1,6 @@
 package pvpmagic;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public abstract class Unit {
@@ -70,7 +71,7 @@ public abstract class Unit {
 	 * Root effects
 	 */
 	boolean _canBeRooted = false;
-	boolean _isRooted = false;
+	public boolean _isRooted = false;
 	
 	public void root(long time){
 		if (_canBeRooted) _isRooted = true;
@@ -172,7 +173,6 @@ public abstract class Unit {
 			}
 		}
 		
-		System.out.println("TO BE CLEANSED: " + toBeCleansed.toString());
 		_timedEffects.removeAll(toBeCleansed);
 	}
 	
@@ -195,7 +195,7 @@ public abstract class Unit {
 				"\t" + _isSilenced;
 				
 	}
-	public void fromNet(String[] networkString) {
+	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
 		//TO-DO: VALIDATION ON STRING
 		_pos = Vector.fromNet(networkString[0]);
 		_size = Vector.fromNet(networkString[1]); 

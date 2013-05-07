@@ -26,6 +26,7 @@ public class ConfuseEffect extends TimedEffect {
 			_target._isSilenced = false;
 			_target._isRooted = false;
 			_effectCompleted = true;
+			((Player) _target)._destination = null;
 		}
 	}
 

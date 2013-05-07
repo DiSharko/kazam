@@ -18,6 +18,7 @@ public class CleanseSpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		c.other(this).cleanse();
+		this._delete = true;
 	}
 	
 	@Override
