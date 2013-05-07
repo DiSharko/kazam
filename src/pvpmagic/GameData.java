@@ -13,14 +13,13 @@ public class GameData {
 	ArrayList<Unit> _units;
 
 	ArrayList<Player> _players;
-	ArrayList<Player> _team1;
-	ArrayList<Player> _team2;
+	TeamData _teamdata;
 
 
 	public GameData(){
 		_units = new ArrayList<Unit>();
 		_players = new ArrayList<Player>();
-
+		_teamdata = new FlagTeamData(3);
 	}
 
 	public void setup(SetupScreen s){
@@ -101,7 +100,11 @@ public class GameData {
 				u.update();
 			}
 		}
-
+		_teamdata.update();
+		if(_teamdata.getWinTeam() != null) {
+			//one team has won!!!
+			System.out.println(_teamdata.getWinTeam()+" has won the game!");
+		}
 		// THIS ORDER IS NECESSARY so that players don't get stuck in walls
 		// as they 
 		applyMovement();
@@ -154,12 +157,6 @@ public class GameData {
 		for (int i = 0; i < _units.size(); i++){
 			Unit e = _units.get(i);
 			if (!e._movable) continue;
-<<<<<<< HEAD
-			
-			System.out.println("type:"+e._type);
-			System.out.println("type pos:"+e._pos);
-=======
->>>>>>> 9d7789a7d8e12ac2c5ef72ed44ec73147bb0a13e
 
 			e._vel = e._vel.plus(e._force.div(e._mass));
 			if (e._appliesFriction) e._vel = e._vel.mult(0.96);
@@ -205,6 +202,16 @@ public class GameData {
 				//line represents a flag: FLAG,500,500,50
 				Vector pos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
 				_units.add(new Flag(this, pos, Double.parseDouble(linearr[3])));
+			} else if (linearr[0].equals("PEDASTAL")) {
+				Vector pos = new Vector(Double.parseDouble(linearr[2]), -1.0*Double.parseDouble(linearr[3]));
+				FlagPedastal pd = new FlagPedastal(this, pos, Double.parseDouble(linearr[4]));
+				_units.add(pd);
+				FlagTeamData data = (FlagTeamData) _teamdata;
+				if (linearr[1].equals("TEAM1")) {
+					data.setTeam1Ped(pd);
+				} else {
+					data.setTeam2Ped(pd);
+				}
 			} else {
 				System.out.println("Not enough types in map file being checked for.");
 			}

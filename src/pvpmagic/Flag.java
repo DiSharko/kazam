@@ -6,10 +6,12 @@ import java.util.ArrayList;
 
 public class Flag extends Unit {
 	public static String TYPE = "flag";
+	public Vector _originalPos;
 	
 	public Flag(GameData data, Vector pos, double size){
 		super(data, TYPE);
 		_pos = pos;
+		_originalPos = pos;
 		
 		Image sprite = Resource.get("flag");
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(90);

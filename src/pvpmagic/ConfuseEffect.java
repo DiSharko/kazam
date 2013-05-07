@@ -1,12 +1,11 @@
 package pvpmagic;
 
-public class FearEffect extends TimedEffect {
+public class ConfuseEffect extends TimedEffect {
 	public static String TYPE = "FearEffect";
 	
-	public FearEffect(double numberOfIntervals, Player u) {
+	public ConfuseEffect(double numberOfIntervals, Player u) {
 		_numberOfIntervals = numberOfIntervals;
 		_target = u;
-		_type = TYPE;
 	}
 
 	@Override

@@ -1,10 +1,8 @@
 package pvpmagic.spells;
 
-import java.awt.Color;
 import java.awt.Image;
 
 import pvpmagic.*;
-
 
 public class AbracadabraSpell extends Spell {
 	public static String TYPE = "AbracadabraSpell";

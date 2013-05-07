@@ -89,17 +89,6 @@ public abstract class Unit {
 		timedEffects.add(new SilenceEffect(numberOfIntervals(time), this));
 	}
 
-<<<<<<< HEAD
-	protected boolean _delete = false;
-	
-	protected Shape _shape;
-	
-	public LinkedList<TimedEffect> timedEffects = new LinkedList<TimedEffect>();
-	private final int MILLISECONDS_PER_TICK = 25;
-	
-=======
-
->>>>>>> 9d7789a7d8e12ac2c5ef72ed44ec73147bb0a13e
 	public void collide(Collision c){
 //		Unit u = c.other(this);
 //		if (u._movable){
@@ -178,7 +167,7 @@ public abstract class Unit {
 					toBeCleansed.add(e);
 				}
 			} else if (e instanceof SilenceEffect || e instanceof RootEffect
-					|| e instanceof FearEffect) {
+					|| e instanceof ConfuseEffect) {
 				toBeCleansed.add(e);
 			}
 		}

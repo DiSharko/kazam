@@ -10,20 +10,10 @@ public class HideSpell extends Spell {
 		_name = "Hide";
 		_cooldown = 10000;
 		_manaCost = 20;
-<<<<<<< HEAD
-		_caster.hide(3500);
-		this._delete = true;
-	}
-	
-	@Override
-	public void draw(View v){
-		//nothing gets drawn
-=======
 	}
 	
 	public void hide() {
 		if (_caster != null) _caster.hide(3500);
 		this._delete = true;
->>>>>>> 9d7789a7d8e12ac2c5ef72ed44ec73147bb0a13e
 	}
 }

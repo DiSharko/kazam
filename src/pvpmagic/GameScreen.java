@@ -183,8 +183,8 @@ public class GameScreen extends Screen {
 		_view._camera = _focus._pos;
 		_view._scale = (Math.min(_holder._h, _holder._w))/600.0;
 		
-//		_view._camera = new Vector(1000,-200);
-//		_view._scale = 0.4;
+		//_view._camera = new Vector(1000,-200);
+		//_view._scale = 0.4;
 
 		if (_focus != null){
 			_healthBar.current = _focus._health;

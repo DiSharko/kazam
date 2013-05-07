@@ -1,7 +1,6 @@
 package pvpmagic.spells;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 import pvpmagic.*;
 
@@ -69,19 +68,10 @@ public abstract class Spell extends Unit {
 		else if (name.equals("Rejuvenate")) { return new RejuvenateSpell(data, caster, dir); }
 		else if (name.equals("Cleanse")) { return new CleanseSpell(data, caster, dir); }
 		else if (name.equals("Summon")) { return new SummonSpell(data, caster, dir); }
-<<<<<<< HEAD
-<<<<<<< HEAD
-		else if (name.equals("Clone")) { return new CloneSpell(data, caster, dir); }
-		else if (name.equals("Hide")) { return new HideSpell(data, caster, dir); }
-=======
-		else if (name.equals("Flash")) {  return new FlashSpell(data, caster, dir); }
->>>>>>> c0a853cc6a39ecf03a8032c010998c5df635c396
-=======
 		else if (name.equals("Clone")) { return new CloneSpell(data, caster, dir); }
 		else if (name.equals("Hide")) { return new HideSpell(data, caster, dir); }
 		else if (name.equals("Flash")) {  return new FlashSpell(data, caster, dir); }
 
->>>>>>> 9d7789a7d8e12ac2c5ef72ed44ec73147bb0a13e
 		System.out.println("Spell name \""+name+"\" not found!");
 		return null;
 	}

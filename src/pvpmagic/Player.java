@@ -23,18 +23,12 @@ public class Player extends Unit {
 	double _spellCastingTime = 0;
 	Spell _spellToCast = null;
 	double _hidden = 1.0;
-<<<<<<< HEAD
 	Composite _old;
-=======
->>>>>>> 9d7789a7d8e12ac2c5ef72ed44ec73147bb0a13e
 
 	String[] _spells;
 	//ArrayList<Carryable> inventory = new ArrayList<Carryable>();
 	public Flag _flag = null;
-<<<<<<< HEAD
-=======
 
->>>>>>> 9d7789a7d8e12ac2c5ef72ed44ec73147bb0a13e
 	Vector _flagSize = new Vector(40,40);
 	
 	HashMap<String, Long> _spellCastingTimes;
@@ -82,21 +76,17 @@ public class Player extends Unit {
 			v.drawImage(Resource.get("flag"), flagPos, _flag._size.mult(0.8));
 			v.unrotate();
 		}
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 		_old = v.getGraphics().getComposite();
 		if (_hidden < 1) {
 			AlphaComposite ac = java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden);
 			v.getGraphics().setComposite(ac);
-			v.drawImage(Resource._gameImages.get("player1_back"), _pos, _size);
+			v.drawImage(Resource.get("player1_back"), _pos, _size);
 		} else if (_hidden == 1) {
-			v.drawImage(Resource._gameImages.get("player1_back"), _pos, _size);
+			v.drawImage(Resource.get("player1_back"), _pos, _size);
 		}
 		v.getGraphics().setComposite(_old);
-=======
 		v.drawImage(Resource.get("player1_back"), _pos, _size);
->>>>>>> c0a853cc6a39ecf03a8032c010998c5df635c396
-=======
 		if (_hidden < 1) {
 			Composite old = v.getGraphics().getComposite();
 			
@@ -107,7 +97,6 @@ public class Player extends Unit {
 		} else if (_hidden == 1) {
 			v.drawImage(Resource.get("player1_back"), _pos, _size);
 		}
->>>>>>> 9d7789a7d8e12ac2c5ef72ed44ec73147bb0a13e
 	}
 
 	public void stop(){
@@ -198,14 +187,7 @@ public class Player extends Unit {
 	}
 
 	public void fear(long time) {
-		timedEffects.add(new FearEffect(numberOfIntervals(time), this));		
-<<<<<<< HEAD
-	}
-	
-	public void hide(long time) {
-		timedEffects.add(new HideEffect(numberOfIntervals(time), this));
-=======
->>>>>>> 9d7789a7d8e12ac2c5ef72ed44ec73147bb0a13e
+		timedEffects.add(new ConfuseEffect(numberOfIntervals(time), this));		
 	}
 	
 	public void hide(long time) {

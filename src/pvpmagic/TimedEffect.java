@@ -20,7 +20,7 @@ public abstract class TimedEffect {
 			System.out.println("Given a null name!");
 			return null;
 		}
-		if (type.equals("FearEffect")){ return new FearEffect(numberOfIntervals, (Player) target); }
+		if (type.equals("FearEffect")){ return new ConfuseEffect(numberOfIntervals, (Player) target); }
 		else if (type.equals("HealthEffect")) { return new HealthEffect(numberOfIntervals, changePerInterval, target); }
 		else if (type.equals("HideEffect")) { return new HideEffect(numberOfIntervals, (Player) target); }
 		else if (type.equals("ManaEffect")) { return new ManaEffect(numberOfIntervals, changePerInterval, target); }
