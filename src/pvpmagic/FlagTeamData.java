@@ -3,7 +3,7 @@ package pvpmagic;
 public class FlagTeamData extends TeamData{
 	private FlagPedastal _team1Ped;
 	private FlagPedastal _team2Ped;
-	
+	 	
 	public FlagTeamData(int winNum) {
 		super(winNum);
 	}
