@@ -69,24 +69,24 @@ public class Coder {
 	
 	 //eventString is in the format netID \t timestamp \t <data>
 	public void handleEvent(String[] eventString, Player p, GameData data) {
-	   Vector target = Vector.fromNet(eventString[4]);
-	   if (eventString[3].equals("Q")) {
+	   Vector target = Vector.fromNet(eventString[3]);
+	   if (eventString[2].equals("Q")) {
 	     data.startCastingSpell(p, p._spells[0], target);
-	   } else if (eventString[3].equals("W")){
+	   } else if (eventString[2].equals("W")){
 	     data.startCastingSpell(p, p._spells[1], target);
-	   } else if (eventString[3].equals("E")){
+	   } else if (eventString[2].equals("E")){
 	     data.startCastingSpell(p, p._spells[2], target);
-	   } else if (eventString[3].equals("R")){
-	     data.startCastingSpell(p, p._spells[3], target);
-	   } else if (eventString[3].equals("A")){
+	   } else if (eventString[2].equals("R")){
+	     data.startCastingSpell(p, p._spells[2], target);
+	   } else if (eventString[2].equals("A")){
 	     data.startCastingSpell(p, p._spells[4], target);
-	   } else if (eventString[3].equals("S")){
+	   } else if (eventString[2].equals("S")){
 	     data.startCastingSpell(p, p._spells[5], target);
-	   } else if (eventString[3].equals("D")){
+	   } else if (eventString[2].equals("D")){
 	     data.startCastingSpell(p, p._spells[6], target);  
-	   } else if (eventString[3].equals("F")){
+	   } else if (eventString[2].equals("F")){
 	     data.startCastingSpell(p, p._spells[7], target);
-	   } else if (eventString[4].equals("CLICK")) {
+	   } else if (eventString[2].equals("CLICK")) {
 	     if (!p._isRooted) {
 	       p._destination = target;
 	     }
