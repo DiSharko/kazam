@@ -1,9 +1,7 @@
 package pvpmagic;
 
 public class HealthEffect extends TimedEffect {
-	private double _numberOfIntervals;
-	public final double _changePerInterval;
-	private Unit _target;
+	public static String TYPE = "HealthEffect";
 
 	public HealthEffect(double numberOfIntervals, double changePerInterval, Unit u) {
 		_numberOfIntervals = numberOfIntervals;

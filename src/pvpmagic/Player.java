@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import pvpmagic.spells.FlashSpell;
+import pvpmagic.spells.HideSpell;
 import pvpmagic.spells.Spell;
 
 public class Player extends Unit {
@@ -143,8 +144,11 @@ public class Player extends Unit {
 
 	public void castSpell(Spell spell) {
 		if (spell._name.equals("Flash")) {
-			FlashSpell f = (FlashSpell) spell;
-			f.flash();
+			FlashSpell s = (FlashSpell) spell;
+			s.flash();
+		} else if (spell._name.equals("Hide")) {
+			HideSpell s = (HideSpell) spell;
+			s.hide();
 		}
 		_spellToCast = spell;
 		_spellCastingTime = spell._castingTime;
@@ -218,8 +222,8 @@ public class Player extends Unit {
 		for (int i = 0; i < _spells.length; i++) {
 			spells += _spells[i] + " ";
 		}
-		return _netID +
-				"\t" + _type +
+		//Note that NetID is prepended by Coder
+		return  _type +
 				"\t" + _characterName + 
 				"\t" + _playerName + 
 				"\t" + spells.substring(0, spells.length() - 1) +
@@ -237,7 +241,8 @@ public class Player extends Unit {
 			p._netID = Integer.parseInt(networkString[0]);
 			return p;
 		}
-		return null;
+		throw new RuntimeException("Called Player.fromNetInit on string: " 
+		+ Arrays.toString(networkString));
 	}
 	
 	public Boolean validNetworkStringInit(String[] networkData) {
