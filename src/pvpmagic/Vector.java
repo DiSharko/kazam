@@ -102,4 +102,14 @@ public class Vector {
 			return new Vector(x, y);
 		}
 	}
+	
+	public final Vector proj(Vector other) {
+		if (other.equals(ZERO)) return this;
+		return other.mult(this.dot(other)/Math.pow(other.mag(),2));
+	}
+	
+	public final Vector bound(Vector min, Vector max){
+		if (min.x > max.x || min.y > max.y) return this;
+		return new Vector(Math.min(Math.max(x, min.x), max.x), Math.min(Math.max(y, min.y), max.y));
+	}
 }

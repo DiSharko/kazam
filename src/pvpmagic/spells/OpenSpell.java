@@ -1,6 +1,6 @@
 package pvpmagic.spells;
 
-import java.awt.Color;
+import java.awt.Image;
 
 import pvpmagic.*;
 
@@ -13,8 +13,12 @@ public class OpenSpell extends Spell {
 		_name = "Open";
 		_cooldown = 1000;
 		_manaCost = 10;
-		_size = new Vector(10, 10);
-		setProperties(_size, 4);
+
+		Image sprite = Resource.get("OpenSpell");
+		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(80), 18);
+		
+		_shape = new Circle(this, new Vector(-8, -8), 8);
+		
 	}
 	
 	@Override
@@ -28,7 +32,8 @@ public class OpenSpell extends Spell {
 	
 	@Override
 	public void draw(View v){
-		v.getGraphics().setColor(Color.red);
-		v.fillRect(_pos, _size);
+		v.rotate(_vel, _pos);
+		v.drawImage(Resource.get("OpenSpell"), _pos.plus(-8-(_vel.x < 0 ? -_size.x: 0), -8), _size.mult(Math.signum(_vel.x), 1));
+		v.unrotate();
 	}
 }

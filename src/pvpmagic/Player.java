@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import pvpmagic.spells.FlashSpell;
 import pvpmagic.spells.Spell;
 
 public class Player extends Unit {
@@ -33,7 +34,7 @@ public class Player extends Unit {
 	   the player. Used for calculation of mana cost. */
 	long _timeLastCast;
 
-	double _velocity = 6;
+	double _velocity = 8;
 
 
 	public Player(GameData data, String characterName, String playerName, String[] spellNames){
@@ -47,10 +48,10 @@ public class Player extends Unit {
 		_mana = 100;
 
 		_pos = new Vector(-50, -20);
-		Image sprite = Resource._gameImages.get("player1_back");
+		Image sprite = Resource.get("player1_back");
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(80);
-		
-		double hitBoxScale = 0.9;
+	
+		double hitBoxScale = 1;
 		_shape = new Box(this, _size.mult(1-hitBoxScale).div(2), _size.mult(hitBoxScale));
 
 		_spells = spellNames;
@@ -70,9 +71,10 @@ public class Player extends Unit {
 		if (_flag != null) {
 			Vector flagPos = _pos.plus(40, 0);
 			v.rotate(new Vector(1.5, -1), flagPos);
-			v.drawImage(Resource._gameImages.get("flag"), flagPos, _flag._size.mult(0.8));
+			v.drawImage(Resource.get("flag"), flagPos, _flag._size.mult(0.8));
 			v.unrotate();
 		}
+<<<<<<< HEAD
 		_old = v.getGraphics().getComposite();
 		if (_hidden < 1) {
 			AlphaComposite ac = java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden);
@@ -82,6 +84,9 @@ public class Player extends Unit {
 			v.drawImage(Resource._gameImages.get("player1_back"), _pos, _size);
 		}
 		v.getGraphics().setComposite(_old);
+=======
+		v.drawImage(Resource.get("player1_back"), _pos, _size);
+>>>>>>> c0a853cc6a39ecf03a8032c010998c5df635c396
 	}
 
 	public void stop(){
@@ -141,6 +146,10 @@ public class Player extends Unit {
 	}
 
 	public void castSpell(Spell spell) {
+		if (spell._name.equals("Flash")) {
+			FlashSpell f = (FlashSpell) spell;
+			f.flash();
+		}
 		_spellToCast = spell;
 		_spellCastingTime = spell._castingTime;
 		decrementMana(spell);

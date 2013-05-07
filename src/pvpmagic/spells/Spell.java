@@ -37,15 +37,15 @@ public abstract class Spell extends Unit {
 	public void setProperties(Vector size, double velocity){
 		_size = size;
 		_velocity = velocity;
-
+		
 		// Spell trajectory starts at center of player
-		_pos = _caster._pos.plus(_caster._size.div(2)).minus(_size.div(2));
+		
+		_pos = _caster._pos.plus(_caster._size.mult(0.5));
 		_dir = _dir.minus(_pos).normalize();
 
 		_vel = _dir.mult(_velocity);
 
 		// Adjust spell to start outside player
-		_pos = _caster._pos.plus(_caster._size.div(2)).minus(_size.div(2)).plus(_vel.normalize().mult(_caster._size));
 	}
 	
 	public static Spell newSpell(GameData data, String name, Player caster, Vector dir){
@@ -53,7 +53,6 @@ public abstract class Spell extends Unit {
 			System.out.println("Given a null name!");
 			return null;
 		}
-		
 		if (name.equals("Stun")){ return new StunSpell(data, caster, dir); }
 		else if (name.equals("Disarm")) { return new DisarmSpell(data, caster, dir); }
 		else if (name.equals("Burn")) { return new BurnSpell(data, caster, dir); }
@@ -64,10 +63,15 @@ public abstract class Spell extends Unit {
 		else if (name.equals("Open")) { return new OpenSpell(data, caster, dir); }
 		else if (name.equals("Lock")) { return new LockSpell(data, caster, dir); }
 		else if (name.equals("Fear")) { return new FearSpell(data, caster, dir); }
+		else if (name.equals("Rejuvenate")) { return new RejuvenateSpell(data, caster, dir); }
 		else if (name.equals("Cleanse")) { return new CleanseSpell(data, caster, dir); }
 		else if (name.equals("Summon")) { return new SummonSpell(data, caster, dir); }
+<<<<<<< HEAD
 		else if (name.equals("Clone")) { return new CloneSpell(data, caster, dir); }
 		else if (name.equals("Hide")) { return new HideSpell(data, caster, dir); }
+=======
+		else if (name.equals("Flash")) {  return new FlashSpell(data, caster, dir); }
+>>>>>>> c0a853cc6a39ecf03a8032c010998c5df635c396
 		System.out.println("Spell name \""+name+"\" not found!");
 		return null;
 	}
@@ -81,7 +85,7 @@ public abstract class Spell extends Unit {
 	
 	@Override
 	public boolean canCollideWith(Unit u){
-		if (u == _caster && time < 10) return false;
+		if (u == _caster && time < 10000) return false;
 		return true;
 	}
 	

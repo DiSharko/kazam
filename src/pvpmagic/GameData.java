@@ -63,9 +63,9 @@ public class GameData {
 		}
 	}
 
-	public void startCastingSpell(Player caster, int spellIndex, Vector dir){
+	public void startCastingSpell(Player caster, String spellName, Vector dir){
 		if (!caster._isSilenced) {
-			Spell s = Spell.newSpell(this, caster._spells[spellIndex], caster, dir);
+			Spell s = Spell.newSpell(this, spellName, caster, dir);
 			if (s != null){
 				Long previousCastTime = caster._spellCastingTimes.get(s._name);
 				if (previousCastTime == null) previousCastTime = (long) 0;
@@ -81,6 +81,13 @@ public class GameData {
 	}
 
 	public void update(){
+		String[] useableSpells = {"Burn", "Open", "Summon", "Rejuvenate"};
+		if (Math.random() < 0.1){
+			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*4)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
+		}
+		if (Math.random() < 0.09){
+			_players.get(1)._mana += 15;
+		}
 		// Deleting must be separate, after all updates and collisions
 		for (int i = 0; i < _units.size(); i++){
 			Unit u = _units.get(i);
@@ -94,6 +101,7 @@ public class GameData {
 		}
 		
 		// THIS ORDER IS NECESSARY so that players don't get stuck in walls
+		// as they 
 		applyMovement();
 		collideEntities();
 	}
@@ -120,14 +128,14 @@ public class GameData {
 						e1._pos = e1._pos.plus(c.mtv(e1).div(2));
 						e2._pos = e2._pos.plus(c.mtv(e2).div(2));
 
-						if (e2._appliesRestitution) e1.applyForce(c.mtv(e1).normalize().mult((c.mtv(e1).normalize().dot(e2._vel.minus(e1._vel)))*e1._mass*e2._mass*(1+cor)/(e1._mass+e2._mass)));
-						if (e1._appliesRestitution) e2.applyForce(c.mtv(e2).normalize().mult((c.mtv(e2).normalize().dot(e1._vel.minus(e2._vel)))*e1._mass*e2._mass*(1+cor)/(e1._mass+e2._mass)));
+						e1.applyForce(c.mtv(e1).normalize().mult((c.mtv(e1).normalize().dot(e2._vel.minus(e1._vel)))*e1._mass*e2._mass*(1+cor)/(e1._mass+e2._mass)));
+						e2.applyForce(c.mtv(e2).normalize().mult((c.mtv(e2).normalize().dot(e1._vel.minus(e2._vel)))*e1._mass*e2._mass*(1+cor)/(e1._mass+e2._mass)));
 					} else if (e1._movable){
 						e1._pos = e1._pos.plus(c.mtv(e1));
-						if (e2._appliesRestitution) e1.applyForce(c.mtv(e1).normalize().mult((ve2-ve1)*e1._mass*(1+cor)));
+						e1.applyForce(c.mtv(e1).normalize().mult((ve2-ve1)*e1._mass*(1+cor)));
 					} else if (e2._movable){
 						e2._pos = e2._pos.plus(c.mtv(e2));
-						if (e1._appliesRestitution) e2.applyForce(c.mtv(e2).normalize().mult((ve1-ve2)*e2._mass*(1+cor)));
+						e2.applyForce(c.mtv(e2).normalize().mult((ve1-ve2)*e2._mass*(1+cor)));
 					}
 
 					e1.collide(c);
@@ -149,7 +157,7 @@ public class GameData {
 			System.out.println("type pos:"+e._pos);
 
 			e._vel = e._vel.plus(e._force.div(e._mass));
-			if (e._appliesFriction) e._vel = e._vel.mult(0.99);
+			if (e._appliesFriction) e._vel = e._vel.mult(0.96);
 
 			e._pos = e._pos.plus(e._vel);
 			e._force = new Vector(0,0);
@@ -165,30 +173,20 @@ public class GameData {
 			if(linearr[0].equals("ROCK")) {
 				//line represents a rock: ROCK,500,500,150
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
+				
 				_units.add(new Rock(this, pos, Double.parseDouble(linearr[3])));
-			
-			} else if (linearr[0].equals("HWALL")) {
-				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Wall(this, pos, Double.parseDouble(linearr[3]), false));
-				
-			} else if (linearr[0].equals("VWALL")) {
-				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Wall(this, pos, Double.parseDouble(linearr[3]), true));
-				
+
 			} else if(linearr[0].equals("SPAWN")) {
 				//line represents a spawn point
-			
 			} else if(linearr[0].equals("DOOR")) {
 				//line represents a door: DOOR,500,500,250,250,50
 				Vector lockpos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
 				Vector openpos = new Vector(Double.parseDouble(linearr[3]), -1.0*Double.parseDouble(linearr[4]));
 				_units.add(new Door(this, lockpos, openpos, Double.parseDouble(linearr[5])));
-			
 			} else if(linearr[0].equals("FLAG")) {
 				//line represents a flag: FLAG,500,500,50
 				Vector pos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
 				_units.add(new Flag(this, pos, Double.parseDouble(linearr[3])));
-			
 			} else {
 				System.out.println("Not enough types in map file being checked for.");
 			}

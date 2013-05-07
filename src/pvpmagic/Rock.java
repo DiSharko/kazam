@@ -11,7 +11,7 @@ public class Rock extends Unit {
 	public Rock(GameData data, Vector pos, double size){
 		super(data, TYPE);
 		_pos = pos;
-		Image sprite = Resource._gameImages.get("rock");
+		Image sprite = Resource.get("rock");
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(size);
 		_movable = false;
 		
@@ -28,9 +28,12 @@ public class Rock extends Unit {
 	}
 	
 	public void draw(View v){
-		v.drawImage(Resource._gameImages.get("rock"), _pos, _size);
+		v.drawImage(Resource.get("rock"), _pos, _size);
 	}
 
+	@Override
+	public void changeHealth(double health){}
+	
 	@Override
 	public void collide(Collision c){
 		Unit u = c.other(this);

@@ -55,18 +55,18 @@ public class Button extends InterfaceElement {
 	int defaultFontSize = 18;
 	int fontSize = defaultFontSize;
 
-	int roundness = 10;
+	int roundness = 20;
 	int offsetOnSelection = 1;
 
 	// IMAGE BUTTON ////////////////
-	Image image;
+	public Image image;
 	Image mousedOverImage;
 	Image selectedImage;
 
 	Image subjectImage;
 	int subjectImageWidth, subjectImageHeight;
 
-	double namePositionFractionX = 0.5, namePositionFractionY = 0.5;
+	public double namePositionFractionX = 0.5, namePositionFractionY = 0.5;
 
 
 	public void recalculateSize(){

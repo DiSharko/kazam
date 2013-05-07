@@ -15,7 +15,7 @@ public abstract class Unit {
 	public boolean _appliesRestitution = true;
 	
 	boolean _collidable = true;
-	double _restitution = 0.5;
+	protected double _restitution = 0.5;
 	double _mass = 1;
 	
 	public Integer _netID = null;
@@ -26,7 +26,6 @@ public abstract class Unit {
 	public void applyForce(float _x, float _y){
 		if (_movable) _force = _force.plus(new Vector(_x, _y));
 	}
-
 	
 	public double _maxHealth = 100;
 	public double _maxMana = 100;
@@ -41,7 +40,8 @@ public abstract class Unit {
 	boolean _isRooted = false;
 	
 	public void root(long time){
-		if (_canBeRooted) _isRooted = true; 
+		if (_canBeRooted) _isRooted = true;
+		_vel = new Vector(0,0);
 		timedEffects.add(new RootEffect(numberOfIntervals(time), this));
 	}
 
