@@ -10,7 +10,10 @@ public class HideSpell extends Spell {
 		_name = "Hide";
 		_cooldown = 10000;
 		_manaCost = 20;
-		_caster.hide(3500);
+	}
+	
+	public void hide() {
+		if (_caster != null) _caster.hide(3500);
 		this._delete = true;
 	}
 }

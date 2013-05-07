@@ -5,9 +5,11 @@ import java.awt.Composite;
 import java.awt.Image;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map.Entry;
 
 import pvpmagic.spells.FlashSpell;
+import pvpmagic.spells.HideSpell;
 import pvpmagic.spells.Spell;
 
 public class Player extends Unit {
@@ -143,8 +145,11 @@ public class Player extends Unit {
 
 	public void castSpell(Spell spell) {
 		if (spell._name.equals("Flash")) {
-			FlashSpell f = (FlashSpell) spell;
-			f.flash();
+			FlashSpell s = (FlashSpell) spell;
+			s.flash();
+		} else if (spell._name.equals("Hide")) {
+			HideSpell s = (HideSpell) spell;
+			s.hide();
 		}
 		_spellToCast = spell;
 		_spellCastingTime = spell._castingTime;
@@ -176,11 +181,15 @@ public class Player extends Unit {
 	public void hide(long time) {
 		timedEffects.add(new HideEffect(numberOfIntervals(time), this));
 	}
-	
+	@Override
 	public String toNet() {
 		String lastCastTimes = "";
 		for (Entry<String, Long> e : _spellCastingTimes.entrySet()) {
 			lastCastTimes += e.getKey() + "," + e.getValue() + ".";
+		}
+		String timedEffectsStr = "";
+		for (TimedEffect e : timedEffects) {
+			timedEffectsStr += e.toNet() + ".";
 		}
 		return _netID + 
 				"\t" + _type + 
@@ -189,27 +198,35 @@ public class Player extends Unit {
 				"\t" + _flag._netID +
 				"\t" + _health +
 				"\t" + _mana +
-				"\t" + lastCastTimes.substring(0, lastCastTimes.length() - 1);
-		//Need to figure out string for timed effects
-		//Timed effects to and fromNet helpers for each effect must be written,
+				"\t" + lastCastTimes.substring(0, lastCastTimes.length() - 1) +
+				"\t" + timedEffectsStr.substring(0, timedEffectsStr.length() - 1);
+		
 		//when fromNet is called, throw away previous timed effects
 		//list, and instantiate new ones with (this) as target
 	}
-	
-	public void fromNet(String[] networkString) {
-		if (validNetworkString(networkString)) {
+	@Override
+	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
+		if (validNetworkString(networkString, false)) {
 			this._pos = Vector.fromNet(networkString[2]);
 			this._destination = Vector.fromNet(networkString[3]);
-			//p._flag = (Flag) objectMap.get(Integer.parseInt(networkString[5]));
+			this._flag = (Flag) objectMap.get(Integer.parseInt(networkString[4]));
 			this._health = Double.parseDouble(networkString[5]);
 			this._mana = Double.parseDouble(networkString[6]);
 
-			String[] lastCastTimes = networkString[7].split(".");
-			String[] sp;
+			String[] lastCastTimes, sp;
+			lastCastTimes = networkString[7].split(".");
 			for (String spell : lastCastTimes) {
 				sp = spell.split(",");
 				this._spellCastingTimes.put(sp[0], Long.parseLong(sp[1]));
 			}
+			String[] tEffects; TimedEffect ef;
+			tEffects = networkString[8].split(".");
+			timedEffects = new LinkedList<TimedEffect>();
+			for (String effect : tEffects) {
+				ef = TimedEffect.fromNet(effect, this);
+				if (ef != null) timedEffects.add(ef);
+			}
+			
 		}
 	}		
 	
@@ -218,8 +235,8 @@ public class Player extends Unit {
 		for (int i = 0; i < _spells.length; i++) {
 			spells += _spells[i] + " ";
 		}
-		return _netID +
-				"\t" + _type +
+		//Note that NetID is prepended by Coder
+		return  _type +
 				"\t" + _characterName + 
 				"\t" + _playerName + 
 				"\t" + spells.substring(0, spells.length() - 1) +
@@ -227,9 +244,9 @@ public class Player extends Unit {
 				"\t" + _destination.toNet();
 	}
 	
-	//networkString format = [id, type, <any data from toNetInit, split on tabs>...]
+	//networkString format = [id, type, <any data from toNetInit split on tabs>...]
 	public static Player fromNetInit(String[] networkString) {
-		if (networkString[1].equals("player")) {
+		if (networkString[1].equals("player") && validNetworkString(networkString, true)) {
 			String[] spells = networkString[4].split(" ");
 			Player p = new Player(null, networkString[2], networkString[3], spells);
 			p._destination = Vector.fromNet(networkString[6]);
@@ -237,22 +254,12 @@ public class Player extends Unit {
 			p._netID = Integer.parseInt(networkString[0]);
 			return p;
 		}
-		return null;
+		throw new RuntimeException("Called Player.fromNetInit on string: " 
+		+ Arrays.toString(networkString));
 	}
 	
-	public Boolean validNetworkStringInit(String[] networkData) {
-		if (networkData.length != 10 || !(networkData[0].equals("n") 
-				&& networkData[2].equals("pn") && networkData[4].equals("s")
-				&& networkData[6].equals("p")) && networkData[8].equals("d")) {
-			System.err.println("ERROR: Invalid String from network - " + Arrays.toString(networkData));
-			return false;
-		} else {
-			return true;
-		}
-	}
-	
-	public Boolean validNetworkString(String[] networkData) {
-		if (networkData.length != 7) {
+	public static Boolean validNetworkString(String[] networkData, Boolean init) {
+		if ((init && networkData.length != 6) || (!init && networkData.length != 9)) {
 			System.err.println("ERROR: Invalid String from network - " + Arrays.toString(networkData));
 			return false;
 		} else {
