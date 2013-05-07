@@ -7,6 +7,8 @@ public abstract class TimedEffect {
 	Unit _target;
 	public static String TYPE;
 	
+	public String _type;
+	
 	public abstract void effect();
 	
 	public static TimedEffect newTimedEffect(String type, Double numberOfIntervals,
@@ -20,6 +22,7 @@ public abstract class TimedEffect {
 			System.out.println("Given a null name!");
 			return null;
 		}
+		
 		if (type.equals("FearEffect")){ return new FearEffect(numberOfIntervals, (Player) target); }
 		else if (type.equals("HealthEffect")) { return new HealthEffect(numberOfIntervals, changePerInterval, target); }
 		else if (type.equals("HideEffect")) { return new HideEffect(numberOfIntervals, (Player) target); }

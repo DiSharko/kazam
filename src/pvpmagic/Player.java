@@ -52,8 +52,8 @@ public class Player extends Unit {
 		Image sprite = Resource.get("player1_back");
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70);
 	
-		double hitBoxScale = 1;
-		_shape = new Box(this, _size.mult(1-hitBoxScale).div(2), _size.mult(hitBoxScale));
+		double hitBoxScale = .7;
+		_shape = new Box(this, _size.mult(0, (1-hitBoxScale)/2), _size.mult(1, hitBoxScale));
 
 		_spells = spellNames;
 		_spellCastingTimes = new HashMap<String, Long>();
@@ -85,6 +85,13 @@ public class Player extends Unit {
 		} else if (_hidden == 1) {
 			v.drawImage(Resource.get("player1_back"), _pos, _size);
 		}
+		
+		for (TimedEffect e : _timedEffects){
+			if (e._type.equals(FearEffect.TYPE)){
+				v.drawImage(Resource.get("confuseEffect"), _pos.plus(10, -30), 30);
+			}
+		}
+		
 	}
 
 	public void stop(){
@@ -175,11 +182,11 @@ public class Player extends Unit {
 	}
 
 	public void fear(long time) {
-		timedEffects.add(new FearEffect(numberOfIntervals(time), this));		
+		_timedEffects.add(new FearEffect(numberOfIntervals(time), this));		
 	}
 	
 	public void hide(long time) {
-		timedEffects.add(new HideEffect(numberOfIntervals(time), this));
+		_timedEffects.add(new HideEffect(numberOfIntervals(time), this));
 	}
 	@Override
 	public String toNet() {
@@ -188,7 +195,7 @@ public class Player extends Unit {
 			lastCastTimes += e.getKey() + "," + e.getValue() + ".";
 		}
 		String timedEffectsStr = "";
-		for (TimedEffect e : timedEffects) {
+		for (TimedEffect e : _timedEffects) {
 			timedEffectsStr += e.toNet() + ".";
 		}
 		return _netID +							//index: 0
@@ -229,10 +236,10 @@ public class Player extends Unit {
 			}
 			String[] tEffects; TimedEffect ef;
 			tEffects = networkString[8].split(".");
-			timedEffects = new LinkedList<TimedEffect>();
+			_timedEffects = new LinkedList<TimedEffect>();
 			for (String effect : tEffects) {
 				ef = TimedEffect.fromNet(effect, this);
-				if (ef != null) timedEffects.add(ef);
+				if (ef != null) _timedEffects.add(ef);
 			}
 			
 		}

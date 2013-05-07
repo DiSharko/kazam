@@ -191,10 +191,9 @@ public class GameData {
 				_units.add(new Wall(this, pos, Double.parseDouble(linearr[3]), true));
 
 			} else if(linearr[0].equals("DOOR")) {
-				//line represents a door: DOOR,500,500,250,250,50
+				//line represents a door: DOOR,500,500,50
 				Vector lockpos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
-				Vector openpos = new Vector(Double.parseDouble(linearr[3]), -1.0*Double.parseDouble(linearr[4]));
-				_units.add(new Door(this, lockpos, openpos, Double.parseDouble(linearr[5])));
+				_units.add(new Door(this, lockpos, Double.parseDouble(linearr[3])));
 			} else if(linearr[0].equals("FLAG")) {
 				//line represents a flag: FLAG,500,500,50
 				Vector pos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));

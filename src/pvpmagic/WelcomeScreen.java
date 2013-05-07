@@ -45,7 +45,7 @@ public class WelcomeScreen extends Screen {
 		onResize();
 	}
 
-	
+
 	@Override
 	protected void draw(Graphics2D g) {
 		g.setColor(Color.gray);
@@ -54,14 +54,9 @@ public class WelcomeScreen extends Screen {
 		g.setFont(new Font("Helvetica", Font.PLAIN, 72));
 		String s = "Kazam";
 		int sWidth = (int)g.getFontMetrics().getStringBounds(s, g).getWidth();
-		g.setColor(new Color((float)Math.random(), (float)Math.random(), (float)Math.random()));
 		
-		int disp = 7;
-		g.drawString(s, (int)(_holder._w/2-sWidth/2)+(int)(Math.random()*disp), 150+(int)(Math.random()*disp));
-		g.setColor(new Color((float)Math.random(), (float)Math.random(), (float)Math.random()));
-		g.drawString(s, (int)(_holder._w/2-sWidth/2)+(int)(Math.random()*disp), 150+(int)(Math.random()*disp));
-		g.setColor(new Color((float)Math.random(), (float)Math.random(), (float)Math.random()));
-		g.drawString(s, (int)(_holder._w/2-sWidth/2)+(int)(Math.random()*disp), 150+(int)(Math.random()*disp));
+		g.setColor(Color.black);
+		g.drawString(s, (int)(_holder._w/2-sWidth/2), 150);
 
 		if (hoverElement != null){
 			int bx = (int) hoverElement.x;

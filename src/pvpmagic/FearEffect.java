@@ -6,6 +6,7 @@ public class FearEffect extends TimedEffect {
 	public FearEffect(double numberOfIntervals, Player u) {
 		_numberOfIntervals = numberOfIntervals;
 		_target = u;
+		_type = TYPE;
 	}
 
 	@Override
