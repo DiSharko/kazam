@@ -14,7 +14,6 @@ public abstract class Spell extends Unit {
 	public double _cooldown = 0;
 	public double _manaCost = 0;
 	
-	
 	public double _castingTime = 5;
 	
 	public String _name;
@@ -85,7 +84,7 @@ public abstract class Spell extends Unit {
 	
 	@Override
 	public boolean canCollideWith(Unit u){
-		if (u == _caster && time < 10000) return false;
+		if (u == _caster && time < 15) return false;
 		return true;
 	}
 	@Override

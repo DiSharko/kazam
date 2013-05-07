@@ -6,6 +6,7 @@ public class SilenceEffect extends TimedEffect {
 	public SilenceEffect(double numberOfIntervals, Unit u) {
 		_numberOfIntervals = numberOfIntervals;
 		_target = u;
+		_type = TYPE;
 	}
 
 	@Override

@@ -1,21 +1,31 @@
 package pvpmagic;
 
-import java.awt.Color;
+
+import java.awt.Image;
+
+import pvpmagic.spells.LockSpell;
 
 
 public class Door extends Unit {
-	private Vector _openPos;
-	private Vector _lockPos;
+	Vector _openSize;
+	Vector _lockedSize;
+	
+	boolean _locked = true;
 	
 	private double _sizeScalar;
 	
-	public Door(GameData data, Vector lockpos, Vector openpos, double size){
+	public Door(GameData data, Vector pos, double size){
 		super(data, "door");
-		_lockPos = lockpos;
-		_openPos = openpos;
-		_pos = _lockPos;
+		_pos = pos;
 		_sizeScalar = size;
-		_size = new Vector(10, 60).normalize().mult(_sizeScalar);
+		
+		Image sprite = Resource.get("door_closed");
+		_lockedSize = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(_sizeScalar);
+		
+		sprite = Resource.get("door_open");
+		_openSize = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(_sizeScalar);
+	
+		_size = _lockedSize;
 		
 		_movable = false;
 		
@@ -24,30 +34,33 @@ public class Door extends Unit {
 	}
 	
 	public void draw(View v){
-		if (_pos.equals(_openPos)) {
-			v.getGraphics().setColor(new Color(139, 69, 19));
-			v.fillRect(_pos, _size);
-		} else {
-			v.getGraphics().setColor(new Color(139, 69, 19));
-			v.fillRect(_pos, _size);
-		}
-//		v.getGraphics().setColor(Color.black);
-//		v.drawRect(_pos, _size);
+		v.drawImage(_locked ? Resource.get("door_closed") : Resource.get("door_open"), _pos, _size);
 	}
 
+	@Override
+	public boolean canCollideWith(Unit u){
+		if (!_locked){
+			if (u._type.equals(LockSpell.TYPE)) return true;
+			return false;
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public void changeHealth(double health){}
+	
 	@Override
 	public void collide(Collision c){
 		//nothing happens if something collides with this
 	}	
 	
 	public void lock() {
-		_pos = _lockPos;
-		_size = new Vector(10, 60).normalize().mult(_sizeScalar);
-		_shape = new Box(this, new Vector(0,0), _size);
+		_locked = true;
+		_size = _lockedSize;
 	}
 	public void open() {
-		_pos = _openPos;
-		_size = new Vector(60, 10).normalize().mult(_sizeScalar);
-		_shape = new Box(this, new Vector(0,0), _size);
+		_locked = false;
+		_size = _openSize;
 	}
 }

@@ -6,6 +6,7 @@ public class RootEffect extends TimedEffect {
 	public RootEffect(double numberOfIntervals, Unit u) {
 		_numberOfIntervals = numberOfIntervals;
 		_target = u;
+		_type = TYPE;
 	}
 
 	@Override

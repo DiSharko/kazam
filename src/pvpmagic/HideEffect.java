@@ -13,6 +13,7 @@ public class HideEffect extends TimedEffect {
 		_appearVals = 40.0;
 		_disappearVals = _numberOfIntervals - _appearVals + 1;
 		_increment = 1.0/_appearVals;
+		_type = TYPE;
 	}
 
 	@Override

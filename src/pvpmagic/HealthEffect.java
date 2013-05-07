@@ -7,6 +7,7 @@ public class HealthEffect extends TimedEffect {
 		_numberOfIntervals = numberOfIntervals;
 		_changePerInterval = changePerInterval;
 		_target = u;
+		_type = TYPE;
 	}
 	
 	public void effect() {
