@@ -14,7 +14,9 @@ public class GameData {
 
 	ArrayList<Player> _players;
 	TeamData _teamdata;
-
+	
+	int _lastTick;
+	int _clientTick;
 
 	public GameData(){
 		_units = new ArrayList<Unit>();
@@ -58,6 +60,10 @@ public class GameData {
 			_units.add(p);
 			_units.add(dummy);
 			dummy._pos = new Vector(-50, -30);
+			
+			// initialize network ticks to invalid values - game starts at 0
+			_lastTick = -1;
+			_clientTick = -1;
 
 		}
 	}

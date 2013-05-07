@@ -2,6 +2,7 @@ package network;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import pvpmagic.*;
 
@@ -59,9 +60,12 @@ public class Coder {
 	 * @param units list of units in the game state - AFTER update() has been called
 	 * @return game state encoded as string
 	 */
-	public static String encodeGame(List<Unit> units) {
+	public static String encodeGame(List<Unit> units, AtomicInteger counter) {
 		String game = "";
 		for (Unit u : units) {
+			if (u._netID == null) {
+				u._netID = counter.getAndIncrement();
+			}
 			game += u.toNet() + "\n";
 		}
 		return game;
