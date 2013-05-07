@@ -32,7 +32,7 @@ public class WelcomeScreen extends Screen {
 		b.defaultFontSize = 24;
 		_interfaceElements.add(b);
 
-		String[] names = {"Andrew DiMarco", "Diego Morales", "Chris Morris", "Miraj Shah"};
+		String[] names = {"Andrew Retardo", "Diego Morales", "Chris Morris", "Miraj Shah"};
 		for (String n : names){
 			b = new Button(this, n, 220, 40, n, -1);
 			b.color = null;
@@ -69,34 +69,34 @@ public class WelcomeScreen extends Screen {
 			int by = (int) hoverElement.y;
 			int bw = 10;
 			String message = "";
-			if (hoverElement.id.equals("Andrew DiMarco")){
+			if (hoverElement.id.equals("Andrew Retardo")){
 				bx += 30;
 				bw = 175;
-				message = "Engine Programmer";
+				message = "Herp derp pizza queen makes me shit myself";
 			} else if (hoverElement.id.equals("Diego Morales")){
 				bx += 25;
 				bw = 183;
-				message = "Content Programmer";
+				message = "I'm too high for this shit mayynee";
 			} else if (hoverElement.id.equals("Chris Morris")){
 				bx += 12;
 				bw = 210;
-				message = "Networking Programmer";
+				message = "I'm going to fail";
 				chrisTime++;
 				if (chrisTime > 20){
 					bx += 50;
 					bw = 115;
-					message = "Just Kidding";
+					message = "But actually.";
 				}
 				if (chrisTime > 40){
 					bx += 10;
 					bw = 70;
-					message = "Retard";
+					message = "Fuck.";
 				}
 				
 			} else if (hoverElement.id.equals("Miraj Shah")){
 				bx += 80;
 				bw = 70;
-				message = "Retard";
+				message = "Whaddup I got a big cock";
 			}
 			if (!message.equals("")){
 				int h = 30;
@@ -127,7 +127,7 @@ public class WelcomeScreen extends Screen {
 				e.x = w/2-e.w/2;
 				e.y = h/2-e.h/2+50;
 			}
-			if (e.id.equals("Andrew DiMarco")){
+			if (e.id.equals("Andrew Retardo")){
 				e.x = _holder._w*.12;
 				e.y = _holder._h-50;
 			} else if (e.id.equals("Diego Morales")){

@@ -10,7 +10,6 @@ public abstract class Spell extends Unit {
 	int time = 0;
 	
 	protected Player _caster;
-	protected Integer _casterNetID;
 	protected double _damage;
 	public double _cooldown = 0;
 	public double _manaCost = 0;
@@ -90,12 +89,13 @@ public abstract class Spell extends Unit {
 		return true;
 	}
 	@Override
-	public void fromNet(String[] networkString) {
+	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
 		if (validNetworkString(networkString)) {
 			Vector dir = Vector.fromNet(networkString[4]);
 			Vector pos = Vector.fromNet(networkString[5]);
 			_pos = pos;
-			_casterNetID = Integer.parseInt(networkString[3]);
+			_caster = (Player) objectMap.get(Integer.parseInt(networkString[3]));
+			if (_caster == null) throw new RuntimeException("Caster is null. String: " + Arrays.toString(networkString));
 			_dir = dir;
 			_pos = pos;
 		}
