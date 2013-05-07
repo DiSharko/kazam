@@ -54,4 +54,9 @@ public abstract class TimedEffect {
 		}
 		return null;
 	}
+	
+	@Override
+	public String toString() {
+		return TYPE;
+	}
 }

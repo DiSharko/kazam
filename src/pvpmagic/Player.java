@@ -5,6 +5,7 @@ import java.awt.Composite;
 import java.awt.Image;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map.Entry;
 
 import pvpmagic.spells.FlashSpell;
@@ -180,11 +181,15 @@ public class Player extends Unit {
 	public void hide(long time) {
 		timedEffects.add(new HideEffect(numberOfIntervals(time), this));
 	}
-	
+	@Override
 	public String toNet() {
 		String lastCastTimes = "";
 		for (Entry<String, Long> e : _spellCastingTimes.entrySet()) {
 			lastCastTimes += e.getKey() + "," + e.getValue() + ".";
+		}
+		String timedEffectsStr = "";
+		for (TimedEffect e : timedEffects) {
+			timedEffectsStr += e.toNet() + ".";
 		}
 		return _netID + 
 				"\t" + _type + 
@@ -193,13 +198,15 @@ public class Player extends Unit {
 				"\t" + _flag._netID +
 				"\t" + _health +
 				"\t" + _mana +
-				"\t" + lastCastTimes.substring(0, lastCastTimes.length() - 1);
+				"\t" + lastCastTimes.substring(0, lastCastTimes.length() - 1) +
+				"\t" + timedEffectsStr.substring(0, timedEffectsStr.length() - 1);
+		
 		//Need to figure out string for timed effects
 		//Timed effects to and fromNet helpers for each effect must be written,
 		//when fromNet is called, throw away previous timed effects
 		//list, and instantiate new ones with (this) as target
 	}
-	
+	@Override
 	public void fromNet(String[] networkString) {
 		if (validNetworkString(networkString)) {
 			this._pos = Vector.fromNet(networkString[2]);
@@ -208,12 +215,20 @@ public class Player extends Unit {
 			this._health = Double.parseDouble(networkString[5]);
 			this._mana = Double.parseDouble(networkString[6]);
 
-			String[] lastCastTimes = networkString[7].split(".");
-			String[] sp;
+			String[] lastCastTimes, sp;
+			lastCastTimes = networkString[7].split(".");
 			for (String spell : lastCastTimes) {
 				sp = spell.split(",");
 				this._spellCastingTimes.put(sp[0], Long.parseLong(sp[1]));
 			}
+			String[] tEffects; TimedEffect ef;
+			tEffects = networkString[8].split(".");
+			timedEffects = new LinkedList<TimedEffect>();
+			for (String effect : tEffects) {
+				ef = TimedEffect.fromNet(effect, this);
+				if (ef != null) timedEffects.add(ef);
+			}
+			
 		}
 	}		
 	
@@ -231,7 +246,7 @@ public class Player extends Unit {
 				"\t" + _destination.toNet();
 	}
 	
-	//networkString format = [id, type, <any data from toNetInit, split on tabs>...]
+	//networkString format = [id, type, <any data from toNetInit split on tabs>...]
 	public static Player fromNetInit(String[] networkString) {
 		if (networkString[1].equals("player")) {
 			String[] spells = networkString[4].split(" ");
