@@ -1,8 +1,7 @@
 package pvpmagic;
 
 public class RootEffect extends TimedEffect {
-	private double _numberOfIntervals;
-	private Unit _target;
+	public static String TYPE = "RootEffect";
 	
 	public RootEffect(double numberOfIntervals, Unit u) {
 		_numberOfIntervals = numberOfIntervals;

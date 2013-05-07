@@ -1,6 +1,7 @@
 package pvpmagic.spells;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import pvpmagic.*;
 
 =======
@@ -11,6 +12,11 @@ import pvpmagic.Player;
 import pvpmagic.Vector;
 import pvpmagic.View;
 >>>>>>> c0a853cc6a39ecf03a8032c010998c5df635c396
+=======
+import pvpmagic.GameData;
+import pvpmagic.Player;
+import pvpmagic.Vector;
+>>>>>>> 9d7789a7d8e12ac2c5ef72ed44ec73147bb0a13e
 
 public class FlashSpell extends Spell {
 	public static String TYPE = "FlashSpell";
@@ -53,6 +59,5 @@ public class FlashSpell extends Spell {
 	public void flash() {
 		_caster._pos = _caster._pos.plus(_dir.normalize().mult(30));
 	}
-
 }
 >>>>>>> c0a853cc6a39ecf03a8032c010998c5df635c396

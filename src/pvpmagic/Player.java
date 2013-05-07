@@ -5,9 +5,11 @@ import java.awt.Composite;
 import java.awt.Image;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map.Entry;
 
 import pvpmagic.spells.FlashSpell;
+import pvpmagic.spells.HideSpell;
 import pvpmagic.spells.Spell;
 
 public class Player extends Unit {
@@ -21,11 +23,18 @@ public class Player extends Unit {
 	double _spellCastingTime = 0;
 	Spell _spellToCast = null;
 	double _hidden = 1.0;
+<<<<<<< HEAD
 	Composite _old;
+=======
+>>>>>>> 9d7789a7d8e12ac2c5ef72ed44ec73147bb0a13e
 
 	String[] _spells;
 	//ArrayList<Carryable> inventory = new ArrayList<Carryable>();
 	public Flag _flag = null;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9d7789a7d8e12ac2c5ef72ed44ec73147bb0a13e
 	Vector _flagSize = new Vector(40,40);
 	
 	HashMap<String, Long> _spellCastingTimes;
@@ -35,7 +44,6 @@ public class Player extends Unit {
 	long _timeLastCast;
 
 	double _velocity = 8;
-
 
 	public Player(GameData data, String characterName, String playerName, String[] spellNames){
 		super(data, TYPE);
@@ -49,7 +57,7 @@ public class Player extends Unit {
 
 		_pos = new Vector(-50, -20);
 		Image sprite = Resource.get("player1_back");
-		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(80);
+		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70);
 	
 		double hitBoxScale = 1;
 		_shape = new Box(this, _size.mult(1-hitBoxScale).div(2), _size.mult(hitBoxScale));
@@ -75,6 +83,7 @@ public class Player extends Unit {
 			v.unrotate();
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 		_old = v.getGraphics().getComposite();
 		if (_hidden < 1) {
 			AlphaComposite ac = java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden);
@@ -87,6 +96,18 @@ public class Player extends Unit {
 =======
 		v.drawImage(Resource.get("player1_back"), _pos, _size);
 >>>>>>> c0a853cc6a39ecf03a8032c010998c5df635c396
+=======
+		if (_hidden < 1) {
+			Composite old = v.getGraphics().getComposite();
+			
+			v.getGraphics().setComposite(java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden));
+			v.drawImage(Resource.get("player1_back"), _pos, _size);
+			
+			v.getGraphics().setComposite(old);
+		} else if (_hidden == 1) {
+			v.drawImage(Resource.get("player1_back"), _pos, _size);
+		}
+>>>>>>> 9d7789a7d8e12ac2c5ef72ed44ec73147bb0a13e
 	}
 
 	public void stop(){
@@ -147,8 +168,11 @@ public class Player extends Unit {
 
 	public void castSpell(Spell spell) {
 		if (spell._name.equals("Flash")) {
-			FlashSpell f = (FlashSpell) spell;
-			f.flash();
+			FlashSpell s = (FlashSpell) spell;
+			s.flash();
+		} else if (spell._name.equals("Hide")) {
+			HideSpell s = (HideSpell) spell;
+			s.hide();
 		}
 		_spellToCast = spell;
 		_spellCastingTime = spell._castingTime;
@@ -175,62 +199,95 @@ public class Player extends Unit {
 
 	public void fear(long time) {
 		timedEffects.add(new FearEffect(numberOfIntervals(time), this));		
+<<<<<<< HEAD
+	}
+	
+	public void hide(long time) {
+		timedEffects.add(new HideEffect(numberOfIntervals(time), this));
+=======
+>>>>>>> 9d7789a7d8e12ac2c5ef72ed44ec73147bb0a13e
 	}
 	
 	public void hide(long time) {
 		timedEffects.add(new HideEffect(numberOfIntervals(time), this));
 	}
-
-	public static void fromNetInit(Integer netID, String networkString, HashMap<Integer, Unit> objectMap, GameData data) {
-		/*String[] netSplit = networkString.split("\t");
-		Player p;
-		String[] spells = netSplit[5].split(", ");
-		Vector dir = Vector.fromNet(netSplit[7]);
-		Vector pos = Vector.fromNet(netSplit[9]);*/
-		//Will have to figure this out, how to put it into GameData
-	}
+	@Override
 	public String toNet() {
 		String lastCastTimes = "";
 		for (Entry<String, Long> e : _spellCastingTimes.entrySet()) {
 			lastCastTimes += e.getKey() + "," + e.getValue() + ".";
 		}
-		return "\tp\t" + _pos.toNet() +
-				"\td\t" + _destination.toNet() +
-				"\tf\t" + _flag._netID +
-				"\th\t" + _health +
-				"\tm\t" + _mana +
-				"\tlct\t" + lastCastTimes.substring(0, lastCastTimes.length() - 1);
+		String timedEffectsStr = "";
+		for (TimedEffect e : timedEffects) {
+			timedEffectsStr += e.toNet() + ".";
+		}
+		return _netID + 
+				"\t" + _type + 
+				"\t" + _pos.toNet() +
+				"\t" + _destination.toNet() +
+				"\t" + _flag._netID +
+				"\t" + _health +
+				"\t" + _mana +
+				"\t" + lastCastTimes.substring(0, lastCastTimes.length() - 1) +
+				"\t" + timedEffectsStr.substring(0, timedEffectsStr.length() - 1);
+		
 		//Need to figure out string for timed effects
+		//Timed effects to and fromNet helpers for each effect must be written,
+		//when fromNet is called, throw away previous timed effects
+		//list, and instantiate new ones with (this) as target
 	}
-	
-	public void fromNet(Integer netID, String networkString, HashMap<Integer, Unit> objectMap, GameData data) {
-		String[] netSplit = networkString.split("\t");
-		Player p;
-		if (validNetworkString(netSplit)) {
-			if ((p = (Player) objectMap.get(netID)) != null) {
-				p._pos = Vector.fromNet(netSplit[1]);
-				p._destination = Vector.fromNet(netSplit[3]);
-				p._flag = (Flag) objectMap.get(Integer.parseInt(netSplit[5]));
-				p._health = Double.parseDouble(netSplit[7]);
-				p._mana = Double.parseDouble(netSplit[9]);
-				
-				String[] lastCastTimes = netSplit[11].split(".");
-				String[] sp;
-				for (String spell : lastCastTimes) {
-					sp = spell.split(",");
-					p._spellCastingTimes.put(sp[0], Long.parseLong(sp[1]));
-				}
+	@Override
+	public void fromNet(String[] networkString) {
+		if (validNetworkString(networkString)) {
+			this._pos = Vector.fromNet(networkString[2]);
+			this._destination = Vector.fromNet(networkString[3]);
+			//p._flag = (Flag) objectMap.get(Integer.parseInt(networkString[5]));
+			this._health = Double.parseDouble(networkString[5]);
+			this._mana = Double.parseDouble(networkString[6]);
+
+			String[] lastCastTimes, sp;
+			lastCastTimes = networkString[7].split(".");
+			for (String spell : lastCastTimes) {
+				sp = spell.split(",");
+				this._spellCastingTimes.put(sp[0], Long.parseLong(sp[1]));
 			}
-		}		
-	}
+			String[] tEffects; TimedEffect ef;
+			tEffects = networkString[8].split(".");
+			timedEffects = new LinkedList<TimedEffect>();
+			for (String effect : tEffects) {
+				ef = TimedEffect.fromNet(effect, this);
+				if (ef != null) timedEffects.add(ef);
+			}
+			
+		}
+	}		
 	
 	public String toNetInit() {
-		String spells = Arrays.toString(_spells);
-		return "cn\t" + _characterName + 
-				"\tpn\t" + _playerName + 
-				"\ts\t" + spells.substring(1, spells.length() - 1) +
-				"\tp\t" + _pos.toNet() +
-				"\td\t" + _destination.toNet();
+		String spells = "";
+		for (int i = 0; i < _spells.length; i++) {
+			spells += _spells[i] + " ";
+		}
+		//Note that NetID is prepended by Coder
+		return  _type +
+				"\t" + _characterName + 
+				"\t" + _playerName + 
+				"\t" + spells.substring(0, spells.length() - 1) +
+				"\t" + _pos.toNet() +
+				"\t" + _destination.toNet();
+	}
+	
+	//networkString format = [id, type, <any data from toNetInit split on tabs>...]
+	public static Player fromNetInit(String[] networkString) {
+		if (networkString[1].equals("player")) {
+			String[] spells = networkString[4].split(" ");
+			Player p = new Player(null, networkString[2], networkString[3], spells);
+			p._destination = Vector.fromNet(networkString[6]);
+			p._pos = Vector.fromNet(networkString[5]);
+			p._netID = Integer.parseInt(networkString[0]);
+			return p;
+		}
+		throw new RuntimeException("Called Player.fromNetInit on string: " 
+		+ Arrays.toString(networkString));
 	}
 	
 	public Boolean validNetworkStringInit(String[] networkData) {
@@ -245,10 +302,7 @@ public class Player extends Unit {
 	}
 	
 	public Boolean validNetworkString(String[] networkData) {
-		if (networkData.length != 12 || !(networkData[0].equals("p")
-				&& networkData[2].equals("d") && networkData[4].equals("f")
-				&& networkData[6].equals("h")) && networkData[8].equals("m")
-				&& networkData[10].equals("lct")) {
+		if (networkData.length != 7) {
 			System.err.println("ERROR: Invalid String from network - " + Arrays.toString(networkData));
 			return false;
 		} else {

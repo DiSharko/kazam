@@ -16,6 +16,7 @@ public class TransitionScreen extends Screen {
 	public TransitionScreen(ScreenHolder holder) {
 		super(holder, "transition");
 		_allowShowBehind = true;
+		_allowUpdateBehind = true;
 
 		setup();
 	}

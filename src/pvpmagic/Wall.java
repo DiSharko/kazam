@@ -4,7 +4,7 @@ import java.awt.Image;
 
 
 public class Wall extends Unit {
-	public static String TYPE = "Wall";
+	public static String TYPE = "all";
 	public static String VWALL = "vwall";
 	public static String HWALL = "hwall";
 	private final boolean VERTICAL;
@@ -15,6 +15,13 @@ public class Wall extends Unit {
 		VERTICAL = vertical; //true is vertical, false is horizontal
 		Image sprite = Resource.get(VERTICAL ? VWALL : HWALL);
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(size);
+		
+		if (!VERTICAL){
+			_size = new Vector(size, size/_size.x*_size.y);
+		} else {
+			_size = new Vector(size/_size.y*_size.x, size);
+
+		}
 		
 		_movable = false;
 		

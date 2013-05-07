@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class InputHandler extends Thread {
 	private Socket _client;
@@ -14,13 +13,12 @@ public class InputHandler extends Thread {
 	private AtomicBoolean _running;
 	private int _id;
 	
-	public InputHandler(Socket client, PriorityBlockingQueue<String> inputs, AtomicBoolean running,
-			AtomicInteger idCounter) {
+	public InputHandler(Socket client, PriorityBlockingQueue<String> inputs, AtomicBoolean running, int id) {
 		// TODO add id counter
 		_client = client;
 		_inputs = inputs;
 		_running = running;
-		_id = idCounter.incrementAndGet();
+		_id = id;
 	}
 	
 	@Override

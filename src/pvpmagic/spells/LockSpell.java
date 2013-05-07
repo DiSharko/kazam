@@ -1,6 +1,6 @@
 package pvpmagic.spells;
 
-import java.awt.Color;
+import java.awt.Image;
 
 import pvpmagic.*;
 
@@ -14,7 +14,11 @@ public class LockSpell extends Spell {
 		_size = new Vector(10, 10);
 		_cooldown = 1000;
 		_manaCost = 10;
-		setProperties(_size, 4);
+		
+		Image sprite = Resource.get("LockSpell");
+		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(80), 18);
+		
+		_shape = new Circle(this, new Vector(-8, -8), 8);
 	}
 	
 	@Override
@@ -23,12 +27,14 @@ public class LockSpell extends Spell {
 		if (target._type.equals("door")) {
 			Door door = (Door) target;
 			door.lock();
+			_health = 0;
 		}
 	}
 	
 	@Override
 	public void draw(View v){
-		v.getGraphics().setColor(Color.blue);
-		v.fillRect(_pos, _size);
+		v.rotate(_vel, _pos);
+		v.drawImage(Resource.get("LockSpell"), _pos.plus(-8-(_vel.x < 0 ? -_size.x: 0), -8), _size.mult(Math.signum(_vel.x), 1));
+		v.unrotate();
 	}
 }

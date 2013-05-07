@@ -1,5 +1,8 @@
 package pvpmagic.spells;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9d7789a7d8e12ac2c5ef72ed44ec73147bb0a13e
 import pvpmagic.*;
 
 

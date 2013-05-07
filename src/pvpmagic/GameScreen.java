@@ -2,12 +2,15 @@ package pvpmagic;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+
+import pvpmagic.spells.Spell;
 
 import screen.Bar;
 import screen.Button;
@@ -26,6 +29,9 @@ public class GameScreen extends Screen {
 	Bar _healthBar;
 	Bar _manaBar;
 
+	int _spellButtonSize = 60;
+	Button[] _focusSpellButtons;
+
 	public GameScreen(ScreenHolder holder) {
 		super(holder, "game");
 
@@ -39,7 +45,7 @@ public class GameScreen extends Screen {
 	@Override
 	public void setup() {
 		_interfaceElements = new ArrayList<InterfaceElement>();
-		
+
 		_healthBar = new Bar("health", new Vector(400, 15), 1);
 		_healthBar.name = "Health";
 		_interfaceElements.add(_healthBar);
@@ -48,7 +54,7 @@ public class GameScreen extends Screen {
 		_manaBar.setColorRange(new Color(0.5f, 0.5f, 1f), null, null, null);
 		_manaBar.name = "Mana";
 		_interfaceElements.add(_manaBar);
-		
+
 		Button menu = new Button(this, "menu", Resource.get("menu"));
 		menu.w = menu.h = 60;
 		_interfaceElements.add(menu);
@@ -66,7 +72,7 @@ public class GameScreen extends Screen {
 
 	public void configureGame(SetupScreen s){
 		_data.setup(s);
-		if (_data._players.size() > 0) _focus = _data._players.get(0);
+		if (_data._players.size() > 0) setFocus(_data._players.get(0));
 		else System.out.println("No players in game!");
 
 		onResize();
@@ -75,13 +81,13 @@ public class GameScreen extends Screen {
 	private class VisionComparator implements Comparator<Unit> {
 		@Override
 		public int compare(Unit u1, Unit u2) {
-			if (u1._pos.y == u2._pos.y) return (int) (u1._pos.x - u2._pos.x);
+			if (u1._pos.y == u2._pos.y) return (int) (u2._pos.x - u1._pos.x);
 			return (int) (u1._pos.y - u2._pos.y);
 		}
 	}
 
 	@Override
-	protected void draw(Graphics2D g) {
+	protected void draw(Graphics2D g){
 		_view.setGraphics(g);
 
 		// Draw things in a logical order of vision, put here instead of GameData because it should be done by the client
@@ -108,12 +114,63 @@ public class GameScreen extends Screen {
 				}
 			}
 		}
+	}
+
+	@Override
+	protected void drawOnTop(Graphics2D g){
+		if (_focusSpellButtons != null){
+			for (int i = 0; i < _focusSpellButtons.length; i++){
+				if (_focus._spells[i] == null || _focusSpellButtons[i] == null) continue;
+				int x = (i%4)*(_spellButtonSize+5) + 10;
+				int y = ((int)(i/4))*(_spellButtonSize+5)+_holder._h-_spellButtonSize*2-10;
+
+				g.setColor(Color.black);
+				g.setFont(new Font("Helvetica", Font.PLAIN, 16));
+				g.drawString(""+Resource._spellKeys[i], x+6, y+17);
+
+				if (_focus._spellCastingTimes.containsKey(_focusSpellButtons[i].name)){
+					Spell proto = Spell.newSpell(_data, _focus._spells[i], null, null);
+					double timeSinceCast = System.currentTimeMillis() - _focus._spellCastingTimes.get(_focusSpellButtons[i].name);
+					double cooldown = proto._cooldown;
+					
+					if (timeSinceCast < cooldown){
+						double fraction = (cooldown-timeSinceCast)/cooldown;
+						g.setColor(new Color(0,0,1,0.4f));
+						g.fillRoundRect(x, y, (int)(_spellButtonSize*fraction), _spellButtonSize, 15, 15);
+					} else if (proto._manaCost > _focus._mana){
+						g.setColor(new Color(1,0.7f,0.7f,0.7f));
+						g.fillRoundRect(x, y, _spellButtonSize, _spellButtonSize, 15, 15);
+					}
+				}
+			}
+		}
 
 	}
 
 
 
-
+	public void setFocus(Player focus){
+		if (_focusSpellButtons != null && _interfaceElements != null){
+			for (int i = 0; i < _focusSpellButtons.length; i++){
+				if (_focusSpellButtons[i] != null){
+					_interfaceElements.remove(_focusSpellButtons[i]);
+				}
+			}
+		}
+		_focusSpellButtons = new Button[8];
+		_focus = focus;
+		for (int i = 0; i < _focus._spells.length; i++){
+			String spell = _focus._spells[i];
+			if (spell != null){
+				Button b = new Button(this, spell, Resource.get(spell+"SpellIcon"));
+				b.name = spell;
+				b.namePositionFractionY = 0.8;
+				_focusSpellButtons[i] = b;
+				_interfaceElements.add(b);
+			}
+		}
+		onResize();
+	}
 
 
 
@@ -124,7 +181,10 @@ public class GameScreen extends Screen {
 		_data.update();
 
 		_view._camera = _focus._pos;
-		_view._scale = (Math.min(_holder._h, _holder._w))/800.0;
+		_view._scale = (Math.min(_holder._h, _holder._w))/600.0;
+		
+//		_view._camera = new Vector(1000,-200);
+//		_view._scale = 0.4;
 
 		if (_focus != null){
 			_healthBar.current = _focus._health;
@@ -181,6 +241,16 @@ public class GameScreen extends Screen {
 		}
 
 		if (key == 192) DEBUG = !DEBUG;
+		
+		if (key == KeyEvent.VK_G){
+			try {
+				_data._units = new ArrayList<Unit>();
+				_data.readInMap("Department of Secrets");
+			} catch (Exception e1){};
+		}
+		if (key == KeyEvent.VK_P){
+			System.out.println(_view.screenToGamePoint(new Vector(_xMouse, _yMouse)));
+		}
 
 	}
 
@@ -215,9 +285,20 @@ public class GameScreen extends Screen {
 					e.y = _holder._h - e.h - 5;
 				}
 			}
+
+		}
+		if (_focusSpellButtons != null){
+			for (int i = 0; i < _focusSpellButtons.length; i++){
+				if (_focusSpellButtons[i] != null){
+					_focusSpellButtons[i].x = (i%4)*(_spellButtonSize+5) + 10;
+					_focusSpellButtons[i].y = ((int)(i/4))*(_spellButtonSize+5)+_holder._h-_spellButtonSize*2-10;
+					_focusSpellButtons[i].w = _focusSpellButtons[i].h = _spellButtonSize;
+					_focusSpellButtons[i].recalculateText();
+				}
+			}
 		}
 	}
-	
+
 	@Override
 	protected void handleElementReleased(InterfaceElement e){
 		super.handleElementReleased(e);

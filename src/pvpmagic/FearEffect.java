@@ -1,8 +1,7 @@
 package pvpmagic;
 
 public class FearEffect extends TimedEffect {
-	private double _numberOfIntervals;
-	private Player _target;
+	public static String TYPE = "FearEffect";
 	
 	public FearEffect(double numberOfIntervals, Player u) {
 		_numberOfIntervals = numberOfIntervals;
@@ -18,7 +17,8 @@ public class FearEffect extends TimedEffect {
 			if (_numberOfIntervals % 20 == 0) {
 				double xOffset = -200 + Math.random()*400 + 1;
 				double yOffset = -200 + Math.random()*400 + 1;
-				_target._destination = new Vector(_target._pos.x + xOffset, _target._pos.y + yOffset);
+				((Player) _target)._destination = 
+						new Vector(_target._pos.x + xOffset, _target._pos.y + yOffset);
 			}
 			_numberOfIntervals -= 1;
 		} else {

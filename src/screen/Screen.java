@@ -46,13 +46,14 @@ public abstract class Screen {
 				return _interfaceElements.get(i);
 			}
 		}
-
 		return null;
 	}
 
+	public InterfaceElement hoverElement;
+	
 	// TextInputLines
-	InterfaceElement keyboardFocus;
-
+	public InterfaceElement keyboardFocus;
+	
 
 	public abstract void setup();
 	
@@ -204,13 +205,15 @@ public abstract class Screen {
 		_xMouse = event.getX();
 		_yMouse = event.getY();
 		boolean found = false;
+		hoverElement = null;
 
 		if (_interfaceElements != null){
 			for (int i = 0; i < _interfaceElements.size(); i++){
 				InterfaceElement e = _interfaceElements.get(i);
 				e.handleMouseMoved(event);
-				if (!e.enabled || !e.visible) continue;
 				if (!found && Function.within(e.x, e.y, e.w, e.h, _xMouse, _yMouse)){
+					hoverElement = e;
+					if (!e.enabled || !e.visible) continue;
 					e.mousedOver = true; found = true;
 					if (e.type.equals("Button")){
 						_holder._window.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -270,7 +273,6 @@ public abstract class Screen {
 			}
 		}
 	}
-
 
 	protected void handleElementReleased(InterfaceElement e){
 		if (_selectorGrid != null){

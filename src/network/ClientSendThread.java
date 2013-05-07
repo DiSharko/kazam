@@ -9,11 +9,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClientSendThread extends Thread {
 	private Socket _client;
-	private ConcurrentLinkedQueue<SyncedString> _inputs;
+	private ConcurrentLinkedQueue<String> _inputs;
 	private AtomicBoolean _connected;
 	private String _clientData;
 
-	public ClientSendThread(Socket client, ConcurrentLinkedQueue<SyncedString> inputs, AtomicBoolean connected, String clientData) {
+	public ClientSendThread(Socket client, ConcurrentLinkedQueue<String> inputs, AtomicBoolean connected, String clientData) {
 		_client = client;
 		_inputs = inputs;
 		_connected = connected;
@@ -30,9 +30,9 @@ public class ClientSendThread extends Thread {
 			
 			// loop through commands
 			while (_connected.get()) {
-				SyncedString command = _inputs.poll();
+				String command = _inputs.poll();
 				if (command != null) {
-					writer.write(command.getData());
+					writer.write(command);
 					writer.flush();
 				}
 			}

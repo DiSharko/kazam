@@ -10,6 +10,7 @@ public abstract class Spell extends Unit {
 	int time = 0;
 	
 	protected Player _caster;
+	protected Integer _casterNetID;
 	protected double _damage;
 	public double _cooldown = 0;
 	public double _manaCost = 0;
@@ -26,6 +27,7 @@ public abstract class Spell extends Unit {
 
 	public Spell(GameData data, String type, Player caster, Vector target) {
 		super(data, type);
+		if (data == null || type == null || caster == null || target == null) return;
 		_appliesRestitution = false;
 		_caster = caster;
 		_shape = new Circle(this, new Vector(0,0), 10);
@@ -35,6 +37,7 @@ public abstract class Spell extends Unit {
 	}
 	
 	public void setProperties(Vector size, double velocity){
+		if (_caster == null || _dir == null) return;
 		_size = size;
 		_velocity = velocity;
 		
@@ -51,7 +54,7 @@ public abstract class Spell extends Unit {
 	public static Spell newSpell(GameData data, String name, Player caster, Vector dir){
 		if (name == null){
 			System.out.println("Given a null name!");
-			return null;
+			name = ""; //Temporary to enable null construction for Chris
 		}
 		if (name.equals("Stun")){ return new StunSpell(data, caster, dir); }
 		else if (name.equals("Disarm")) { return new DisarmSpell(data, caster, dir); }
@@ -67,11 +70,18 @@ public abstract class Spell extends Unit {
 		else if (name.equals("Cleanse")) { return new CleanseSpell(data, caster, dir); }
 		else if (name.equals("Summon")) { return new SummonSpell(data, caster, dir); }
 <<<<<<< HEAD
+<<<<<<< HEAD
 		else if (name.equals("Clone")) { return new CloneSpell(data, caster, dir); }
 		else if (name.equals("Hide")) { return new HideSpell(data, caster, dir); }
 =======
 		else if (name.equals("Flash")) {  return new FlashSpell(data, caster, dir); }
 >>>>>>> c0a853cc6a39ecf03a8032c010998c5df635c396
+=======
+		else if (name.equals("Clone")) { return new CloneSpell(data, caster, dir); }
+		else if (name.equals("Hide")) { return new HideSpell(data, caster, dir); }
+		else if (name.equals("Flash")) {  return new FlashSpell(data, caster, dir); }
+
+>>>>>>> 9d7789a7d8e12ac2c5ef72ed44ec73147bb0a13e
 		System.out.println("Spell name \""+name+"\" not found!");
 		return null;
 	}
@@ -88,37 +98,29 @@ public abstract class Spell extends Unit {
 		if (u == _caster && time < 10000) return false;
 		return true;
 	}
-	
-	public static void fromNet(Integer netID, String networkString, HashMap<Integer, Unit> objectMap, GameData data) {
-		String[] netSplit = networkString.split("\t");
-		Player caster; Spell spell;
-		if (validNetworkString(netSplit)) {
-			//invalid, wait for repeat send?
-		} else if ((caster = (Player) objectMap.get(Integer.parseInt(netSplit[1]))) == null) {
-			throw new RuntimeException("ERROR: Player " + netSplit[1] + 
-					" does not exist in objectMap. This should not happen.");
-		} else {
-			Vector dir = Vector.fromNet(netSplit[5]);
-			Vector pos = Vector.fromNet(netSplit[7]);
-			if ((spell = (Spell) objectMap.get(netID)) == null) {
-				spell = newSpell(data, netSplit[1], caster, dir);
-				spell._pos = pos;
-			} else {
-				spell._caster = caster;
-				spell._dir = dir;
-				spell._pos = pos;
-			}
+	@Override
+	public void fromNet(String[] networkString) {
+		if (validNetworkString(networkString)) {
+			Vector dir = Vector.fromNet(networkString[4]);
+			Vector pos = Vector.fromNet(networkString[5]);
+			_pos = pos;
+			_casterNetID = Integer.parseInt(networkString[3]);
+			_dir = dir;
+			_pos = pos;
 		}
 	}
-	
+	@Override
 	public String toNet() {
-		return "n\t" + _name + "\tc\t" + _caster._netID + "\td\t" + _dir.toNet() + "\tp\t" + _pos.toNet();
+		return _netID +
+				"\t" + "SPELL" +
+				"\t" + _name +
+				"\t" + _caster._netID +
+				"\t" + _dir.toNet() +
+				"\t" + _pos.toNet();
 	}
 	
 	public static Boolean validNetworkString(String[] networkData) {
-		if (networkData.length != 8 || !(networkData[0].equals("n") 
-				&& networkData[2].equals("c") && networkData[4].equals("d")
-				&& networkData[6].equals("p"))) {
+		if (networkData.length != 6) {
 			System.err.println("ERROR: Invalid String from network - " + Arrays.toString(networkData));
 			return false;
 		} else {

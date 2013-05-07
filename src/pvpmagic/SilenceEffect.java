@@ -1,9 +1,8 @@
 package pvpmagic;
 
 public class SilenceEffect extends TimedEffect {
-	private double _numberOfIntervals;
-	private Unit _target;
-	
+	public static String TYPE = "SilenceEffect";
+
 	public SilenceEffect(double numberOfIntervals, Unit u) {
 		_numberOfIntervals = numberOfIntervals;
 		_target = u;

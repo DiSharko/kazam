@@ -51,9 +51,9 @@ public class Button extends InterfaceElement {
 
 	int activationKeycode = -1;
 
-	Color textColor = Color.black;
-	int defaultFontSize = 18;
-	int fontSize = defaultFontSize;
+	public Color textColor = Color.black;
+	public int defaultFontSize = 18;
+	public int fontSize = defaultFontSize;
 
 	int roundness = 20;
 	int offsetOnSelection = 1;
@@ -111,10 +111,14 @@ public class Button extends InterfaceElement {
 
 
 		if (image == null){
-			g.setColor(color);
-			g.fillRoundRect((int)x + selectedOffset,(int)y + selectedOffset, (int)w, (int)h, roundness, roundness);
-			g.setColor(borderColor);
-			g.drawRoundRect((int)x + selectedOffset,(int)y + selectedOffset, (int)w, (int)h, roundness, roundness);
+			if (color != null){
+				g.setColor(color);
+				g.fillRoundRect((int)x + selectedOffset,(int)y + selectedOffset, (int)w, (int)h, roundness, roundness);
+			}
+			if (borderColor != null){
+				g.setColor(borderColor);
+				g.drawRoundRect((int)x + selectedOffset,(int)y + selectedOffset, (int)w, (int)h, roundness, roundness);
+			}
 		}
 
 
@@ -142,12 +146,10 @@ public class Button extends InterfaceElement {
 			g.drawString(name, tempX+selectedOffset, tempY+selectedOffset);
 		}
 
-
-
-		if (selected && selectedImage == null){
+		if (selected && selectedImage == null && selectColor != null){
 			g.setColor(selectColor);
 			g.fillRoundRect((int)x + selectedOffset,(int)y + selectedOffset, (int)w, (int)h, roundness, roundness);
-		} else if (mousedOver && mousedOverImage == null){
+		} else if (mousedOver && mousedOverImage == null && mouseOverColor != null){
 			g.setColor(mouseOverColor);
 			g.fillRoundRect((int)x + selectedOffset,(int)y + selectedOffset, (int)w, (int)h, roundness, roundness);
 		}
