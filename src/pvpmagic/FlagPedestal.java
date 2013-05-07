@@ -2,6 +2,7 @@ package pvpmagic;
 
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class FlagPedestal extends Unit {
@@ -48,4 +49,19 @@ public class FlagPedestal extends Unit {
 			}
 		}
 	}	
+	
+	@Override
+	public String toNet() {
+		return _type + 
+				"\t" + _flag._netID;
+	}
+	
+	@Override
+	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
+		if (networkString[1].equals("FlagZone") 
+				&& _netID == Integer.parseInt(networkString[0])
+				&& networkString.length == 3) {
+			_flag = (Flag) objectMap.get(Integer.parseInt(networkString[2]));
+		}
+	}
 }

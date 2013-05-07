@@ -1,9 +1,10 @@
 package pvpmagic;
 
 import java.awt.Image;
+import java.util.HashMap;
 
 public class Pillar extends Unit {
-		public static String TYPE = "pillar";
+		public static String TYPE = "Pillar";
 		
 		public Pillar(GameData data, Vector pos, double size){
 			super(data, TYPE);
@@ -28,5 +29,15 @@ public class Pillar extends Unit {
 		
 		@Override
 		public void changeHealth(double health){}
+
+		@Override
+		public String toNet() {
+			// TODO Auto-generated method stub
+			return _type;
+		}
+
+		@Override
+		public void fromNet(String[] networkString,
+				HashMap<Integer, Unit> objectMap) {}
 
 }

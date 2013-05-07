@@ -210,7 +210,7 @@ public class GameData {
 		linearr = line.split(",");
 		if(linearr[0].equals("NUMTEAMS")) {
 			for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
-				_teams.add(new FlagTeamData(i));
+				_teams.add(new FlagTeamData(i, this));
 			}
 		} else {
 			System.out.println("NUMBER OF TEAMS NOT IN MAP, invalid map file.");
