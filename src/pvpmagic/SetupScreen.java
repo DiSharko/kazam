@@ -36,7 +36,7 @@ public class SetupScreen extends Screen {
 	ChooserScreen _spellChooserScreen;
 	ChooserScreen _spellAllChooserScreen;
 
-	ChooserScreen _gameTypeChooserScreen;
+//	ChooserScreen _gameTypeChooserScreen;
 	ChooserScreen _mapChooserScreen;
 
 	public SetupScreen(ScreenHolder holder) {
@@ -135,22 +135,22 @@ public class SetupScreen extends Screen {
 		_hostGameElements.add(spellChooser);
 
 		// GAME TYPES
-		Button gameTypeChooser = new Button(this, "gameTypeChooser", 200, 50, "Choose Game Type", -1);
-		gameTypeChooser.setColors(_bgColor, new Color(0.5f,0.5f,0.5f,0.2f), new Color(0.3f,0.3f,0.3f,0.3f), null);
-		_hostGameElements.add(gameTypeChooser);
-		_serverElements.add(gameTypeChooser);
-
-		Button selectedGameType = new Button(this, "selectedGameType", 165, 165);
-		selectedGameType.setColors(_bgColor, new Color(0.5f,0.5f,0.5f,0.2f), new Color(0.3f,0.3f,0.3f,0.3f), null);
-		_hostGameElements.add(selectedGameType);
-		_serverElements.add(selectedGameType);
-
-		_gameTypeChooserScreen = new ChooserScreen(_holder, "gameTypeChooser");
-		_gameTypeChooserScreen._caller = this;
-		for (int i = 0; i < Resource._gameTypes.size(); i++){
-			String name = Resource._gameTypes.get(i);
-			_gameTypeChooserScreen._choices.addButton(new Button(null, name, 100, 100, name, -1));
-		}
+//		Button gameTypeChooser = new Button(this, "gameTypeChooser", 200, 50, "Choose Game Type", -1);
+//		gameTypeChooser.setColors(_bgColor, new Color(0.5f,0.5f,0.5f,0.2f), new Color(0.3f,0.3f,0.3f,0.3f), null);
+//		_hostGameElements.add(gameTypeChooser);
+//		_serverElements.add(gameTypeChooser);
+//
+//		Button selectedGameType = new Button(this, "selectedGameType", 165, 165);
+//		selectedGameType.setColors(_bgColor, new Color(0.5f,0.5f,0.5f,0.2f), new Color(0.3f,0.3f,0.3f,0.3f), null);
+//		_hostGameElements.add(selectedGameType);
+//		_serverElements.add(selectedGameType);
+//
+//		_gameTypeChooserScreen = new ChooserScreen(_holder, "gameTypeChooser");
+//		_gameTypeChooserScreen._caller = this;
+//		for (int i = 0; i < Resource._gameTypes.size(); i++){
+//			String name = Resource._gameTypes.get(i);
+//			_gameTypeChooserScreen._choices.addButton(new Button(null, name, 100, 100, name, -1));
+//		}
 
 
 		// MAPS
@@ -248,8 +248,8 @@ public class SetupScreen extends Screen {
 		} else if (e.id.equals("spellChooser")){
 			_spellAllChooserScreen._callingElement = e;
 			_holder.showChooser(_spellAllChooserScreen);
-		} else if (e.id.equals("gameTypeChooser") || e.id.equals("selectedGameType")){
-			_holder.showChooser(_gameTypeChooserScreen);
+//		} else if (e.id.equals("gameTypeChooser") || e.id.equals("selectedGameType")){
+//			_holder.showChooser(_gameTypeChooserScreen);
 		} else if (e.id.equals("mapChooser") || e.id.equals("selectedMap")){
 			_holder.showChooser(_mapChooserScreen);
 		} else if (e.id.equals("play")){
