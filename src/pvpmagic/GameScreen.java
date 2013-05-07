@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.concurrent.PriorityBlockingQueue;
 
 import pvpmagic.spells.Spell;
 
@@ -21,6 +22,8 @@ import screen.InterfaceElement;
 public class GameScreen extends Screen {
 
 	boolean DEBUG = false;
+	String _eventNetString = "";
+	PriorityBlockingQueue<String> _netInputs;
 
 	GameData _data;
 	Player _focus;
@@ -201,7 +204,7 @@ public class GameScreen extends Screen {
 	@Override
 	public void onKeyPressed(KeyEvent e){
 		int key = e.getKeyCode();
-
+		_eventNetString = System.currentTimeMillis() + "\t";
 
 		if (key == KeyEvent.VK_ESCAPE){
 			_holder.showBorder();
@@ -220,24 +223,32 @@ public class GameScreen extends Screen {
 		if (key == KeyEvent.VK_DOWN){
 			_view._camera = _view._camera.plus(0, 10);
 		}
-
+		
 		Vector target = _view.screenToGamePoint(new Vector(_xMouse, _yMouse));
 		if (key == KeyEvent.VK_Q){
 			_data.startCastingSpell(_focus, _focus._spells[0], target);
+			_eventNetString = "Q\t" + target.toNet();
 		} else if (key == KeyEvent.VK_W){
 			_data.startCastingSpell(_focus, _focus._spells[1], target);
+			_eventNetString = "W\t" + target.toNet();
 		} else if (key == KeyEvent.VK_E){
 			_data.startCastingSpell(_focus, _focus._spells[2], target);
+			_eventNetString = "E\t" + target.toNet();
 		} else if (key == KeyEvent.VK_R){
 			_data.startCastingSpell(_focus, _focus._spells[3], target);
+			_eventNetString = "R\t" + target.toNet();
 		} else if (key == KeyEvent.VK_A){
 			_data.startCastingSpell(_focus, _focus._spells[4], target);
+			_eventNetString = "A\t" + target.toNet();
 		} else if (key == KeyEvent.VK_S){
 			_data.startCastingSpell(_focus, _focus._spells[5], target);
+			_eventNetString = "S\t" + target.toNet();
 		} else if (key == KeyEvent.VK_D){
-			_data.startCastingSpell(_focus, _focus._spells[6], target);			
+			_data.startCastingSpell(_focus, _focus._spells[6], target);	
+			_eventNetString = "D\t" + target.toNet();
 		} else if (key == KeyEvent.VK_F){
 			_data.startCastingSpell(_focus, _focus._spells[7], target);
+			_eventNetString = "F\t" + target.toNet();
 		}
 
 		if (key == 192) DEBUG = !DEBUG;
@@ -251,16 +262,48 @@ public class GameScreen extends Screen {
 		if (key == KeyEvent.VK_P){
 			System.out.println(_view.screenToGamePoint(new Vector(_xMouse, _yMouse)));
 		}
-
+		
+		_netInputs.add(_eventNetString);
 	}
+	
+	//eventString is in the format netID \t timestamp \t <data>
+	public void handleEvent(String[] eventString, Player p) {
+		Vector target = Vector.fromNet(eventString[4]);
+		if (eventString[3].equals("Q")) {
+			_data.startCastingSpell(p, p._spells[0], target);
+		} else if (eventString[3].equals("W")){
+			_data.startCastingSpell(_focus, _focus._spells[1], target);
+		} else if (eventString[3].equals("E")){
+			_data.startCastingSpell(_focus, _focus._spells[2], target);
+		} else if (eventString[3].equals("R")){
+			_data.startCastingSpell(_focus, _focus._spells[3], target);
+		} else if (eventString[3].equals("A")){
+			_data.startCastingSpell(_focus, _focus._spells[4], target);
+		} else if (eventString[3].equals("S")){
+			_data.startCastingSpell(_focus, _focus._spells[5], target);
+		} else if (eventString[3].equals("D")){
+			_data.startCastingSpell(_focus, _focus._spells[6], target);	
+		} else if (eventString[3].equals("F")){
+			_data.startCastingSpell(_focus, _focus._spells[7], target);
+		} else if (eventString[4].equals("CLICK")) {
+			if (!p._isRooted) {
+				p._destination = target;
+			}
+		}
+	}
+	
+	
 
 	@Override
 	public boolean onMousePressed(MouseEvent e){
+		_eventNetString = System.currentTimeMillis() + "\t";
 		if (!super.onMousePressed(e)){
 			Vector point = _view.screenToGamePoint(new Vector(e.getX(), e.getY()));
+			_eventNetString = "CLICK\t" + point.toNet();
 			if (!_focus._isRooted) {
 				_focus._destination = point;
 			}
+			_netInputs.add(_eventNetString);
 		}
 		return true;
 	}

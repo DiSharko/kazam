@@ -191,13 +191,17 @@ public class Player extends Unit {
 		for (TimedEffect e : timedEffects) {
 			timedEffectsStr += e.toNet() + ".";
 		}
-		return _netID + 
-				"\t" + _type + 
-				"\t" + _pos.toNet() +
-				"\t" + _destination.toNet() +
-				"\t" + _flag._netID +
-				"\t" + _health +
-				"\t" + _mana +
+		return _netID +							//index: 0
+				"\t" + _type + 					//index: 1
+				"\t" + _pos.toNet() +			//index: 2
+				"\t" + _destination.toNet() +	//index: 3
+				"\t" + _flag._netID +			//index: 4
+				"\t" + _health +				//index: 5
+				"\t" + _mana +					//index: 6
+				"\t" + _vel.toNet() +			//index: 7
+				"\t" + _force.toNet() +			//index: 8
+				"\t" + _isRooted +				//index: 9
+				"\t" + _isSilenced +			//index: 10
 				"\t" + lastCastTimes.substring(0, lastCastTimes.length() - 1) +
 				"\t" + timedEffectsStr.substring(0, timedEffectsStr.length() - 1);
 		
@@ -212,6 +216,10 @@ public class Player extends Unit {
 			this._flag = (Flag) objectMap.get(Integer.parseInt(networkString[4]));
 			this._health = Double.parseDouble(networkString[5]);
 			this._mana = Double.parseDouble(networkString[6]);
+			this._vel = Vector.fromNet(networkString[7]);
+			this._force = Vector.fromNet(networkString[8]);
+			this._isRooted = Boolean.parseBoolean(networkString[9]);
+			this._isSilenced = Boolean.parseBoolean(networkString[10]);
 
 			String[] lastCastTimes, sp;
 			lastCastTimes = networkString[7].split(".");
