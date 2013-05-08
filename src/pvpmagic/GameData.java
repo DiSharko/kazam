@@ -64,7 +64,7 @@ public class GameData {
 		}**/
 		
 		try {
-			PriorityQueue<Player> playerQueue = new PriorityQueue<Player>(_playerList.size(),new PlayerComparator());
+			PriorityQueue<Player> playerQueue = new PriorityQueue<Player>(_playerList.size()+1,new PlayerComparator());
 			playerQueue.addAll(_playerList);
 			readInMap(s.getElement("selectedMap").name,_idCounter,playerQueue);
 		} catch (IOException e) {
