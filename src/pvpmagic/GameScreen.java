@@ -8,8 +8,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.PriorityQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import network.SyncedString;
 
 import pvpmagic.spells.Spell;
 
@@ -23,9 +29,35 @@ public class GameScreen extends Screen {
 
 	boolean DEBUG = false;
 	
+	// shared network vars - setup in setup TODO
 	boolean _isClient;
-	public PriorityBlockingQueue<String> _netInputs = new PriorityBlockingQueue<String>();
-
+	boolean _isHost;
+	HashMap<Integer,Unit> _staticMap;
+	HashMap<Integer,Unit> _dynamicMap;
+	int lobbyVersion;
+	
+	// Server vars - set in setup TODO
+	public PriorityBlockingQueue<String> _netInputs; // inputs used by server
+	HashMap<Integer,Player> _playerMap;
+	AtomicBoolean _running;
+	AtomicBoolean _startedS;
+	int _port;
+	GameData _dataS;
+	int _tick;
+	
+	// Client vars - set in setup TODO
+	ConcurrentLinkedQueue<String> _netOutputs; // outputs added to by client
+	AtomicBoolean _connected;
+	AtomicBoolean _started;
+	SyncedString _gameData;
+	SyncedString _lobbyData;
+	int _getPort;
+	int _sendPort;
+	AtomicInteger _focusID;
+	PriorityQueue<Player> _players;
+	int _lastTick;
+	int _clientTick;
+	
 
 	GameData _data;
 	Player _focus;
@@ -65,6 +97,7 @@ public class GameScreen extends Screen {
 		_interfaceElements.add(menu);
 		
 		_isClient = false;
+		_isHost = false;
 
 		startGame();
 	}
@@ -244,49 +277,49 @@ public class GameScreen extends Screen {
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[0], target);
 			} else {
-				eventNetString = _data._lastTick + "Q\t" + target.toNet();
+				eventNetString = _lastTick + "Q\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_W){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[1], target);
 			} else {
-				eventNetString = _data._lastTick + "W\t" + target.toNet();
+				eventNetString = _lastTick + "W\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_E){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[2], target);
 			} else {
-				eventNetString = _data._lastTick + "E\t" + target.toNet();
+				eventNetString = _lastTick + "E\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_R){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[3], target);
 			} else {
-				eventNetString = _data._lastTick + "R\t" + target.toNet();
+				eventNetString = _lastTick + "R\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_A){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[4], target);
 			} else {
-				eventNetString = _data._lastTick + "A\t" + target.toNet();
+				eventNetString = _lastTick + "A\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_S){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[5], target);
 			} else {
-				eventNetString = _data._lastTick + "S\t" + target.toNet();
+				eventNetString = _lastTick + "S\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_D){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[6], target);
 			} else {
-				eventNetString = _data._lastTick + "D\t" + target.toNet();
+				eventNetString = _lastTick + "D\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_F){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[7], target);
 			} else {
-				eventNetString = _data._lastTick + "F\t" + target.toNet();
+				eventNetString = _lastTick + "F\t" + target.toNet();
 			}
 		}
 		
@@ -303,7 +336,7 @@ public class GameScreen extends Screen {
 		if (key == KeyEvent.VK_P){
 			System.out.println(_view.screenToGamePoint(new Vector(_xMouse, _yMouse)));
 			
-		_netInputs.add(eventNetString);
+		_netOutputs.add(eventNetString);
 		}
 
 	}
@@ -313,9 +346,9 @@ public class GameScreen extends Screen {
 		if (!super.onMousePressed(e)){
 			Vector point = _view.screenToGamePoint(new Vector(e.getX(), e.getY()));
 			if (_isClient) {
-				String eventNetString = _data._lastTick + "\t";
+				String eventNetString = _lastTick + "\t";
 				eventNetString = "CLICK\t" + point.toNet();
-				_netInputs.add(eventNetString);
+				_netOutputs.add(eventNetString);
 			} else {
 				if (!_focus._isRooted) {
 					_focus._destination = point;

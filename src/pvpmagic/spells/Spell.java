@@ -1,6 +1,5 @@
 package pvpmagic.spells;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 import pvpmagic.*;
@@ -74,6 +73,7 @@ public abstract class Spell extends Unit {
 		else if (name.equals("Hide")) { return new HideSpell(data, caster, dir); }
 		else if (name.equals("Dash")) {  return new DashSpell(data, caster, dir); }
 		else if (name.equals("Felify")) {  return new FelifySpell(data, caster, dir); }
+		else if (name.equals("Shield")) {  return new ShieldSpell(data, caster, dir); }
 
 		System.out.println("Spell name \""+name+"\" not found!");
 		return null;
@@ -93,16 +93,9 @@ public abstract class Spell extends Unit {
 	}
 	@Override
 	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
-		if (validNetworkString(networkString)) {
-			Vector dir = Vector.fromNet(networkString[4]);
-			Vector pos = Vector.fromNet(networkString[5]);
-			_pos = pos;
-			_caster = (Player) objectMap.get(Integer.parseInt(networkString[3]));
-			if (_caster == null) 
-				throw new RuntimeException("Caster is null. String: " + Arrays.toString(networkString));
-			_dir = dir;
-			_pos = pos;
-		}
+		_netID = Integer.parseInt(networkString[0]);
+		_pos = Vector.fromNet(networkString[4]);
+		_health = Double.parseDouble(networkString[5]);
 	}
 	@Override
 	public String toNet() {
@@ -110,15 +103,7 @@ public abstract class Spell extends Unit {
 				"\t" + _name +
 				"\t" + _caster._netID +
 				"\t" + _dir.toNet() +
-				"\t" + _pos.toNet();
-	}
-	
-	public static Boolean validNetworkString(String[] networkData) {
-		if (networkData.length != 6) {
-			System.err.println("ERROR: Invalid String from network - " + Arrays.toString(networkData));
-			return false;
-		} else {
-			return true;
-		}
+				"\t" + _pos.toNet() +
+				"\t" + _health;
 	}
 }

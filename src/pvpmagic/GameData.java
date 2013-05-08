@@ -4,20 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
+import java.util.Collection;
 import pvpmagic.spells.Spell;
 import screen.TextInputLine;
 
 
 public class GameData {
 	private final int NEEDED = 3;
-	ArrayList<Unit> _units;
+	public ArrayList<Unit> _units;
 	ArrayList<Player> _players;
 
 	TeamData _teamdata;
-	
-	int _lastTick;
-	int _clientTick;
 
 	ArrayList<TeamData> _teams;
 	ArrayList<Player> _spawning;
@@ -72,10 +69,6 @@ public class GameData {
 			_units.add(p);
 			_units.add(dummy);
 			dummy._pos = new Vector(-50, -30);
-			
-			// initialize network ticks to invalid values - game starts at 0
-			_lastTick = -1;
-			_clientTick = -1;
 
 		}
 	}
@@ -268,6 +261,20 @@ public class GameData {
 			}
 		}
 		br.close();
+	}
+	
+	/**
+	 * For use by game state modifying methods in Coder, e.g. decodeGame() 
+	 */
+	public void clearList() {
+		_units.clear();
+	}
+
+	/**
+	 * For use by game state modifying methods in Coder, e.g. decodeGame() 
+	 */
+	public void addAll(Collection<? extends Unit> collection) {
+		_units.addAll(collection);
 	}
 
 }
