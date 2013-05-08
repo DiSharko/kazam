@@ -12,6 +12,7 @@ import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import network.SyncedString;
 
@@ -38,10 +39,10 @@ public class GameScreen extends Screen {
 	AtomicBoolean _started;
 	SyncedString _gameData;
 	SyncedString _lobbyData;
-	int getPort;
-	int sendPort;
-	int focusID;
-	PriorityQueue<Player> players;
+	int _getPort;
+	int _sendPort;
+	AtomicInteger _focusID;
+	PriorityQueue<Player> _players;
 	
 
 	GameData _data;
