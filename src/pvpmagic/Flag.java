@@ -41,7 +41,7 @@ public class Flag extends Unit {
 	@Override
 	public void collide(Collision c){
 		Unit u = c.other(this);
-		if (u._type.equals("player")){
+		if (u._type.equals(Player.TYPE)){
 			System.out.println("player has flag");
 			Player player = (Player) u;
 			player._flag = this;

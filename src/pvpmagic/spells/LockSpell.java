@@ -24,7 +24,7 @@ public class LockSpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
-		if (target._type.equals("door")) {
+		if (target._type.equals(Door.TYPE)) {
 			Door door = (Door) target;
 			door.lock();
 			_health = 0;

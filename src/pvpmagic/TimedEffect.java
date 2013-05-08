@@ -24,14 +24,14 @@ public abstract class TimedEffect {
 			System.out.println("ERROR: newTimedEffect given a null argument!");
 			return null;
 		}
-		if (type.equals("ConfuseEffect")){ return new ConfuseEffect(numberOfIntervals, (Player) target); }
-		else if (type.equals("HealthBurnEffect")) { return new HealthBurnEffect(numberOfIntervals, changePerInterval, target); }
-		else if (type.equals("HealthBoostEffect")) { return new HealthBoostEffect(numberOfIntervals, changePerInterval, target); }
-		else if (type.equals("HideEffect")) { return new HideEffect(numberOfIntervals, (Player) target); }
-		else if (type.equals("ManaBurnEffect")) { return new ManaBurnEffect(numberOfIntervals, changePerInterval, target); }
-		else if (type.equals("ManaBoostEffect")) { return new ManaBoostEffect(numberOfIntervals, changePerInterval, target); }
-		else if (type.equals("RootEffect")) { return new RootEffect(numberOfIntervals, target); }
-		else if (type.equals("SilenceEffect")) { return new SilenceEffect(numberOfIntervals, target); }
+		if (type.equals(ConfuseEffect.TYPE)){ return new ConfuseEffect(numberOfIntervals, (Player) target); }
+		else if (type.equals(HealthBurnEffect.TYPE)) { return new HealthBurnEffect(numberOfIntervals, changePerInterval, target); }
+		else if (type.equals(HealthBoostEffect.TYPE)) { return new HealthBoostEffect(numberOfIntervals, changePerInterval, target); }
+		else if (type.equals(HideEffect.TYPE)) { return new HideEffect(numberOfIntervals, (Player) target); }
+		else if (type.equals(ManaBurnEffect.TYPE)) { return new ManaBurnEffect(numberOfIntervals, changePerInterval, target); }
+		else if (type.equals(ManaBoostEffect.TYPE)) { return new ManaBoostEffect(numberOfIntervals, changePerInterval, target); }
+		else if (type.equals(RootEffect.TYPE)) { return new RootEffect(numberOfIntervals, target); }
+		else if (type.equals(SilenceEffect.TYPE)) { return new SilenceEffect(numberOfIntervals, target); }
 
 		System.out.println("Effect name \""+ type +"\" not found!");
 		return null;
