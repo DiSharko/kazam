@@ -48,6 +48,7 @@ public class WelcomeScreen extends Screen {
 	
 	@Override
 	protected void draw(Graphics2D g) {
+		onResize();
 		g.setColor(Color.gray);
 		g.fillRect(0, 0, _holder._w, _holder._h);
 
@@ -67,19 +68,26 @@ public class WelcomeScreen extends Screen {
 				bx += 30;
 				bw = 175;
 				message = "Engine Programmer";
+				g.drawImage(Resource.get("andrew"), bx, by-250, null);
+			
 			} else if (hoverElement.id.equals("Diego Morales")){
 				bx += 25;
 				bw = 183;
 				message = "Content Programmer";
+				g.drawImage(Resource.get("diego"), bx, by-250, null);
+			
 			} else if (hoverElement.id.equals("Chris Morris")){
 				bx += 12;
 				bw = 210;
 				message = "Networking Programmer";
-				
+				g.drawImage(Resource.get("chris"), bx, by-250, null);
+
 			} else if (hoverElement.id.equals("Miraj Shah")){
 				bx += 25;
 				bw = 182;
 				message = "Content Programmer";
+				g.drawImage(Resource.get("miraj"), bx, by-250, null);
+
 			}
 			if (!message.equals("")){
 				int h = 30;
@@ -108,7 +116,7 @@ public class WelcomeScreen extends Screen {
 		for (InterfaceElement e : _interfaceElements){
 			if (e.id.equals("play")){
 				e.x = w/2-e.w/2;
-				e.y = h/2-e.h/2+50;
+				e.y = h/2-e.h/2-10;
 			}
 			if (e.id.equals("Andrew DiMarco")){
 				e.x = _holder._w*.12;

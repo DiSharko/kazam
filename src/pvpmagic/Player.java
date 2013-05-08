@@ -20,7 +20,7 @@ public class Player extends Unit {
 	private int _flagGrabTimer = 0;
 	public boolean _flagable = true;
 	
-	String _characterName;
+	public String _characterName;
 	String _playerName;
 
 	public Vector _destination;
@@ -44,8 +44,8 @@ public class Player extends Unit {
 
 	double _velocity = 8;
 
-	public Player(GameData data, String characterName, String playerName, String[] spellNames, String basicImage){
-		super(data, TYPE, STATICOBJ, basicImage);
+	public Player(GameData data, String characterName, String playerName, String[] spellNames){
+		super(data, TYPE, STATICOBJ, characterName);
 		_canBeRooted = true;
 		_canBeSilenced = true;
 
@@ -54,8 +54,12 @@ public class Player extends Unit {
 		_health = 100;
 		_mana = 100;
 
+		_characterName = characterName;
+		_basicImage = _characterName;
+		_playerName = playerName;
+		
 		_pos = new Vector(-50, -20);
-		Image sprite = Resource.get("player1_back");
+		Image sprite = Resource.get(_characterName);
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70);
 
 		double hitBoxScale = .7;
@@ -64,8 +68,6 @@ public class Player extends Unit {
 		_spells = spellNames;
 		_spellCastingTimes = new HashMap<String, Long>();
 
-		_characterName = characterName;
-		_playerName = playerName;
 
 		this._restitution = 0;
 
@@ -92,15 +94,13 @@ public class Player extends Unit {
 
 		_old = v.getGraphics().getComposite();
 		if (_hidden < 1) {
-			Composite old = v.getGraphics().getComposite();
-
-			v.getGraphics().setComposite(java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden));
+			AlphaComposite ac = java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden);
+			v.getGraphics().setComposite(ac);
 			v.drawImage(Resource.get(_basicImage), _pos, _size);
-
-			v.getGraphics().setComposite(old);
 		} else if (_hidden == 1) {
 			v.drawImage(Resource.get(_basicImage), _pos, _size);
 		}
+		v.getGraphics().setComposite(_old);
 		
 		t = _timedEffects.get(ConfuseEffect.TYPE);
 		if (t != null && t._type.equals(ConfuseEffect.TYPE) && t._display){
@@ -320,7 +320,7 @@ public class Player extends Unit {
 	public static Player fromNetInit(String[] networkString) {
 		if (networkString[1].equals("static") && validNetworkString(networkString, true)) {
 			String[] spells = networkString[4].split(" ");
-			Player p = new Player(null, networkString[2], networkString[3], spells, "player1_back");
+			Player p = new Player(null, networkString[2], networkString[3], spells);
 			p._destination = Vector.fromNet(networkString[6]);
 			p._pos = Vector.fromNet(networkString[5]);
 			p._netID = Integer.parseInt(networkString[0]);
