@@ -26,7 +26,7 @@ import screen.TransitionScreen.Transition;
 public abstract class ScreenHolder extends JPanel implements KeyListener, MouseInputListener, WindowListener {
 
 	public JFrame _window;
-	protected ArrayList<Screen> _screenList;
+	public ArrayList<Screen> _screenList;
 	protected TransitionScreen _transitionScreen;
 	protected ChooserScreen _chooserScreen;
 	protected BorderScreen _borderScreen;

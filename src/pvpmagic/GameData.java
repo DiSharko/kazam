@@ -66,6 +66,7 @@ public class GameData {
 		try {
 			PriorityQueue<Player> playerQueue = new PriorityQueue<Player>(_playerList.size()+1,new PlayerComparator());
 			playerQueue.addAll(_playerList);
+			_units.addAll(_playerList);
 			readInMap(s.getElement("selectedMap").name,_idCounter,playerQueue);
 		} catch (IOException e) {
 			System.out.println("IOException in setup.");
@@ -314,7 +315,7 @@ public class GameData {
 				FlagTeamData ft = (FlagTeamData) _teams.get(Integer.parseInt(linearr[1]));
 				ft.setPed(pd);
 			} else {
-				System.out.println(line);
+				System.out.println("GD PRINT " + line);
 				System.out.println("Not enough types in map file being checked for.");
 			}
 		}

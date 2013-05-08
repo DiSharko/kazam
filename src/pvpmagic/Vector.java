@@ -96,7 +96,7 @@ public class Vector {
 	public static Vector fromNet(String vectorString) throws IllegalArgumentException {
 		String[] vec = vectorString.split(",");
 		if (vec.length != 2) {
-			throw new IllegalArgumentException("ERROR: More than 2 values. Invalid vector string.");
+			return null;
 		} else {
 			double x = Double.parseDouble(vec[0]);
 			double y = Double.parseDouble(vec[1]);

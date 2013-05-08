@@ -40,10 +40,11 @@ public class ClientGetThread extends Thread {
 						curData = _gameData;
 						_started.set(true);
 					} else if (line.equals("EOT")) {
-						curData.setData(buffer);
+//						System.out.println("buffer: \""+buffer+"\"");
+						if (!buffer.equals("")) curData.setData(buffer);
 						buffer = "";
 					} else {
-						buffer += line;
+						buffer += line+"\n";
 					}
 				}
 			}

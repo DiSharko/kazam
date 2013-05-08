@@ -73,7 +73,7 @@ public class Rock extends Unit {
 		if (networkString[1].equals(_staticObj ? "static" : _type) 
 				&& _netID == Integer.parseInt(networkString[0])
 				&& networkString.length == 4) {
-			_health = Integer.parseInt(networkString[2]);
+			_health = Double.parseDouble(networkString[2]);
 			_basicImage = networkString[3];
 		}
 	}

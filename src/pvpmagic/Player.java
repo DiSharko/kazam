@@ -311,10 +311,11 @@ public class Player extends Unit {
 	}
 	@Override
 	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
+		//System.out.println(Arrays.toString(networkString));
 		if (networkString[1].equals(_staticObj ? "static" : _type)) {
 			this._pos = Vector.fromNet(networkString[2]);
 			this._destination = Vector.fromNet(networkString[3]);
-			this._flag = (Flag) objectMap.get(Integer.parseInt(networkString[4]));
+			if (!networkString[4].equals("null")) this._flag = (Flag) objectMap.get(Integer.parseInt(networkString[4]));
 			this._health = Double.parseDouble(networkString[5]);
 			this._mana = Double.parseDouble(networkString[6]);
 			this._vel = Vector.fromNet(networkString[7]);
@@ -323,8 +324,8 @@ public class Player extends Unit {
 			this._isSilenced = Boolean.parseBoolean(networkString[10]);
 			this._basicImage = networkString[13];
 			this._connected = Boolean.parseBoolean(networkString[14]);
-			this._kills = Integer.parseInt(networkString[15]);
-			this._deaths = Integer.parseInt(networkString[16]);
+			this._kills = Double.parseDouble(networkString[15]);
+			this._deaths = Double.parseDouble(networkString[16]);
 
 			String[] lastCastTimes, sp;
 			lastCastTimes = networkString[7].split(".");

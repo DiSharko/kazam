@@ -31,7 +31,7 @@ public class ClientSendThread extends Thread {
 		try {
 			// get writer and sent client data
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(_client.getOutputStream()));
-			writer.write(_clientData + "EOT\n");
+			writer.write(_clientData);
 			writer.flush();
 			
 			BufferedReader reader = new BufferedReader(new InputStreamReader(_client.getInputStream()));
@@ -46,7 +46,8 @@ public class ClientSendThread extends Thread {
 			while (_connected.get()) {
 				String command = _inputs.poll();
 				if (command != null) {
-					writer.write(command);
+					System.out.println("COMMAND " + command);
+					writer.write(command + "\n");
 					writer.flush();
 				}
 			}

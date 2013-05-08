@@ -28,9 +28,9 @@ public class ServerScreen extends Screen {
 
 	String _serverIP = "Error getting IP Address";
 	String _mapName = "";
-	
+
 	SetupScreen _settings;
-	
+
 	// client/server vars
 	boolean _isClient;
 	boolean _isHost;
@@ -38,7 +38,7 @@ public class ServerScreen extends Screen {
 	HashMap<Integer,Unit> _dynamicMap;
 	int _lobbyVersion;
 	ArrayList<Player> _playerList;
-	
+
 	// Server vars
 	public PriorityBlockingQueue<String> _netInputs; // inputs used by server
 	HashMap<Integer,Player> _playerMap;
@@ -71,7 +71,7 @@ public class ServerScreen extends Screen {
 		try {
 			_serverIP = InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {}
-		
+
 		// setup general network vars
 		_isClient = true;
 		_isHost = true;
@@ -79,7 +79,7 @@ public class ServerScreen extends Screen {
 		_dynamicMap = new HashMap<Integer,Unit>();
 		_lobbyVersion = 0;
 		_playerList = new ArrayList<Player>();
-		
+
 		// server only vars
 		_netInputs = new PriorityBlockingQueue<String>(32,new CommandComparator());
 		_playerMap = new HashMap<Integer,Player>();
@@ -89,7 +89,7 @@ public class ServerScreen extends Screen {
 		_statePort = 9001;
 		_inputPort = 9002;
 		_tick = 0;
-		
+
 		// start servers
 		try {
 			_stateServer = new StateServer(_statePort, _running, _started);
@@ -110,7 +110,7 @@ public class ServerScreen extends Screen {
 			}
 			_holder.transitionToScreen(Transition.FADE, "setup");
 		}
-		
+
 		// setup client to connect with this server
 		LobbyScreen lobby = (LobbyScreen) _holder.getScreen("lobby");
 		_lobby = lobby;
@@ -152,7 +152,7 @@ public class ServerScreen extends Screen {
 			}
 			_holder.transitionToScreen(Transition.FADE, "setup");
 		}
-		
+
 		onResize();
 	}
 
@@ -160,7 +160,7 @@ public class ServerScreen extends Screen {
 		_mapName = s.getElement("selectedMap").name;
 		_settings = s;
 	}
-	
+
 	@Override
 	public void update() {
 		// update lobby
@@ -191,7 +191,7 @@ public class ServerScreen extends Screen {
 			_lobbyVersion++;
 			String lobbyData = Coder.encodeLobby(_playerList, _mapName, _lobbyVersion);
 			_stateServer.broadcast(lobbyData);
-			
+
 			// initialize game data and map of ids to players
 			_data = new GameData(_playerList,_isClient);
 			for (Player player: _playerList) {
@@ -202,12 +202,12 @@ public class ServerScreen extends Screen {
 			for (Unit unit : _data._units) {
 				_staticMap.put(unit._netID, unit);
 			}
-			
+
 			// broadcast start and switch to client lobby
 			_stateServer.broadcastStart();
 			_transitioned = true;
-			_holder.transitionToScreen(Transition.FADE, "lobby");
-			
+			_holder.switchToScreen("lobby");
+
 		} else if (_running.get()) {
 			// read disconnects and commands whose tick was prior to the present
 			// handleEvent reads and executes commands
@@ -235,7 +235,7 @@ public class ServerScreen extends Screen {
 					// ignore malformed commands
 				}
 			}
-			
+
 			// update, encode, and broadcast state, and increment tick counter
 			_data.update();
 			String gameState = Coder.encodeGame(_data._units, _data._idCounter, _tick);
@@ -257,7 +257,7 @@ public class ServerScreen extends Screen {
 			_holder.transitionToScreen(Transition.FADE, "setup");
 		}
 	}
-	
+
 	@Override
 	protected void draw(Graphics2D g) {
 		g.setColor(Color.gray);
@@ -269,7 +269,7 @@ public class ServerScreen extends Screen {
 		String s = "Waiting for players to join...";
 		int sWidth = (int)g.getFontMetrics().getStringBounds(s, g).getWidth();
 		g.drawString(s, (int)(_holder._w/2-sWidth/2), 150);
-		
+
 		g.setFont(new Font("Helvetica", Font.PLAIN, 24));
 		s = "Server IP: "+_serverIP;
 		sWidth = (int)g.getFontMetrics().getStringBounds(s, g).getWidth();
@@ -283,29 +283,31 @@ public class ServerScreen extends Screen {
 			_running.set(false);
 		} else if (e.id.equals("start")) {
 			_started.set(true);
-			
+
 			e.visible = false;
 			e.enabled = false;
 			/**
 			_holder.getScreen("game").setup();
 			((GameScreen)(_holder.getScreen("game"))).initializeGame(_settings);
 			_holder.transitionToScreen(Transition.FADE, "game");
-			
+
 			e.visible = false;
 			e.enabled = false;
-			**/
+			 **/
 		}
 	}
 
 	@Override
 	protected void onResize() {
-		for (InterfaceElement e : _interfaceElements){
-			if (e.id.equals("main")){
-				e.x = _holder._w/2 - e.w/2;
-				e.y = _holder._h-e.h-50;
-			} else if (e.id.equals("start")){
-				e.x = _holder._w/2 - e.w/2;
-				e.y = _holder._h-e.h-150;
+		if (_interfaceElements != null){
+			for (InterfaceElement e : _interfaceElements){
+				if (e.id.equals("main")){
+					e.x = _holder._w/2 - e.w/2;
+					e.y = _holder._h-e.h-50;
+				} else if (e.id.equals("start")){
+					e.x = _holder._w/2 - e.w/2;
+					e.y = _holder._h-e.h-150;
+				}
 			}
 		}
 	}

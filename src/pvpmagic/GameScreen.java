@@ -126,6 +126,7 @@ public class GameScreen extends Screen {
 		_view = new View(_data);
 		
 		onResize();
+		
 	}
 	
 	private class VisionComparator implements Comparator<Unit> {
@@ -222,7 +223,7 @@ public class GameScreen extends Screen {
 		_focus = focus;
 		for (int i = 0; i < _focus._spells.length; i++){
 			String spell = _focus._spells[i];
-			if (spell != null){
+			if (spell != null && !spell.equals("null")){
 				Button b = new Button(this, spell, Resource.get(spell+"SpellIcon"));
 				b.name = spell;
 				b.namePositionFractionY = 0.8;
@@ -237,6 +238,13 @@ public class GameScreen extends Screen {
 	@Override
 	public void update(){
 		super.update();
+		
+//		System.out.println(_holder._screenList.get(0)._id);
+
+
+//		System.out.println("UPDATING");
+
+//		System.out.println(_data._units.contains(_focus));
 		
 		if (!_isClient) {
 			_data.update();
@@ -266,6 +274,7 @@ public class GameScreen extends Screen {
 					// now retrieve latest update
 					String gameUpdate = _gameData.getData();
 					String[] update = gameUpdate.split("\n");
+//					System.out.println("HERE: \""+gameUpdate+"\"");
 					int curTick = Integer.parseInt(update[0]);
 					
 					// if update is new, update game state
@@ -302,6 +311,7 @@ public class GameScreen extends Screen {
 						_manaBar.total = _focus._maxMana;
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 					end();
 				}
 			} else {
@@ -333,7 +343,8 @@ public class GameScreen extends Screen {
 	public void onKeyPressed(KeyEvent e){
 		int key = e.getKeyCode();
 
-
+		//System.out.println("HERE");
+		
 		if (key == KeyEvent.VK_ESCAPE){
 			_holder.showBorder();
 			_holder.switchToScreen("pause");
@@ -358,62 +369,62 @@ public class GameScreen extends Screen {
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[0], target);
 			} else {
-				eventNetString = _lastTick + "Q\t" + target.toNet();
+				eventNetString = _lastTick + "\tQ\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_W){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[1], target);
 			} else {
-				eventNetString = _lastTick + "W\t" + target.toNet();
+				eventNetString = _lastTick + "\tW\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_E){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[2], target);
 			} else {
-				eventNetString = _lastTick + "E\t" + target.toNet();
+				eventNetString = _lastTick + "\tE\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_R){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[3], target);
 			} else {
-				eventNetString = _lastTick + "R\t" + target.toNet();
+				eventNetString = _lastTick + "\tR\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_A){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[4], target);
 			} else {
-				eventNetString = _lastTick + "A\t" + target.toNet();
+				eventNetString = _lastTick + "\tA\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_S){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[5], target);
 			} else {
-				eventNetString = _lastTick + "S\t" + target.toNet();
+				eventNetString = _lastTick + "\tS\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_D){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[6], target);
 			} else {
-				eventNetString = _lastTick + "D\t" + target.toNet();
+				eventNetString = _lastTick + "\tD\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_F){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[7], target);
 			} else {
-				eventNetString = _lastTick + "F\t" + target.toNet();
+				eventNetString = _lastTick + "\tF\t" + target.toNet();
 			}
 		}
 		
-		if (!_isClient) {
-			if (key == 192) DEBUG = !DEBUG;
-		}
-
-		if (key == KeyEvent.VK_G){
-			try {
-				_data._units = new ArrayList<Unit>();
-				_data.readInMap("Chamber of Mysteries",null,null);
-			} catch (Exception e1){};
-		}
+//		if (!_isClient) {
+//			if (key == 192) DEBUG = !DEBUG;
+//		}
+//
+//		if (key == KeyEvent.VK_G){
+//			try {
+//				_data._units = new ArrayList<Unit>();
+//				_data.readInMap("Chamber of Mysteries",null,null);
+//			} catch (Exception e1){};
+//		}
 		if (key == KeyEvent.VK_P){
 			System.out.println(_view.screenToGamePoint(new Vector(_xMouse, _yMouse)));
 			
@@ -430,7 +441,7 @@ public class GameScreen extends Screen {
 			Vector point = _view.screenToGamePoint(new Vector(e.getX(), e.getY()));
 			if (_isClient) {
 				String eventNetString = _lastTick + "\t";
-				eventNetString = "CLICK\t" + point.toNet();
+				eventNetString += "CLICK\t" + point.toNet();
 				_netOutputs.add(eventNetString);
 			} else {
 				if (!_focus._isRooted) {

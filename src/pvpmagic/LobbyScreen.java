@@ -29,7 +29,7 @@ public class LobbyScreen extends Screen {
 
 	String _serverIP = "123.456.789.1337";
 	public SetupScreen _settings;
-	
+
 	// shared network vars - setup in setup TODO
 	boolean _isClient;
 	boolean _isHost;
@@ -37,7 +37,7 @@ public class LobbyScreen extends Screen {
 	HashMap<Integer,Unit> _dynamicMap;
 	public int _lobbyVersion;
 	public ArrayList<Player> _playerList;
-	
+
 	// Client vars - set in setup TODO
 	ConcurrentLinkedQueue<String> _netOutputs; // outputs added to by client
 	AtomicBoolean _connected;
@@ -69,7 +69,7 @@ public class LobbyScreen extends Screen {
 		_dynamicMap = new HashMap<Integer,Unit>();
 		_lobbyVersion = -1;
 		_playerList = new ArrayList<Player>();
-		
+
 		// client only vars
 		_netOutputs = new ConcurrentLinkedQueue<String>();
 		_connected = new AtomicBoolean(true);
@@ -82,10 +82,10 @@ public class LobbyScreen extends Screen {
 		_inputPort = 9002;
 		_focusID = new AtomicInteger(0);
 		_networker = new ClientNetworker(_statePort, _inputPort, _lobbyData, _gameData, _netOutputs, _connected, _started, _focusID);
-		
+
 		onResize();
 	}
-	
+
 	public void getSettings(SetupScreen s){
 		_settings = s;
 		_serverIP = ((TextInputLine)s.getElement("ipAddress")).getText();
@@ -101,13 +101,13 @@ public class LobbyScreen extends Screen {
 			_holder.transitionToScreen(Transition.FADE, "setup");
 		}
 	}
-	
+
 	public void connect() throws UnknownHostException, NetworkException {
 
 		String playerName = ((TextInputLine)_settings.getElement("playerName")).getText();
 		//String characterName = _settings.getElement("selectedCharacter").name;
 		String characterName = "andrew";
-		
+
 		String[] spells = new String[8];
 		for (int i = 0; i < 8; i++){
 			spells[i] = _settings._spells[i].name;
@@ -120,10 +120,10 @@ public class LobbyScreen extends Screen {
 		String clientData = "static" +
 				"\t" + characterName + 
 				"\t" + playerName + 
-				"\t" + spellStr.substring(0, spellStr.length() - 1);
+				"\t" + spellStr.substring(0, spellStr.length() - 1) + "\n";
 		_networker.connect(_serverIP, clientData);
 	}
-	
+
 	@Override
 	public void update() {
 		if (_connected.get() && !_started.get()) {
@@ -142,7 +142,7 @@ public class LobbyScreen extends Screen {
 			} catch (BadProtocolException e) {
 				end();
 			}
-			
+
 			// set up game screen
 			GameScreen gameScreen = (GameScreen) _holder.getScreen("game");
 			gameScreen.setup();
@@ -153,7 +153,7 @@ public class LobbyScreen extends Screen {
 			gameScreen._staticMap = _staticMap;
 			gameScreen._dynamicMap = _dynamicMap;
 			gameScreen._playerList = _playerList;
-			
+
 			// Client vars - set up manually by lobby screen
 			gameScreen._netOutputs = _netOutputs; // outputs added to by client
 			gameScreen._connected = _connected;
@@ -165,16 +165,15 @@ public class LobbyScreen extends Screen {
 			gameScreen._lastTick = -1;
 			gameScreen._clientTick = -1;
 			gameScreen._server = _server;
-			
+
 			// initialize game data and switch to game screen
 			gameScreen.initializeGame(_settings);
-			_holder.transitionToScreen(Transition.FADE, "game");
-			
+			_holder.switchToScreen("game");
 		} else { // disconnect
 			end();
 		}
 	}
-	
+
 	// end gracefully with this function
 	public void end() {
 		_networker.disconnect();
@@ -222,10 +221,12 @@ public class LobbyScreen extends Screen {
 
 	@Override
 	protected void onResize() {
-		for (InterfaceElement e : _interfaceElements){
-			if (e.id.equals("disconnect")){
-				e.x = _holder._w/2 - e.w/2;
-				e.y = _holder._h-e.h-50;
+		if (_interfaceElements != null){
+			for (InterfaceElement e : _interfaceElements){
+				if (e.id.equals("disconnect")){
+					e.x = _holder._w/2 - e.w/2;
+					e.y = _holder._h-e.h-50;
+				}
 			}
 		}
 	}

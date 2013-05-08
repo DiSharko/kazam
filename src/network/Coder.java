@@ -59,6 +59,7 @@ public class Coder {
 		for (Player player : players) {
 			lobby += player._netID + "\t" + player.toNetInit() + "\n";
 		}
+//		System.out.println("ENCODED: "+lobby);
 		return lobby;
 	}
 	
@@ -70,8 +71,9 @@ public class Coder {
 	 * @throws BadProtocolException on protocol from server being invalid, recommend disconnect
 	 */
 	public static void decodeLobby(String lobbyData, LobbyScreen lobby) throws BadProtocolException {
+//		System.out.println(lobbyData);
 		try {
-			String[] lobbyUpdate = lobbyData.split("[\n]");
+			String[] lobbyUpdate = lobbyData.split("\n");
 			if (Integer.parseInt(lobbyUpdate[0]) > lobby._lobbyVersion) {
 				lobby._settings.getElement("selectedMap").name = lobbyUpdate[1];
 				lobby._playerList.clear();
@@ -119,7 +121,8 @@ public class Coder {
 			String[] update = gameState.split("[\n]");
 			for (int i = 1; i < update.length; i++) { // skip tick line
 				String[] objInfo = update[i].split("[\t]");
-				Unit obj = staticMap.get(objInfo[ID]);
+				if (objInfo[ID].equals("")) continue; // for walls
+				Unit obj = staticMap.get(Integer.parseInt(objInfo[ID]));
 				if (obj != null) { // update static object
 					obj.fromNet(objInfo, staticMap);
 				} else { // spell
@@ -138,6 +141,7 @@ public class Coder {
 			}
 			// check for disconnected players and remove them from lobby list and static map
 			// leave priority queue and map alone
+			
 			ArrayList<Player> removing = new ArrayList<Player>(data._playerList.size());
 			for (Player player : data._playerList) {
 				if (!player._connected) {
@@ -154,6 +158,7 @@ public class Coder {
 			data.addAll(staticMap.values());
 			data.addAll(dynamicMap.values());
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new BadProtocolException("ERROR: Bad protocol.");
 		}
 	}
