@@ -118,6 +118,8 @@ public class GameScreen extends Screen {
 	private class VisionComparator implements Comparator<Unit> {
 		@Override
 		public int compare(Unit u1, Unit u2) {
+			if(u1._pos == null) return -1;
+			if(u2._pos == null) return 1;
 			if(!(u1._drawUnder && u2._drawUnder)) {
 				if (u1._drawUnder) return -1;
 				else if (u2._drawUnder) return 1;

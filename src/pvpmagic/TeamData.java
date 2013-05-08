@@ -19,6 +19,7 @@ public abstract class TeamData extends Unit{
 		TEAM_NUM = teamNum;
 	}
 	
+	@Override
 	public abstract void update();
 	
 	public void addSpawn(Vector pos) {
