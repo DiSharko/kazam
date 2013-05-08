@@ -5,7 +5,6 @@ Cleanse
 Clone
 Disarm
 Fear
-Felify
 Flash
 Hide
 Lock

@@ -119,7 +119,9 @@ public class Player extends Unit {
 			} else if (e._type.equals(SilenceEffect.TYPE)){
 				v.drawImage(Resource.get("silenceEffect"), _pos.plus(30, -10), 30);
 			} else if (e._type.equals(HealthEffect.TYPE)){
-				v.drawImage(Resource.get("burnEffect"), _pos.plus(3, _size.y-35), 50);
+				if (e._changePerInterval < 0){
+					v.drawImage(Resource.get("burnEffect"), _pos.plus(3, _size.y-35), 50);
+				}
 			}
 		}
 

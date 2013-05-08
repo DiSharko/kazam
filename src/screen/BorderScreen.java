@@ -26,24 +26,24 @@ public class BorderScreen extends Screen {
 		super(holder, "border");
 		setup();
 	}
-	
+
 	boolean _fadingIn = false;
 	boolean _fadingOut = false;
 	int _fadeTime = 0;
 	int _fadeTimeTotal = 20;
-	
+
 
 	static int _windowedTopBarHeight = 40;
 	static int _windowedBorderSize = 4;
-	
+
 	static int _fullscreenTopBarHeight = 20;
 	static int _fullscreenBorderSize = 2;
-	
+
 	public static int _topBarHeight = _windowedTopBarHeight;
 	int _borderSize = _windowedBorderSize;
 	int _cornerSize = 8; // not visible
 	Color _frameColor = Color.black;
-	
+
 
 	Rectangle _screenBounds;
 
@@ -82,46 +82,48 @@ public class BorderScreen extends Screen {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			_screenBounds = ge.getMaximumWindowBounds();
-			
+
 			// If that fails for some reason, use the guaranteed way to find just the basic total size.
 		} catch (ClassNotFoundException e){	_screenBounds = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
 		} catch (InstantiationException e){	_screenBounds = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
 		} catch (IllegalAccessException e){	_screenBounds = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
 		} catch (UnsupportedLookAndFeelException e){ _screenBounds = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());			
 		}
-		
+
 		_interfaceElements = new ArrayList<InterfaceElement>();
 		Button close = new Button(this, "close", Resource.get("close"));
 		close.roundness = 0;
 		close.setColors(new Color(0,0,0,0f), new Color(1f,1f,1f,0.3f), new Color(1f, 1f, 1f, 0.4f), new Color(0,0,0,0f));
 		_interfaceElements.add(close);
-		
+
 		Button fullscreen = new Button(this, "fullscreen", Resource.get("fullscreen"));
 		fullscreen.roundness = 0;
 		fullscreen.setColors(new Color(0,0,0,0f), new Color(1f,1f,1f,0.3f), new Color(1f, 1f, 1f, 0.4f), new Color(0,0,0,0f));
 		_interfaceElements.add(fullscreen);
-		
+
+		_lastMousePress = 0;
+
 		onResize();
 	}
 
 	public void fadeIn(){
 		_fadingIn = true;
 		_fadingOut = false;
-		
+
 		_fadeTime = 0;
 	}
 	public void fadeOut(){
 		_fadingIn = true;
 		_fadingOut = false;
-		
+
 		_fadeTime = _fadeTimeTotal;
 	}
-	
-	
+
+
 	@Override
 	public void update(){
 		super.update();
-		
+
 		if (_fadingIn){
 			_fadeTime++;
 		} else if (_fadingOut){
@@ -129,7 +131,7 @@ public class BorderScreen extends Screen {
 		}
 		if (_lastMousePress > 0) _lastMousePress--;
 	}
-	
+
 	@Override
 	protected void draw(Graphics2D g) {
 		g.setColor(_frameColor);
@@ -138,33 +140,36 @@ public class BorderScreen extends Screen {
 		g.fillRect(0, _holder._h-_borderSize, _holder._w, _borderSize);
 
 		g.fillRect(0, 0, _holder._w, _topBarHeight);
-		
+
 		g.setColor(Color.lightGray);
 		g.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		g.drawString(Resource._title, 15, _topBarHeight*2/3);
 	}
 
 
-	long _lastMousePress = 0;
+	int _lastMousePress = 0;
 	@Override
 	public boolean onMousePressed(MouseEvent e) {
 		super.onMousePressed(e);
 		_mouseDown = true;
-		
+
+
+		_mouseDownX = e.getX();
+		_mouseDownY = e.getY();
+
 		if (_lastMousePress > 0){
-			if (_holder._w == _screenBounds.width && _holder._h == _screenBounds.height){
-				_holder.setWindowBounds(_savedWindowX, _savedWindowY, _savedWindowW, _savedWindowH);
-			} else {
-				saveSize();
-				_holder._window.setLocation(_screenBounds.x, _screenBounds.y);
-				_holder.setWindowSize(_screenBounds.width, _screenBounds.height);
+			if (_mouseDownY < _topBarHeight && _resizingSides.size() == 0){
+				if (_holder._w == _screenBounds.width && _holder._h == _screenBounds.height){
+					_holder.setWindowBounds(_savedWindowX, _savedWindowY, _savedWindowW, _savedWindowH);
+				} else {
+					saveSize();
+					_holder._window.setLocation(_screenBounds.x, _screenBounds.y);
+					_holder.setWindowSize(_screenBounds.width, _screenBounds.height);
+				}
 			}
 		}
 		_lastMousePress = 5;
 
-		_mouseDownX = e.getX();
-		_mouseDownY = e.getY();
-		
 		return true;
 	}
 
@@ -183,7 +188,7 @@ public class BorderScreen extends Screen {
 		_mouseY = e.getY();
 
 		if (_mouseDown && !_fullscreen){
-			
+
 			if (_resizingSides.contains("northwest") || (_mouseDownX < _cornerSize && _mouseDownY < _cornerSize && _resizingSides.size() == 0)){
 				int differenceX = _holder._window.getX()-e.getXOnScreen();
 				int differenceY = _holder._window.getY()-e.getYOnScreen();
@@ -197,7 +202,7 @@ public class BorderScreen extends Screen {
 				_holder.setWindowBounds(_holder._window.getX(), _holder._window.getY()-differenceY, _holder._w-differenceX+1, _holder._h+differenceY);
 				_resizingSides.add("northeast");
 				_holder._window.setCursor(new Cursor(Cursor.NE_RESIZE_CURSOR));
-				
+
 			} else if (_resizingSides.contains("southwest") || (_mouseDownX < _cornerSize && _mouseDownY > _holder._h-_cornerSize && _resizingSides.size() == 0)){
 				int differenceX = _holder._window.getX()-e.getXOnScreen();
 				int differenceY = _holder._window.getY()+_holder._h-e.getYOnScreen();
@@ -211,7 +216,7 @@ public class BorderScreen extends Screen {
 				_holder.setWindowSize(_holder._w-differenceX+1, _holder._h-differenceY);
 				_resizingSides.add("southeast");
 				_holder._window.setCursor(new Cursor(Cursor.SE_RESIZE_CURSOR));
-				
+
 			} else if (_resizingSides.contains("west") || (_mouseDownX < _borderSize && _resizingSides.size() == 0)){
 				int differenceX = _holder._window.getX()-e.getXOnScreen();
 				_holder.setWindowBounds(_holder._window.getX()-differenceX, _holder._window.getY(), _holder._w+differenceX, _holder._h);
@@ -257,7 +262,7 @@ public class BorderScreen extends Screen {
 				}
 				_resizingSides.add("move");
 			}
-			
+
 			if (_resizingSides.size() > 0 && !_resizingSides.contains("move")){
 				saveSize();
 				_holder.repaint();
@@ -287,7 +292,7 @@ public class BorderScreen extends Screen {
 		} else if (_resizingSides.contains("south") || _mouseY > _holder._h-_borderSize){
 			_holder._window.setCursor(new Cursor(Cursor.S_RESIZE_CURSOR));
 		} else if (_mouseY < _topBarHeight){
-//			_holder._window.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+			//			_holder._window.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 		} else {
 			_holder._window.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
@@ -300,7 +305,7 @@ public class BorderScreen extends Screen {
 		_savedWindowH = _holder._h;
 	}
 
-	
+
 	@Override
 	public void onResize(){
 		for (InterfaceElement e : _interfaceElements){
@@ -315,7 +320,7 @@ public class BorderScreen extends Screen {
 			}
 		}
 	};
-	
+
 	@Override
 	public void handleElementReleased(InterfaceElement e){
 		if (e.id.equals("close")){
@@ -330,14 +335,14 @@ public class BorderScreen extends Screen {
 			}
 		}
 	}
-	
+
 	boolean _fullscreen = false;
 	public void goFullscreen(){
 		_fullscreen = true;
 		_holder._window.setVisible(false);
 		_topBarHeight = _fullscreenTopBarHeight;
 		_borderSize = _fullscreenBorderSize;
-		
+
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		gd.setFullScreenWindow(_holder._window);
 		_holder._window.requestFocus();
@@ -347,13 +352,13 @@ public class BorderScreen extends Screen {
 		_holder.setWindowSize(size.width, size.height);
 		_holder._window.setVisible(true);
 	}
-	
+
 	public void goWindowed(){
 		_fullscreen = false;
 		_holder._window.setVisible(false);
 		_topBarHeight = _windowedTopBarHeight;
 		_borderSize = _windowedBorderSize;
-		
+
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		_holder.setWindowSize(_savedWindowW, _savedWindowH);
 

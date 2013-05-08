@@ -77,10 +77,12 @@ public abstract class Unit {
 	boolean _canBeRooted = false;
 	public boolean _isRooted = false;
 	
-	public void root(long time){
+	public RootEffect root(long time){
 		if (_canBeRooted) _isRooted = true;
 		_vel = new Vector(0,0);
-		_timedEffects.add(new RootEffect(numberOfIntervals(time), this));
+		RootEffect r = new RootEffect(numberOfIntervals(time), this);
+		_timedEffects.add(r);
+		return r;
 	}
 	
 	/**

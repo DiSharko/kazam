@@ -7,7 +7,7 @@ public abstract class TimedEffect {
 	Unit _target;
 
 	public String _type;
-	boolean _display = true;
+	public boolean _display = true;
 	
 	public static String TYPE;
 	
