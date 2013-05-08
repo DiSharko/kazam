@@ -79,8 +79,8 @@ public class Player extends Unit {
 
 	@Override
 	public void draw(View v){
-		TimedEffect t = _timedEffects.get("Root");
-		if (t != null && t._type.equals(RootEffect.TYPE) && t._display){
+		TimedEffect t = _timedEffects.get(RootEffect.TYPE);
+		if (t != null && t._display){
 			v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
 		}
 
@@ -103,15 +103,15 @@ public class Player extends Unit {
 		v.getGraphics().setComposite(_old);
 		
 		t = _timedEffects.get(ConfuseEffect.TYPE);
-		if (t != null && t._type.equals(ConfuseEffect.TYPE) && t._display){
+		if (t != null && t._display){
 			v.drawImage(Resource.get("confuseEffect"), _pos.plus(10, -30), 30);
 		} 
 		t = _timedEffects.get(SilenceEffect.TYPE);
-		if (t != null && t._type.equals(SilenceEffect.TYPE) && t._display){
+		if (t != null && t._display){
 			v.drawImage(Resource.get("silenceEffect"), _pos.plus(30, -10), 30);
 		} 
 		t = _timedEffects.get(HealthBurnEffect.TYPE);
-		if (t != null && t._type.equals(HealthBurnEffect.TYPE) && t._display){
+		if (t != null && t._display){
 			v.drawImage(Resource.get("burnEffect"), _pos.plus(3, _size.y-35), 50);
 		}
 
