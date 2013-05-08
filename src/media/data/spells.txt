@@ -2,11 +2,11 @@ Abracadabra
 Burn
 Cleanse
 Clone
+Confuse
 Dash
 Disarm
-Confuse
 Felify
-Dash
+Flash
 Hide
 Lock
 Open

@@ -1,6 +1,6 @@
 package pvpmagic.spells;
 
-import java.awt.Color;
+import java.awt.Image;
 
 import pvpmagic.*;
 
@@ -10,10 +10,14 @@ public class FelifySpell extends Spell {
 	public FelifySpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
 		_name = "Felify";
-		_size = new Vector(10, 10);
+
+		Image sprite = Resource.get("FelifySpell");
+		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(30), 15);
+		
+		_shape = new Circle(this, new Vector(-8, -8), 8);
+		
 		_cooldown = 1000;
 		_manaCost = 10;
-		setProperties(_size, 10);
 	}
 	
 	@Override
@@ -28,7 +32,8 @@ public class FelifySpell extends Spell {
 	
 	@Override
 	public void draw(View v){
-		v.getGraphics().setColor(Color.yellow);
-		v.fillRect(_pos, _size);
+		v.rotate(_vel, _pos);
+		v.drawImage(Resource.get("FelifySpell"), _pos.minus(8,8), _size);
+		v.unrotate();
 	}
 }

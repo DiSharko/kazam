@@ -54,6 +54,7 @@ public class PVPMagicMain extends ScreenHolder {
 		_screenList.add(_chooserScreen = new ChooserScreen(this, "default"));
 		_screenList.add(new GameScreen(this));
 		_screenList.add(new PauseScreen(this));
+		_screenList.add(new LobbyScreen(this));
 
 		switchToScreen("welcome");
 	}
