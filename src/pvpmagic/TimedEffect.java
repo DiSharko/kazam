@@ -28,6 +28,7 @@ public abstract class TimedEffect {
 			System.out.println("ERROR: newTimedEffect given a null argument!");
 			return null;
 		}
+		if (caster == null) System.err.println("NULL CASTER!");
 
 		if (type.equals(ConfuseEffect.TYPE)){ 
 			return new ConfuseEffect(numberOfIntervals, caster, (Player) target); 
@@ -52,20 +53,26 @@ public abstract class TimedEffect {
 	}
 	
 	public String toNet() {
+		String casterID = (_caster == null) ? "null" : Integer.toString(_caster._netID);
 		return _type + 
 				"," + _effectCompleted +
 				"," + _numberOfIntervals +
 				"," + _changePerInterval +
-				"," + _caster._netID +
+				"," +  casterID +
 				"," + _target._netID;
 	}
 	
 	public static TimedEffect fromNet(String effectNetString, HashMap<Integer, Unit> objectMap) {
 		String[] args = effectNetString.split(",");
+		Player caster;
 		if (Boolean.parseBoolean(args[1])) {
-			Player caster = (Player) objectMap.get(Integer.parseInt(args[4]));
+			if (!args[4].equals("null")) {
+				caster = null;
+			} else {
+				caster = (Player) objectMap.get(Integer.parseInt(args[4]));
+			}
 			Unit target = objectMap.get(Integer.parseInt(args[5]));
-			if (args[3].equals("null")) { 
+			if (args[3].equals("null")) {
 				return newTimedEffect(args[0], Double.parseDouble(args[2]), caster, target);
 			} else {
 				return newTimedEffect(args[0], Double.parseDouble(args[2]), caster, target, 
