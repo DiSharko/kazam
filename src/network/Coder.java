@@ -188,7 +188,7 @@ public class Coder {
 				} else if (eventString[2].equals("E")){
 					data.startCastingSpell(p, p._spells[2], target);
 				} else if (eventString[2].equals("R")){
-					data.startCastingSpell(p, p._spells[2], target);
+					data.startCastingSpell(p, p._spells[3], target);
 				} else if (eventString[2].equals("A")){
 					data.startCastingSpell(p, p._spells[4], target);
 				} else if (eventString[2].equals("S")){
