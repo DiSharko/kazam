@@ -18,7 +18,6 @@ public class FlagTeamData extends TeamData{
 	@Override
 	public void update() {
 		//update scores
-
 		if (_pedestal._flag != null) {
 			_teamScore += 1;
 			System.out.println("Flagdata flag orig pos = "+_pedestal._flag._originalPos);

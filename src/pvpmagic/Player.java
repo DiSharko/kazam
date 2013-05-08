@@ -30,7 +30,7 @@ public class Player extends Unit {
 	double _hidden = 1.0;
 	Composite _old;
 	
-	public boolean _connected = false;
+	public boolean _connected = true;
 
 	public String[] _spells;
 	//ArrayList<Carryable> inventory = new ArrayList<Carryable>();

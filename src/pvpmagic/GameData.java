@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.PriorityQueue;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import pvpmagic.spells.Spell;
 import screen.TextInputLine;
 
@@ -42,7 +45,7 @@ public class GameData {
 			else {
 				System.out.println("map name was not random: "+s.getElement("selectedMap").name);
 				try {
-					readInMap(s.getElement("selectedMap").name);
+					readInMap(s.getElement("selectedMap").name,null,null);
 				} catch (IOException e) {
 					System.out.println("IOException in setup.");
 					e.printStackTrace();
@@ -60,8 +63,8 @@ public class GameData {
 				spells[i] = s._spells[i].name;
 			}
 
-			Player p = new Player(this, "andrew", playerName, spells,null);
-			Player dummy = new Player(this, "diego", "bobby", null,null);
+			Player p = new Player(this, "andrew", playerName, spells);
+			Player dummy = new Player(this, "diego", "bobby", null);
 
 			_players.add(p);
 			_players.add(dummy);
@@ -203,7 +206,7 @@ public class GameData {
 		}
 	}
 
-	public void readInMap(String mapname) throws IOException {
+	public void readInMap(String mapname, AtomicInteger counter, PriorityQueue<Player> pq) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/data/maps/"+mapname+".txt")));
 		String line; String[] linearr;
 		
@@ -214,6 +217,7 @@ public class GameData {
 			if (linearr[2].equals("TEAM DEATHMATCH")) {
 				_gameType = "TEAM DEATHMATCH";
 				_needed = 12;
+				System.out.println("sdfasdf");
 				for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
 					DeathmatchTeamData data = new DeathmatchTeamData(i, this);
 					_teams.add((TeamData)data);
@@ -222,6 +226,7 @@ public class GameData {
 			} else if (linearr[2].equals("TEAM FLAG")) {
 				_gameType = "TEAM FLAG";
 				_needed = 3;
+				System.out.println("slkjl");
 				for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
 					FlagTeamData data = new FlagTeamData(i, this);
 					_teams.add((TeamData)data);
