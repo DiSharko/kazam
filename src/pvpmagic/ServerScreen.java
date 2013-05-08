@@ -3,6 +3,7 @@ package pvpmagic;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class ServerScreen extends Screen {
 	
 	SetupScreen _settings;
 	
-	// shared network vars - setup in setup TODO
+	// client/server vars
 	boolean _isClient;
 	boolean _isHost;
 	HashMap<Integer,Unit> _staticMap;
@@ -38,14 +39,14 @@ public class ServerScreen extends Screen {
 	int _lobbyVersion;
 	ArrayList<Player> _playerList;
 	
-	// Server vars - set in setup TODO
+	// Server vars
 	public PriorityBlockingQueue<String> _netInputs; // inputs used by server
 	HashMap<Integer,Player> _playerMap;
 	AtomicBoolean _running;
 	AtomicBoolean _started;
 	boolean _transitioned;
-	int _getPort;
-	int _sendPort;
+	int _statePort;
+	int _inputPort;
 	GameData _data;
 	int _tick;
 	StateServer _stateServer;
@@ -70,8 +71,8 @@ public class ServerScreen extends Screen {
 			_serverIP = InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {}
 		
-		// setup lobby network vars
-		_isClient = false;
+		// setup general network vars
+		_isClient = true;
 		_isHost = true;
 		_staticMap = new HashMap<Integer,Unit>();
 		_dynamicMap = new HashMap<Integer,Unit>();
@@ -84,18 +85,28 @@ public class ServerScreen extends Screen {
 		_running = new AtomicBoolean(true);
 		_started = new AtomicBoolean(false);
 		_transitioned = false;
-		_getPort = 9001;
-		_sendPort = 9002;
+		_statePort = 9001;
+		_inputPort = 9002;
 		_tick = 0;
 		
 		// start servers
 		try {
-			_stateServer = new StateServer(_getPort, _running, _started);
-			_inputServer = new InputServer(_sendPort, _netInputs, _running, _started);
+			_stateServer = new StateServer(_statePort, _running, _started);
+			_inputServer = new InputServer(_inputPort, _netInputs, _running, _started);
 			_stateServer.start();
 			_inputServer.start();
 		} catch (NetworkException e) {
 			System.out.println(e.getMessage());
+			try {
+				_stateServer.kill();
+			} catch (IOException e1) {
+				// ignore as disconnecting
+			}
+			try {
+				_inputServer.kill();
+			} catch (IOException e1) {
+				// ignore as disconnecting
+			}
 			_holder.transitionToScreen(Transition.FADE, "setup");
 		}
 		
@@ -107,6 +118,38 @@ public class ServerScreen extends Screen {
 		lobby._server = this;
 		lobby._serverIP = "localhost"; // instead of call to lobby.getSettings()
 		lobby._settings = _settings; // instead of call to lobby.getSettings()
+		try {
+			lobby.connect(); // try to connect (usually called in lobby.getSettings()
+			// an error results in a disconnect and killing all network threads/objects
+		} catch (UnknownHostException e) {
+			System.out.println(e.getMessage());
+			lobby._networker.disconnect();
+			try {
+				_stateServer.kill();
+			} catch (IOException e1) {
+				// ignore as disconnecting
+			}
+			try {
+				_inputServer.kill();
+			} catch (IOException e1) {
+				// ignore as disconnecting
+			}
+			_holder.transitionToScreen(Transition.FADE, "setup");
+		} catch (NetworkException e) {
+			System.out.println(e.getMessage());
+			lobby._networker.disconnect();
+			try {
+				_stateServer.kill();
+			} catch (IOException e1) {
+				// ignore as disconnecting
+			}
+			try {
+				_inputServer.kill();
+			} catch (IOException e1) {
+				// ignore as disconnecting
+			}
+			_holder.transitionToScreen(Transition.FADE, "setup");
+		}
 		
 		onResize();
 	}
@@ -147,8 +190,12 @@ public class ServerScreen extends Screen {
 			String lobbyData = Coder.encodeLobby(_playerList, _mapName, _lobbyVersion);
 			_stateServer.broadcast(lobbyData);
 			
-			// initialize game data
+			// initialize game data and map of ids to players
 			_data = new GameData(_playerList,_isClient);
+			for (Player player: _playerList) {
+				_playerMap.put(player._netID,player);
+				player._data = _data;
+			}
 			_data.setup(_settings);
 			for (Unit unit : _data._units) {
 				_staticMap.put(unit._netID, unit);
@@ -160,8 +207,40 @@ public class ServerScreen extends Screen {
 			_holder.transitionToScreen(Transition.FADE, "lobby");
 			
 		} else if (_running.get()) {
+			// read disconnects and commands whose tick was prior to the present
+			// handleEvent reads and executes commands
+			while (_netInputs.peek() != null) {
+				try {
+					String input = _netInputs.poll();
+					int inputTick = _tick+1; // dummy value
+					boolean isDisconnect = false;
+					if (input.split("\t")[0].equals("DISCONNECTION")) {
+						isDisconnect = true;
+					} else {
+						inputTick = Integer.parseInt(input.split("\t")[1]);
+					}
+					if (inputTick < _tick || isDisconnect) {
+						try {
+							Coder.handleEvent(input.split("\t"), _data, _playerMap);
+						} catch (BadProtocolException e) {
+							// ignore malformed command
+						}
+					} else {
+						_netInputs.put(input);
+						break;
+					}
+				} catch (Exception e) {
+					// ignore malformed commands
+				}
+			}
 			
+			// update, encode, and broadcast state, and increment tick counter
+			_data.update();
+			String gameState = Coder.encodeGame(_data._units, _data._idCounter, _tick);
+			_stateServer.broadcast(gameState);
+			_tick++;
 		} else {
+			// game over
 			_holder.transitionToScreen(Transition.FADE, "setup");
 		}
 	}

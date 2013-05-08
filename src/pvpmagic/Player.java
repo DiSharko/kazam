@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import pvpmagic.GameData.GameMode;
 import pvpmagic.spells.DashSpell;
 import pvpmagic.spells.HideSpell;
 import pvpmagic.spells.Spell;
@@ -353,9 +352,7 @@ public class Player extends Unit {
 		return  "static" +
 				"\t" + _characterName + 
 				"\t" + _playerName + 
-				"\t" + spells.substring(0, spells.length() - 1) +
-				"\t" + _pos.toNet() +
-				"\t" + _destination.toNet();
+				"\t" + spells.substring(0, spells.length() - 1);
 	}
 
 	//networkString format = [id, type, <any data from toNetInit split on tabs>...]
@@ -363,8 +360,6 @@ public class Player extends Unit {
 		if (networkString[1].equals("static")) {
 			String[] spells = networkString[4].split(" ");
 			Player p = new Player(null, networkString[2], networkString[3], spells);
-			p._destination = Vector.fromNet(networkString[6]);
-			p._pos = Vector.fromNet(networkString[5]);
 			p._netID = Integer.parseInt(networkString[0]);
 			return p;
 		}
