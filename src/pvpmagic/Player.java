@@ -24,7 +24,7 @@ public class Player extends Unit {
 	String _playerName;
 
 	public Vector _destination;
-	public boolean _connected;
+
 	double _spellCastingTime = 0;
 	Spell _spellToCast = null;
 	double _hidden = 1.0;
@@ -44,8 +44,8 @@ public class Player extends Unit {
 
 	double _velocity = 8;
 
-	public Player(GameData data, String characterName, String playerName, String[] spellNames){
-		super(data, TYPE, STATICOBJ, characterName);
+	public Player(GameData data, String characterName, String playerName, String[] spellNames, String basicImage){
+		super(data, TYPE, STATICOBJ, basicImage);
 		_canBeRooted = true;
 		_canBeSilenced = true;
 
@@ -54,12 +54,8 @@ public class Player extends Unit {
 		_health = 100;
 		_mana = 100;
 
-		_characterName = characterName;
-		_basicImage = _characterName;
-		_playerName = playerName;
-		
 		_pos = new Vector(-50, -20);
-		Image sprite = Resource.get(_characterName);
+		Image sprite = Resource.get("player1_back");
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70);
 
 		double hitBoxScale = .7;
@@ -68,12 +64,12 @@ public class Player extends Unit {
 		_spells = spellNames;
 		_spellCastingTimes = new HashMap<String, Long>();
 
+		_characterName = characterName;
+		_playerName = playerName;
 
 		this._restitution = 0;
 
 		_appliesFriction = true;
-		
-		_connected = true;
 
 	}
 
@@ -94,13 +90,15 @@ public class Player extends Unit {
 
 		_old = v.getGraphics().getComposite();
 		if (_hidden < 1) {
-			AlphaComposite ac = java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden);
-			v.getGraphics().setComposite(ac);
+			Composite old = v.getGraphics().getComposite();
+
+			v.getGraphics().setComposite(java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden));
 			v.drawImage(Resource.get(_basicImage), _pos, _size);
+
+			v.getGraphics().setComposite(old);
 		} else if (_hidden == 1) {
 			v.drawImage(Resource.get(_basicImage), _pos, _size);
 		}
-		v.getGraphics().setComposite(_old);
 		
 		t = _timedEffects.get(ConfuseEffect.TYPE);
 		if (t != null && t._type.equals(ConfuseEffect.TYPE) && t._display){
@@ -261,10 +259,7 @@ public class Player extends Unit {
 				"\t" + _isRooted +        					//index: 9
 				"\t" + _isSilenced +      					//index: 10
 				"\t" + lastCastTimes.substring(0, lastCastTimes.length() - 1) +
-				"\t" + timedEffectsStr.substring(0, timedEffectsStr.length() - 1) +
-				"\t" + _basicImage +						//index: 13
-				"\t" + _connected;							//index: 14
-		
+				"\t" + timedEffectsStr.substring(0, timedEffectsStr.length() - 1);
 
 		//when fromNet is called, throw away previous timed effects
 		//list, and instantiate new ones with (this) as target
@@ -278,21 +273,15 @@ public class Player extends Unit {
 			this._flag = (Flag) objectMap.get(Integer.parseInt(networkString[4]));
 			this._health = Double.parseDouble(networkString[5]);
 			this._mana = Double.parseDouble(networkString[6]);
-			this._vel = Vector.fromNet(networkString[7]);
-			this._force = Vector.fromNet(networkString[8]);
-			this._isRooted = Boolean.parseBoolean(networkString[9]);
-			this._isSilenced = Boolean.parseBoolean(networkString[10]);
-			this._basicImage = networkString[13];
-			this._connected = Boolean.parseBoolean(networkString[14]);
 
 			String[] lastCastTimes, sp;
-			lastCastTimes = networkString[11].split(".");
+			lastCastTimes = networkString[7].split(".");
 			for (String spell : lastCastTimes) {
 				sp = spell.split(",");
 				this._spellCastingTimes.put(sp[0], Long.parseLong(sp[1]));
 			}
 			String[] tEffects; TimedEffect ef;
-			tEffects = networkString[12].split(".");
+			tEffects = networkString[8].split(".");
 			_timedEffects = new HashMap<String, TimedEffect>();
 			for (String effect : tEffects) {
 				ef = TimedEffect.fromNet(effect, this);
@@ -320,7 +309,7 @@ public class Player extends Unit {
 	public static Player fromNetInit(String[] networkString) {
 		if (networkString[1].equals("static") && validNetworkString(networkString, true)) {
 			String[] spells = networkString[4].split(" ");
-			Player p = new Player(null, networkString[2], networkString[3], spells);
+			Player p = new Player(null, networkString[2], networkString[3], spells, "player1_back");
 			p._destination = Vector.fromNet(networkString[6]);
 			p._pos = Vector.fromNet(networkString[5]);
 			p._netID = Integer.parseInt(networkString[0]);

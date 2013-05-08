@@ -13,7 +13,7 @@ public class ShieldSpell extends Spell {
 	}
 	
 	public void hide() {
-		_data._units.add(new Shield());
-		this.die();
+		//_data._units.add(new Shield());
+		//this.die();
 	}
 }
