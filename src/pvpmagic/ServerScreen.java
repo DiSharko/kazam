@@ -51,6 +51,7 @@ public class ServerScreen extends Screen {
 	int _tick;
 	StateServer _stateServer;
 	InputServer _inputServer;
+	LobbyScreen _lobby;
 
 	public ServerScreen(ScreenHolder holder) {
 		super(holder, "server");
@@ -112,6 +113,7 @@ public class ServerScreen extends Screen {
 		
 		// setup client to connect with this server
 		LobbyScreen lobby = (LobbyScreen) _holder.getScreen("lobby");
+		_lobby = lobby;
 		lobby.setup();
 		lobby._isHost = _isHost;
 		lobby._isClient = _isClient;
@@ -241,6 +243,17 @@ public class ServerScreen extends Screen {
 			_tick++;
 		} else {
 			// game over
+			_lobby._networker.disconnect();
+			try {
+				_stateServer.kill();
+			} catch (IOException e) {
+				//ignore
+			}
+			try {
+				_inputServer.kill();
+			} catch (IOException e) {
+				// ignore
+			}
 			_holder.transitionToScreen(Transition.FADE, "setup");
 		}
 	}
