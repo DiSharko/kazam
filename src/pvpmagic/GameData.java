@@ -18,6 +18,8 @@ public class GameData {
 
 	ArrayList<TeamData> _teams;
 	ArrayList<Player> _spawning;
+	
+	public ArrayList<Player> _playerList; // pushed down from lobby/serverscreen
 
 
 	public GameData(){

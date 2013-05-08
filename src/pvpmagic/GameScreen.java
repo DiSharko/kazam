@@ -9,12 +9,14 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import network.ClientNetworkable;
 import network.SyncedString;
 
 import pvpmagic.spells.Spell;
@@ -34,7 +36,8 @@ public class GameScreen extends Screen {
 	boolean _isHost;
 	HashMap<Integer,Unit> _staticMap;
 	HashMap<Integer,Unit> _dynamicMap;
-	int lobbyVersion;
+	int _lobbyVersion;
+	List<Player> _playerList;
 	
 	// Server vars - set in setup TODO
 	public PriorityBlockingQueue<String> _netInputs; // inputs used by server
@@ -53,10 +56,12 @@ public class GameScreen extends Screen {
 	SyncedString _lobbyData;
 	int _getPort;
 	int _sendPort;
+	ClientNetworkable _networker;
 	AtomicInteger _focusID;
-	PriorityQueue<Player> _players;
+	PriorityQueue<Player> _playerQueue;
 	int _lastTick;
 	int _clientTick;
+	ServerScreen _server; //only set if isHost is true
 	
 
 	GameData _data;

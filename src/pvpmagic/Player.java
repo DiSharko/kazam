@@ -134,6 +134,9 @@ public class Player extends Unit {
 	@Override
 	public void update(){
 		super.update();
+		if (!_connected) { // signal deletion if disconnected
+			_delete = true;
+		}
 		if(_flag != null) _flag.update();
 		if (_flagGrabTimer == 0) {
 			_flagable = true;
