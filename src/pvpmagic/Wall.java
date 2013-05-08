@@ -1,10 +1,11 @@
 package pvpmagic;
 
 import java.awt.Image;
+import java.util.HashMap;
 
 
 public class Wall extends Unit {
-	public static String TYPE = "all";
+	public static String TYPE = "Wall";
 	public static String VWALL = "vwall";
 	public static String HWALL = "hwall";
 	private final boolean VERTICAL;
@@ -40,5 +41,13 @@ public class Wall extends Unit {
 	
 	@Override
 	public void changeHealth(double health){}
+	
+	@Override
+	public String toNet() {
+		return _type;
+	}
+	
+	@Override
+	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {}
 
 }

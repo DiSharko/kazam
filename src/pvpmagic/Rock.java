@@ -2,6 +2,7 @@ package pvpmagic;
 
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Rock extends Unit {
@@ -40,6 +41,21 @@ public class Rock extends Unit {
 		if (u._type.equals("spell")){
 			u._health -= 10;
 //			u._delete = true;
+		}
+	}
+	
+	@Override
+	public String toNet() {
+		return _type + 
+				"\t" + _health;
+	}
+	
+	@Override
+	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
+		if (networkString[1].equals("Rock") 
+				&& _netID == Integer.parseInt(networkString[0])
+				&& networkString.length == 3) {
+			_health = Integer.parseInt(networkString[2]);
 		}
 	}
 	
