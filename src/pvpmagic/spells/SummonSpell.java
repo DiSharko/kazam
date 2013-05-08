@@ -33,7 +33,7 @@ public class SummonSpell extends Spell {
 	public void collide(Collision c){
 		Unit target = c.other(this);
 		Vector dir = _caster._pos.minus(target._pos).normalize().mult(10);
-		if (target._type.equals("flag")) {
+		if (target._type.equals("Flag")) {
 			System.out.println(dir);
 			System.out.println("here");
 			target.applyForce(dir);

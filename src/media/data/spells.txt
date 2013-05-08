@@ -4,9 +4,9 @@ Burn
 Cleanse
 Clone
 Disarm
-Fear
+Confuse
 Felify
-Flash
+Dash
 Hide
 Lock
 Open

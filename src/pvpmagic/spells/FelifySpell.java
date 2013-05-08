@@ -4,24 +4,24 @@ import java.awt.Color;
 
 import pvpmagic.*;
 
-public class DisarmSpell extends Spell {
-	public static String TYPE = "DisarmSpell";
+public class FelifySpell extends Spell {
+	public static String TYPE = "FelifySpell";
 
-	public DisarmSpell(GameData data, Player caster, Vector dir) {
+	public FelifySpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
-		_name = "Disarm";
+		_name = "Felify";
 		_size = new Vector(10, 10);
 		_cooldown = 1000;
 		_manaCost = 10;
-		setProperties(_size, 4);
+		setProperties(_size, 10);
 	}
 	
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
 		target.changeHealth(-5);
-		if(target instanceof Player) {
-			target.silence(5000);
+		if (!(target instanceof Spell) && !(target instanceof Wall)) {
+			target.kitty(3000);
 			this.die();
 		}
 	}

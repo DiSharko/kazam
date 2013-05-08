@@ -2,14 +2,17 @@ package pvpmagic;
 
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Rock extends Unit {
+	public static Boolean STATICOBJ = true;
 	public static String TYPE = "Rock";
 	private boolean _dead = false;
 	
-	public Rock(GameData data, Vector pos, double size){
-		super(data, TYPE);
+	public Rock(GameData data, Vector pos, double size, String basic){
+		super(data, TYPE, STATICOBJ, basic);
+		_basicImage = "rock";
 		_pos = pos;
 		Image sprite = Resource.get("rock");
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(size);
@@ -28,7 +31,8 @@ public class Rock extends Unit {
 	}
 	
 	public void draw(View v){
-		if (!_dead) v.drawImage(Resource.get("rock"), _pos, _size);
+		super.draw(v);
+		if (!_dead) v.drawImage(Resource.get(_basicImage), _pos, _size);
 		else v.drawImage(Resource.get("deadrock"), _pos, _size);
 	}
 
@@ -51,6 +55,22 @@ public class Rock extends Unit {
 		Unit u = c.other(this);
 		if (u._type.equals("spell")){
 			u._health -= 10;
+		}
+	}
+	
+	@Override
+	public String toNet() {
+		return _netID +
+				"\t" + (_staticObj ? "static" : _type) + 
+				"\t" + _health;
+	}
+	
+	@Override
+	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
+		if (networkString[1].equals(_staticObj ? "static" : _type) 
+				&& _netID == Integer.parseInt(networkString[0])
+				&& networkString.length == 3) {
+			_health = Integer.parseInt(networkString[2]);
 		}
 	}
 	

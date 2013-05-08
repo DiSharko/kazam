@@ -7,7 +7,6 @@ import pvpmagic.*;
 public class StunSpell extends Spell {
 	public static String TYPE = "StunSpell";
 	
-	
 	public StunSpell(GameData data, Player caster, Vector dir){
 		super(data, TYPE, caster, dir);
 		_cooldown = 1000;

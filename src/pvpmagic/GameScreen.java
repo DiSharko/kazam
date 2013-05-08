@@ -22,8 +22,8 @@ import screen.InterfaceElement;
 public class GameScreen extends Screen {
 
 	boolean DEBUG = false;
-
-	String _eventNetString = "";
+	
+	boolean _isClient;
 	public PriorityBlockingQueue<String> _netInputs = new PriorityBlockingQueue<String>();
 
 
@@ -63,6 +63,8 @@ public class GameScreen extends Screen {
 		Button menu = new Button(this, "menu", Resource.get("menu"));
 		menu.w = menu.h = 60;
 		_interfaceElements.add(menu);
+		
+		_isClient = false;
 
 		startGame();
 	}
@@ -236,34 +238,61 @@ public class GameScreen extends Screen {
 			_view._camera = _view._camera.plus(0, 10);
 		}
 
+		String eventNetString = "";
 		Vector target = _view.screenToGamePoint(new Vector(_xMouse, _yMouse));
 		if (key == KeyEvent.VK_Q){
-			_data.startCastingSpell(_focus, _focus._spells[0], target);
-			_eventNetString = "Q\t" + target.toNet();
+			if (!_isClient) {
+				_data.startCastingSpell(_focus, _focus._spells[0], target);
+			} else {
+				eventNetString = _data._lastTick + "Q\t" + target.toNet();
+			}
 		} else if (key == KeyEvent.VK_W){
-			_data.startCastingSpell(_focus, _focus._spells[1], target);
-			_eventNetString = "W\t" + target.toNet();
+			if (!_isClient) {
+				_data.startCastingSpell(_focus, _focus._spells[1], target);
+			} else {
+				eventNetString = _data._lastTick + "W\t" + target.toNet();
+			}
 		} else if (key == KeyEvent.VK_E){
-			_data.startCastingSpell(_focus, _focus._spells[2], target);
-			_eventNetString = "E\t" + target.toNet();
+			if (!_isClient) {
+				_data.startCastingSpell(_focus, _focus._spells[2], target);
+			} else {
+				eventNetString = _data._lastTick + "E\t" + target.toNet();
+			}
 		} else if (key == KeyEvent.VK_R){
-			_data.startCastingSpell(_focus, _focus._spells[3], target);
-			_eventNetString = "R\t" + target.toNet();
+			if (!_isClient) {
+				_data.startCastingSpell(_focus, _focus._spells[3], target);
+			} else {
+				eventNetString = _data._lastTick + "R\t" + target.toNet();
+			}
 		} else if (key == KeyEvent.VK_A){
-			_data.startCastingSpell(_focus, _focus._spells[4], target);
-			_eventNetString = "A\t" + target.toNet();
+			if (!_isClient) {
+				_data.startCastingSpell(_focus, _focus._spells[4], target);
+			} else {
+				eventNetString = _data._lastTick + "A\t" + target.toNet();
+			}
 		} else if (key == KeyEvent.VK_S){
-			_data.startCastingSpell(_focus, _focus._spells[5], target);
-			_eventNetString = "S\t" + target.toNet();
+			if (!_isClient) {
+				_data.startCastingSpell(_focus, _focus._spells[5], target);
+			} else {
+				eventNetString = _data._lastTick + "S\t" + target.toNet();
+			}
 		} else if (key == KeyEvent.VK_D){
-			_data.startCastingSpell(_focus, _focus._spells[6], target);
-			 _eventNetString = "D\t" + target.toNet();
+			if (!_isClient) {
+				_data.startCastingSpell(_focus, _focus._spells[6], target);
+			} else {
+				eventNetString = _data._lastTick + "D\t" + target.toNet();
+			}
 		} else if (key == KeyEvent.VK_F){
-			_data.startCastingSpell(_focus, _focus._spells[7], target);
-			_eventNetString = "F\t" + target.toNet();
+			if (!_isClient) {
+				_data.startCastingSpell(_focus, _focus._spells[7], target);
+			} else {
+				eventNetString = _data._lastTick + "F\t" + target.toNet();
+			}
 		}
-
-		if (key == 192) DEBUG = !DEBUG;
+		
+		if (!_isClient) {
+			if (key == 192) DEBUG = !DEBUG;
+		}
 
 		if (key == KeyEvent.VK_G){
 			try {
@@ -274,7 +303,7 @@ public class GameScreen extends Screen {
 		if (key == KeyEvent.VK_P){
 			System.out.println(_view.screenToGamePoint(new Vector(_xMouse, _yMouse)));
 			
-		_netInputs.add(_eventNetString);
+		_netInputs.add(eventNetString);
 		}
 
 	}
@@ -282,13 +311,16 @@ public class GameScreen extends Screen {
 	@Override
 	public boolean onMousePressed(MouseEvent e){
 		if (!super.onMousePressed(e)){
-			_eventNetString = System.currentTimeMillis() + "\t";
 			Vector point = _view.screenToGamePoint(new Vector(e.getX(), e.getY()));
-			_eventNetString = "CLICK\t" + point.toNet();
-			if (!_focus._isRooted) {
-				_focus._destination = point;
+			if (_isClient) {
+				String eventNetString = _data._lastTick + "\t";
+				eventNetString = "CLICK\t" + point.toNet();
+				_netInputs.add(eventNetString);
+			} else {
+				if (!_focus._isRooted) {
+					_focus._destination = point;
+				}
 			}
-			_netInputs.add(_eventNetString);
 		}
 		return true;
 	}

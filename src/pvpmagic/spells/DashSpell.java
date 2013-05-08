@@ -4,10 +4,10 @@ import pvpmagic.GameData;
 import pvpmagic.Player;
 import pvpmagic.Vector;
 
-public class FlashSpell extends Spell {
+public class DashSpell extends Spell {
 	public static String TYPE = "FlashSpell";
 
-	public FlashSpell(GameData data, Player caster, Vector dir) {
+	public DashSpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
 		_name = "Flash";
 		_size = new Vector(10, 10);
@@ -16,8 +16,10 @@ public class FlashSpell extends Spell {
 		setProperties(_size, 1);
 	}
 	
-	public void flash() {
+	public void dash() {
 		_caster._pos = _caster._pos.plus(_dir.normalize().mult(30));
 		this.die();
+		_caster._vel = _dir.normalize().mult(50);
+		_caster._destination = null;
 	}
 }

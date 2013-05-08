@@ -9,8 +9,6 @@ public abstract class TimedEffect {
 	public String _type;
 	boolean _display = true;
 	
-	public static String TYPE;
-	
 	public abstract void effect();
 	
 	public static TimedEffect newTimedEffect(String type, Double numberOfIntervals,
@@ -24,12 +22,13 @@ public abstract class TimedEffect {
 			System.out.println("Given a null name!");
 			return null;
 		}
-		if (type.equals("FearEffect")){ return new ConfuseEffect(numberOfIntervals, (Player) target); }
+		if (type.equals("ConfuseEffect")){ return new ConfuseEffect(numberOfIntervals, (Player) target); }
 		else if (type.equals("HealthEffect")) { return new HealthEffect(numberOfIntervals, changePerInterval, target); }
 		else if (type.equals("HideEffect")) { return new HideEffect(numberOfIntervals, (Player) target); }
 		else if (type.equals("ManaEffect")) { return new ManaEffect(numberOfIntervals, changePerInterval, target); }
 		else if (type.equals("RootEffect")) { return new RootEffect(numberOfIntervals, target); }
 		else if (type.equals("SilenceEffect")) { return new SilenceEffect(numberOfIntervals, target); }
+		else if (type.equals("KittyEffect")) { return new KittyEffect(numberOfIntervals, target); }
 
 		System.out.println("Effect name \""+ type +"\" not found!");
 		return null;

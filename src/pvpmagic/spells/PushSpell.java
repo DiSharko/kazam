@@ -22,7 +22,7 @@ public class PushSpell extends Spell {
 		this.die();
 		Unit target = c.other(this);
 		target.changeHealth(-5);
-		if (target._type.equals("player") && !target.equals(_caster)) {
+		if (target._type.equals("Player") && !target.equals(_caster)) {
 			Player p = (Player) target;
 			Vector f = p._pos.minus(_caster._pos).normalize();
 			p._destination = null;//p._pos.plus(f.mult(100));

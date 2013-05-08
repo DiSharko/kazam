@@ -6,6 +6,7 @@ import java.util.HashMap;
 import pvpmagic.*;
 
 public abstract class Spell extends Unit {
+	public static Boolean STATICOBJ = false;
 	
 	int time = 0;
 	
@@ -26,7 +27,7 @@ public abstract class Spell extends Unit {
 	
 
 	public Spell(GameData data, String type, Player caster, Vector target) {
-		super(data, type);
+		super(data, type, STATICOBJ, null);
 		if (data == null || type == null || caster == null || target == null) return;
 		_appliesRestitution = false;
 		_caster = caster;
@@ -65,13 +66,14 @@ public abstract class Spell extends Unit {
 		else if (name.equals("Abracadabra")) { return new AbracadabraSpell(data, caster, dir); }
 		else if (name.equals("Open")) { return new OpenSpell(data, caster, dir); }
 		else if (name.equals("Lock")) { return new LockSpell(data, caster, dir); }
-		else if (name.equals("Fear")) { return new FearSpell(data, caster, dir); }
+		else if (name.equals("Confuse")) { return new ConfuseSpell(data, caster, dir); }
 		else if (name.equals("Rejuvenate")) { return new RejuvenateSpell(data, caster, dir); }
 		else if (name.equals("Cleanse")) { return new CleanseSpell(data, caster, dir); }
 		else if (name.equals("Summon")) { return new SummonSpell(data, caster, dir); }
 		else if (name.equals("Clone")) { return new CloneSpell(data, caster, dir); }
 		else if (name.equals("Hide")) { return new HideSpell(data, caster, dir); }
-		else if (name.equals("Flash")) {  return new FlashSpell(data, caster, dir); }
+		else if (name.equals("Dash")) {  return new DashSpell(data, caster, dir); }
+		else if (name.equals("Felify")) {  return new FelifySpell(data, caster, dir); }
 
 		System.out.println("Spell name \""+name+"\" not found!");
 		return null;
@@ -86,7 +88,7 @@ public abstract class Spell extends Unit {
 	
 	@Override
 	public boolean canCollideWith(Unit u){
-		if (u == _caster && time < 10000) return false;
+		if (u == _caster && time < 15) return false;
 		return true;
 	}
 	@Override
@@ -105,7 +107,6 @@ public abstract class Spell extends Unit {
 	@Override
 	public String toNet() {
 		return _netID +
-				"\t" + "SPELL" +
 				"\t" + _name +
 				"\t" + _caster._netID +
 				"\t" + _dir.toNet() +

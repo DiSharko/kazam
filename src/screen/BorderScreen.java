@@ -47,6 +47,8 @@ public class BorderScreen extends Screen {
 
 	Rectangle _screenBounds;
 
+	int _savedWindowX;
+	int _savedWindowY;
 	int _savedWindowW;
 	int _savedWindowH;
 
@@ -125,6 +127,7 @@ public class BorderScreen extends Screen {
 		} else if (_fadingOut){
 			_fadeTime--;
 		}
+		if (_lastMousePress > 0) _lastMousePress--;
 	}
 	
 	@Override
@@ -142,10 +145,22 @@ public class BorderScreen extends Screen {
 	}
 
 
+	long _lastMousePress = 0;
 	@Override
 	public boolean onMousePressed(MouseEvent e) {
 		super.onMousePressed(e);
 		_mouseDown = true;
+		
+		if (_lastMousePress > 0){
+			if (_holder._w == _screenBounds.width && _holder._h == _screenBounds.height){
+				_holder.setWindowBounds(_savedWindowX, _savedWindowY, _savedWindowW, _savedWindowH);
+			} else {
+				saveSize();
+				_holder._window.setLocation(_screenBounds.x, _screenBounds.y);
+				_holder.setWindowSize(_screenBounds.width, _screenBounds.height);
+			}
+		}
+		_lastMousePress = 5;
 
 		_mouseDownX = e.getX();
 		_mouseDownY = e.getY();
@@ -215,7 +230,6 @@ public class BorderScreen extends Screen {
 				_resizingSides.add("north");
 				_holder._window.setCursor(new Cursor(Cursor.N_RESIZE_CURSOR));
 
-
 			} else if (_resizingSides.contains("south") || (_mouseDownY > _holder._h-_borderSize && _resizingSides.size() == 0)){
 				int differenceY = _holder._window.getY()+_holder._h-e.getYOnScreen();
 				_holder.setWindowSize(_holder._w, _holder._h-differenceY);
@@ -225,13 +239,13 @@ public class BorderScreen extends Screen {
 
 			} else if (_resizingSides.contains("move") || (_mouseDownY < _topBarHeight && _resizingSides.size() == 0)){
 				if (e.getXOnScreen() <= 2){
-					_holder._window.setLocation(0,0);
 					_holder.setWindowSize(_screenBounds.width/2, _screenBounds.height);
+					_holder._window.setLocation(_screenBounds.x, _screenBounds.y);
 				} else if (e.getXOnScreen() >= _screenBounds.width-3){
-					_holder._window.setLocation(_screenBounds.width/2, 0);
 					_holder.setWindowSize(_screenBounds.width/2, _screenBounds.height);
-				} else if (e.getYOnScreen() <= 2){
-					_holder._window.setLocation(0, 0);
+					_holder._window.setLocation(_screenBounds.width-_holder._w, _screenBounds.y);
+				} else if (e.getYOnScreen() <= _screenBounds.y+2){
+					_holder._window.setLocation(_screenBounds.x, _screenBounds.y);
 					_holder.setWindowSize(_screenBounds.width, _screenBounds.height);
 				} else {
 					if (_holder._w != _savedWindowW || _holder._h != _savedWindowH){ // If the window is being dragged away from snap
@@ -280,6 +294,8 @@ public class BorderScreen extends Screen {
 	}
 
 	public void saveSize(){
+		_savedWindowX = _holder._window.getX();
+		_savedWindowY = _holder._window.getY();
 		_savedWindowW = _holder._w;
 		_savedWindowH = _holder._h;
 	}

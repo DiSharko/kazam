@@ -2,14 +2,16 @@ package pvpmagic;
 
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Flag extends Unit {
-	public static String TYPE = "flag";
+	public static Boolean STATICOBJ = true;
+	public static String TYPE = "Flag";
 	public Vector _originalPos;
 	
-	public Flag(GameData data, Vector pos, double size){
-		super(data, TYPE);
+	public Flag(GameData data, Vector pos, double size, String basic){
+		super(data, TYPE, STATICOBJ, basic);
 		_pos = pos;
 		_originalPos = pos;
 		
@@ -30,7 +32,8 @@ public class Flag extends Unit {
 	}
 	
 	public void draw(View v){
-		v.drawImage(Resource.get("flag"), _pos, _size);
+		super.draw(v);
+		v.drawImage(Resource.get(_basicImage), _pos, _size);
 	}
 
 	@Override
@@ -39,7 +42,7 @@ public class Flag extends Unit {
 	@Override
 	public void collide(Collision c){
 		Unit u = c.other(this);
-		if (u._type.equals("player")){
+		if (u._type.equals("Player")){
 			Player player = (Player) u;
 			if(player._flagable) {
 				player._flag = this;
@@ -48,6 +51,23 @@ public class Flag extends Unit {
 				_vel = new Vector(0,0);
 				_force = new Vector(0,0);
 			}
+		}
+	}
+	@Override
+	public String toNet() {
+		return _netID +
+				"\t" + (_staticObj ? "static" : _type) + 
+				"\t" + _pos + 
+				"\t" + _delete;
+	}
+	
+	@Override
+	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
+		if (networkString[1].equals(_staticObj ? "static" : _type) 
+				&& _netID == Integer.parseInt(networkString[0])
+				&& networkString.length == 4) {
+			_pos = Vector.fromNet(networkString[2]);
+			_delete = Boolean.parseBoolean(networkString[3]);
 		}
 	}
 }

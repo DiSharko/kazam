@@ -2,7 +2,9 @@ package pvpmagic;
 
 import java.util.ArrayList;
 
-public abstract class TeamData {
+public abstract class TeamData extends Unit{
+	public static Boolean STATICOBJ = true;
+	
 	protected ArrayList<Vector> _spawnList;
 	protected ArrayList<Player> _playerList;
 	protected int _teamScore = 0;
@@ -10,7 +12,8 @@ public abstract class TeamData {
 	
 	private int spawnIndex;
 	
-	public TeamData (int teamNum) {
+	public TeamData (int teamNum, GameData data, String type) {
+		super(data, type, STATICOBJ, null);
 		_spawnList = new ArrayList<Vector>();
 		_playerList = new ArrayList<Player>();
 		TEAM_NUM = teamNum;
