@@ -21,7 +21,6 @@ public class DisarmSpell extends Spell {
 		Unit target = c.other(this);
 		target.silence(5000);
 		target.changeHealth(-5);
-		//TODO: possibly make it so that your wand also gets knocked away
 	}
 	
 	@Override

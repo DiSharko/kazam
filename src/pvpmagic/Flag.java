@@ -40,10 +40,14 @@ public class Flag extends Unit {
 	public void collide(Collision c){
 		Unit u = c.other(this);
 		if (u._type.equals("player")){
-			System.out.println("player has flag");
 			Player player = (Player) u;
-			player._flag = this;
-			_delete = true;
+			if(player._flagable) {
+				player._flag = this;
+				System.out.println("player has flag");
+				_delete = true;
+				_vel = new Vector(0,0);
+				_force = new Vector(0,0);
+			}
 		}
 	}
 }

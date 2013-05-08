@@ -23,11 +23,10 @@ public class BurnSpell extends Spell {
 
 	public void collide(Collision c){
 		Unit target = c.other(this);
-//		System.out.println("Spell hit "+target._type);
 		if (target._type.equals("player")) {
 			target.changeHealth(-30,5000);
 			target.changeMana(-30,5000);
-			_health = 0;
+			this.die();
 		}
 	}
 	

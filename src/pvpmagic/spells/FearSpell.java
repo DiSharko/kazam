@@ -28,9 +28,11 @@ public class FearSpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
+		target.changeHealth(-5);
 		if (target instanceof Player) {
 			Player p = (Player) target;
 			p.fear(3000);
+			this.die();
 		}
 	}
 	

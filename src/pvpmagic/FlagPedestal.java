@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 
 public class FlagPedestal extends Unit {
-	public static String TYPE = "FlagZone";
+	public static String TYPE = "FlagPedestal";
 	Flag _flag = null;
 	
 	public FlagPedestal(GameData data, Vector pos, double size){

@@ -17,6 +17,8 @@ public class Player extends Unit {
 	public Vector _spawn;
 	public int _teamNum;
 	public int _spawnTimer = 0;
+	private int _flagGrabTimer = 0;
+	public boolean _flagable = true;
 	
 	String _characterName;
 	String _playerName;
@@ -142,7 +144,13 @@ public class Player extends Unit {
 	@Override
 	public void update(){
 		super.update();
-
+		if (_flagGrabTimer == 0) {
+			_flagable = true;
+		} else if (_flagGrabTimer > 0) {
+			_flagable = false;
+			_flagGrabTimer -= 1;
+		}
+		
 		//flag-stun checking
 		if(_isRooted && _isSilenced)
 			dropFlag();
@@ -212,12 +220,19 @@ public class Player extends Unit {
 		if (_flag == null) {
 			return; //nothing happens
 		} else {
-			double newx = 50 - Math.random()*101;
-			double newy = 50 - Math.random()*101;
-			Vector newpos = new Vector(this._pos.x + newx,this._pos.y + newy);
-			_flag._pos = newpos;
+			_flag._pos = this._pos;
+			double x = Math.random()*11 - 5;
+			double y = Math.random()*11 - 5;
+			while((x==0) && (y==0)) {
+				x = Math.random()*11 - 5;
+				y = Math.random()*11 - 5;
+			}
+			Vector newforce = new Vector(x,y).normalize().mult(5);
+			_flag.applyForce(newforce); 
 			_flag._delete = false;
 			_data._units.add(_flag);
+			_flagable = false;
+			_flagGrabTimer = 50;
 			_flag = null;
 		}
 	}

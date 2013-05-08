@@ -22,12 +22,11 @@ public class StunSpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
+		target.changeHealth(-10);
 		if (target._type.equals(Player.TYPE)){
 			target.root(2000);
 			target.silence(2000);
-			target.changeHealth(-5);
-		
-			_health = 0;
+			this.die();
 		}
 	}
 	

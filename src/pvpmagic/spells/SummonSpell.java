@@ -37,9 +37,8 @@ public class SummonSpell extends Spell {
 			System.out.println(dir);
 			System.out.println("here");
 			target.applyForce(dir);
-			_health = 0;
+			this.die();
 		}
-		//TODO: possibly make it so that your wand also gets knocked away
 	}
 	
 	@Override

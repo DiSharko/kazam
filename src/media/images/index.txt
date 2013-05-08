@@ -3,6 +3,7 @@ misc/rock
 misc/pillar
 misc/door_closed
 misc/door_open
+misc/deadrock
 spells/icon
 spells/StunSpell
 spells/RootSpell

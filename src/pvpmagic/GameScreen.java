@@ -86,6 +86,10 @@ public class GameScreen extends Screen {
 	private class VisionComparator implements Comparator<Unit> {
 		@Override
 		public int compare(Unit u1, Unit u2) {
+			if(!(u1._drawUnder && u2._drawUnder)) {
+				if (u1._drawUnder) return -1;
+				else if (u2._drawUnder) return 1;
+			}
 			if (u1._pos.y == u2._pos.y) return (int) (u2._pos.x - u1._pos.x);
 			return (int) (u1._pos.y - u2._pos.y);
 		}
@@ -193,8 +197,9 @@ public class GameScreen extends Screen {
 		_view._camera = _focus._pos;
 		_view._scale = (Math.min(_holder._h, _holder._w))/600.0;
 
-		//		_view._camera = new Vector(1000,-200);
-		//		_view._scale = 0.4;
+		//_view._camera = new Vector(1000,-500);
+		//_view._scale = .5;
+		//System.out.println(_view._scale);
 
 		if (_focus != null){
 			_healthBar.current = _focus._health;

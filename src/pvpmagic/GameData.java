@@ -255,7 +255,6 @@ public class GameData {
 				Vector pos = new Vector(Double.parseDouble(linearr[2]), -1.0*Double.parseDouble(linearr[3]));
 				FlagPedestal pd = new FlagPedestal(this, pos, Double.parseDouble(linearr[4]));
 				_units.add(pd);
-
 				FlagTeamData ft = (FlagTeamData) _teams.get(Integer.parseInt(linearr[1]));
 				ft.setPed(pd);
 			} else {

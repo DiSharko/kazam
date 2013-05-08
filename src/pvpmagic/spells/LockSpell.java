@@ -27,7 +27,7 @@ public class LockSpell extends Spell {
 		if (target._type.equals("door")) {
 			Door door = (Door) target;
 			door.lock();
-			_health = 0;
+			this.die();
 		}
 	}
 	

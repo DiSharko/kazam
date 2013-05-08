@@ -15,6 +15,7 @@ public abstract class Unit {
 	 */
 	protected GameData _data;
 	protected boolean _delete = false;
+	protected boolean _drawUnder = false;
 	protected Shape _shape;
 	
 	public Unit(GameData data, String type){ _data = data; _type = type; }
@@ -69,6 +70,7 @@ public abstract class Unit {
 	
 	public void die() {
 		this._delete = true;
+		_timedEffects = new LinkedList<TimedEffect>();
 	}
 	
 	/**
@@ -112,7 +114,6 @@ public abstract class Unit {
 		}
 		
 		_timedEffects.removeAll(completedEffects);
-	
 	}
 	
 	public void draw(View v){}

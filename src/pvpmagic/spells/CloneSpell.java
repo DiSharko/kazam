@@ -18,7 +18,7 @@ public class CloneSpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		//do nothing if it hits something, just disappear
-		this._delete = true;
+		this.die();
 	}
 	
 	@Override

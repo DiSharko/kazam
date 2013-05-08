@@ -18,5 +18,6 @@ public class FlashSpell extends Spell {
 	
 	public void flash() {
 		_caster._pos = _caster._pos.plus(_dir.normalize().mult(30));
+		this.die();
 	}
 }

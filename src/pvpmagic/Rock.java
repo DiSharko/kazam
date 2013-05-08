@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Rock extends Unit {
 	public static String TYPE = "Rock";
-
+	private boolean _dead = false;
 	
 	public Rock(GameData data, Vector pos, double size){
 		super(data, TYPE);
@@ -28,18 +28,29 @@ public class Rock extends Unit {
 	}
 	
 	public void draw(View v){
-		v.drawImage(Resource.get("rock"), _pos, _size);
+		if (!_dead) v.drawImage(Resource.get("rock"), _pos, _size);
+		else v.drawImage(Resource.get("deadrock"), _pos, _size);
 	}
 
 	@Override
-	public void changeHealth(double health){}
+	public void changeHealth(double amount){
+		System.out.println("rock hit");
+		_health -= 20;
+	}
+	
+	@Override
+	public void die(){
+		System.out.println("rock died");
+		_dead = true;
+		_collidable = false;
+		_drawUnder = true;
+	}
 	
 	@Override
 	public void collide(Collision c){
 		Unit u = c.other(this);
 		if (u._type.equals("spell")){
 			u._health -= 10;
-//			u._delete = true;
 		}
 	}
 	
