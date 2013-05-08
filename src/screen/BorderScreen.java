@@ -157,18 +157,18 @@ public class BorderScreen extends Screen {
 		_mouseDownX = e.getX();
 		_mouseDownY = e.getY();
 
-		if (_lastMousePress > 0){
-			if (_mouseDownY < _topBarHeight && _resizingSides.size() == 0){
-				if (_holder._w == _screenBounds.width && _holder._h == _screenBounds.height){
-					_holder.setWindowBounds(_savedWindowX, _savedWindowY, _savedWindowW, _savedWindowH);
-				} else {
-					saveSize();
-					_holder._window.setLocation(_screenBounds.x, _screenBounds.y);
-					_holder.setWindowSize(_screenBounds.width, _screenBounds.height);
-				}
-			}
-		}
-		_lastMousePress = 5;
+//		if (_lastMousePress > 0){
+//			if (_mouseDownY < _topBarHeight && _resizingSides.size() == 0){
+//				if (_holder._w == _screenBounds.width && _holder._h == _screenBounds.height){
+//					_holder.setWindowBounds(_savedWindowX, _savedWindowY, _savedWindowW, _savedWindowH);
+//				} else {
+//					saveSize();
+//					_holder._window.setLocation(_screenBounds.x, _screenBounds.y);
+//					_holder.setWindowSize(_screenBounds.width, _screenBounds.height);
+//				}
+//			}
+//		}
+//		_lastMousePress = 4;
 
 		return true;
 	}
