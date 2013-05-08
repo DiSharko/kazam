@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A chat server, listening for incoming connections and passing them
@@ -17,6 +18,9 @@ public class InputServer extends Thread {
 	private AtomicBoolean _started;
 	private AtomicBoolean _running;
 	private int _idCounter;
+	private AtomicInteger _playerCounter;
+	
+	private static int MAX_PLAYERS = 6;
 	
 	/**
 	 * Initialize a server on the given port. This server will not listen until
@@ -33,6 +37,7 @@ public class InputServer extends Thread {
 		_running = running;
 		_started = started;
 		_idCounter = 0;
+		_playerCounter = new AtomicInteger(0);
 		try {
 			_socket = new ServerSocket(_port);
 		} catch (IOException e) {
@@ -55,10 +60,11 @@ public class InputServer extends Thread {
 			try {
 				clientConnection = _socket.accept();
 				
-				// fork input handler if not started
-				if (!_started.get()) {
+				// fork input handler if not started and not too many players
+				if (!_started.get() && _playerCounter.get() < MAX_PLAYERS) {
 					_idCounter--;
-					InputHandler inputHandler = new InputHandler(clientConnection,_inputs,_running,_idCounter);
+					_playerCounter.incrementAndGet();
+					InputHandler inputHandler = new InputHandler(clientConnection,_inputs,_running,_idCounter,_playerCounter);
 					inputHandler.start();
 				} else { // else close socket
 					try {

@@ -5,14 +5,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.PriorityQueue;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import pvpmagic.spells.Spell;
 import screen.TextInputLine;
 
 
 public class GameData {
-	private int _needed;
+	public enum GameMode { CTF, TEAM_DEATHMATCH }
+	
+	private final int NEEDED = 3;
+
+	private int _needed = NEEDED;
 	public ArrayList<Unit> _units;
-	ArrayList<Player> _players;
+	
 	public String _gameType;
 
 	TeamData _teamdata;
@@ -20,17 +27,23 @@ public class GameData {
 	ArrayList<TeamData> _teams;
 	ArrayList<Player> _spawning;
 	
+	GameMode _gameMode;
 	public ArrayList<Player> _playerList; // pushed down from lobby/serverscreen
+	boolean _isClient;
+	AtomicInteger _idCounter;
 
-
-	public GameData(){
+	public GameData(ArrayList<Player> playerList, boolean isClient){
 		_units = new ArrayList<Unit>();
-		_players = new ArrayList<Player>();
+		_playerList = playerList;
 		_teams = new ArrayList<TeamData>();
 		_spawning = new ArrayList<Player>();
+		_isClient = isClient;
+		_idCounter = new AtomicInteger(0);
 	}
 
 	public void setup(SetupScreen s){
+		
+		/**
 		if (s._currentTab.id.equals("hostTab") ||  s._currentTab.id.equals("dedicatedServer")){
 			if (s.getElement("selectedMap").name == null || s.getElement("selectedMap").name.equals("Random")) {
 				for (int i = 0; i < 20; i++){
@@ -42,15 +55,24 @@ public class GameData {
 			else {
 				System.out.println("map name was not random: "+s.getElement("selectedMap").name);
 				try {
-					readInMap(s.getElement("selectedMap").name);
+					readInMap(s.getElement("selectedMap").name,null,null);
 				} catch (IOException e) {
 					System.out.println("IOException in setup.");
 					e.printStackTrace();
 				}
 			}
+		}**/
+		
+		try {
+			PriorityQueue<Player> playerQueue = new PriorityQueue<Player>(_playerList.size(),new PlayerComparator());
+			playerQueue.addAll(_playerList);
+			readInMap(s.getElement("selectedMap").name,_idCounter,playerQueue);
+		} catch (IOException e) {
+			System.out.println("IOException in setup.");
+			e.printStackTrace();
 		}
 
-		if (s._currentTab.id.equals("hostTab")){
+		if (!_isClient){
 //			String characterName = s.getElement("selectedCharacter").name;
 
 			String playerName = ((TextInputLine)s.getElement("playerName")).getText();
@@ -63,8 +85,8 @@ public class GameData {
 			Player p = new Player(this, "andrew", playerName, spells);
 			Player dummy = new Player(this, "diego", "bobby", null);
 
-			_players.add(p);
-			_players.add(dummy);
+			_playerList.add(p);
+			_playerList.add(dummy);
 			
 			_teams.get(0).addPlayer(p);
 			_teams.get(1).addPlayer(dummy);
@@ -94,7 +116,7 @@ public class GameData {
 
 
 	public void update(){
-		String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Confuse", "Felify"};
+		//String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Confuse", "Felify"};
 //		if (Math.random() < 0.1){
 //			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*useableSpells.length)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
 //		}
@@ -203,7 +225,7 @@ public class GameData {
 		}
 	}
 
-	public void readInMap(String mapname) throws IOException {
+	public void readInMap(String mapname, AtomicInteger counter, PriorityQueue<Player> pq) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/data/maps/"+mapname+".txt")));
 		String line; String[] linearr;
 		
@@ -216,6 +238,7 @@ public class GameData {
 				_needed = 12;
 				for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
 					DeathmatchTeamData data = new DeathmatchTeamData(i, this);
+					data._netID = counter.getAndIncrement();
 					_teams.add((TeamData)data);
 					_units.add((Unit)data);
 				}
@@ -224,6 +247,7 @@ public class GameData {
 				_needed = 3;
 				for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
 					FlagTeamData data = new FlagTeamData(i, this);
+					data._netID = counter.getAndIncrement();
 					_teams.add((TeamData)data);
 					_units.add((Unit)data);
 				}
@@ -242,36 +266,50 @@ public class GameData {
 			if(linearr[0].equals("ROCK")) {
 				//line represents a rock: ROCK,500,500,150
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Rock(this, pos, Double.parseDouble(linearr[3]),"rock"));
-
+				Rock r = new Rock(this, pos, Double.parseDouble(linearr[3]),"rock");
+				r._netID = counter.getAndIncrement();
+				_units.add(r);
+				
 			} else if(linearr[0].equals("SPAWN")) {
 				//line represents a spawn point
 				Vector spawn = new Vector(Double.parseDouble(linearr[2]),-1.0*Double.parseDouble(linearr[3]));
 				_teams.get(Integer.parseInt(linearr[1])).addSpawn(spawn);
+				
 			} else if (linearr[0].equals("PILLAR")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Pillar(this, pos, Double.parseDouble(linearr[3]), "pillar"));
+				Pillar p = new Pillar(this, pos, Double.parseDouble(linearr[3]), "pillar");
+				p._netID = counter.getAndIncrement();
+				_units.add(p);
 
 			} else if (linearr[0].equals("HWALL")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Wall(this, pos, Double.parseDouble(linearr[3]), false));
+				Wall w = new Wall(this, pos, Double.parseDouble(linearr[3]), false);
+				w._netID = counter.getAndIncrement();
+				_units.add(w);
 
 			} else if (linearr[0].equals("VWALL")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Wall(this, pos, Double.parseDouble(linearr[3]), true));
+				Wall w = new Wall(this, pos, Double.parseDouble(linearr[3]), true);
+				w._netID = counter.getAndIncrement();
+				_units.add(w);
 
 			} else if(linearr[0].equals("DOOR")) {
 				//line represents a door: DOOR,500,500,250,250,50
 				Vector lockpos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Door(this, lockpos, Double.parseDouble(linearr[3]),"door_closed"));
+				Door d = new Door(this, lockpos, Double.parseDouble(linearr[3]),"door_closed");
+				d._netID = counter.getAndIncrement();
+				_units.add(d);
 			} else if(linearr[0].equals("FLAG")) {
 				//line represents a flag: FLAG,500,500,50
 				Vector pos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Flag(this, pos, Double.parseDouble(linearr[3]),"flag"));
+				Flag f = new Flag(this, pos, Double.parseDouble(linearr[3]),"flag");
+				f._netID = counter.getAndIncrement();
+				_units.add(f);
 
 			} else if (linearr[0].equals("PEDASTAL")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[2]), -1.0*Double.parseDouble(linearr[3]));
 				FlagPedestal pd = new FlagPedestal(this, pos, Double.parseDouble(linearr[4]),"rock");
+				pd._netID = counter.getAndIncrement();
 				_units.add(pd);
 				FlagTeamData ft = (FlagTeamData) _teams.get(Integer.parseInt(linearr[1]));
 				ft.setPed(pd);
@@ -281,6 +319,16 @@ public class GameData {
 			}
 		}
 		br.close();
+		
+		int curr = 0;
+		int max = this._teams.size();
+		Player p;
+		while (!pq.isEmpty()) {
+			p = pq.poll();
+			_teams.get(curr).addPlayer(p);
+			curr++;
+			if (curr == max) curr = 0;
+		}
 	}
 	
 	/**

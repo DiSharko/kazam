@@ -52,12 +52,13 @@ public class WelcomeScreen extends Screen {
 		g.setColor(Color.gray);
 		g.fillRect(0, 0, _holder._w, _holder._h);
 
-		g.setFont(new Font("Helvetica", Font.PLAIN, 72));
-		String s = "Kazam";
-		int sWidth = (int)g.getFontMetrics().getStringBounds(s, g).getWidth();
-		
-		g.setColor(Color.black);
-		g.drawString(s, (int)(_holder._w/2-sWidth/2), 150);
+//		g.setFont(new Font("Helvetica", Font.PLAIN, 72));
+//		String s = "Kazam";
+//		int sWidth = (int)g.getFontMetrics().getStringBounds(s, g).getWidth();
+//		
+//		g.setColor(Color.black);
+//		g.drawString(s, (int)(_holder._w/2-sWidth/2), 150);
+		g.drawImage(Resource.get("splashlogo"), (int)(_holder._w/2-660/2), 106, null);
 
 		if (hoverElement != null){
 			int bx = (int) hoverElement.x;

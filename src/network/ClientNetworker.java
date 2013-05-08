@@ -47,15 +47,26 @@ public class ClientNetworker implements ClientNetworkable {
 			_getThread = new ClientGetThread(_clientGet,_initData,_gameData,_connected,_started);
 			_getThread.start();
 		} catch (IOException e) {
+			disconnect();
 			throw new NetworkException(e.getMessage());
 		}
 	}
 
 	@Override
 	public void disconnect() {
+		_connected.set(false);
+		
 		// close clients
-		_getThread.kill();
-		_sendThread.kill();
+		try {
+			_getThread.kill();
+		} catch (Exception e) {
+			// ignore as disconnecting
+		}
+		try {
+			_sendThread.kill();
+		} catch (Exception e) {
+			// ignore as disconnecting
+		}
 	}
 
 }

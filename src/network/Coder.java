@@ -141,12 +141,12 @@ public class Coder {
 			ArrayList<Player> removing = new ArrayList<Player>(data._playerList.size());
 			for (Player player : data._playerList) {
 				if (!player._connected) {
-					staticMap.remove(player._netID);
 					removing.add(player);
 				}
 			}
 			for (Player player : removing) {
 				data._playerList.remove(player);
+				staticMap.remove(player._netID);
 			}
 			
 			// update game state
@@ -166,7 +166,7 @@ public class Coder {
 	 * @param playerMap Map of players to IDs.
 	 * @throws BadProtocolException If the input string deviates protocol.  Recommend disconnection of or ignoring client.
 	 */
-	public static void handleEvent(String[] eventString, Player p, GameData data, HashMap<Integer,Player> playerMap) throws BadProtocolException {
+	public static void handleEvent(String[] eventString, GameData data, HashMap<Integer,Player> playerMap) throws BadProtocolException {
 		try {
 			// check for disconnection
 			if (eventString[0].equals("DISCONNECTION")) {
@@ -175,6 +175,7 @@ public class Coder {
 			} else {
 				//eventString is in the format netID \t timestamp \t <data>
 				Vector target = Vector.fromNet(eventString[3]);
+				Player p = playerMap.get(Integer.parseInt(eventString[0]));
 				if (eventString[2].equals("Q")) {
 					data.startCastingSpell(p, p._spells[0], target);
 				} else if (eventString[2].equals("W")){

@@ -13,7 +13,7 @@ public class HideSpell extends Spell {
 	}
 	
 	public void hide() {
-		if (_caster != null) _caster.hide(3500);
+		if (_caster != null) _caster.hide(3500, _caster);
 		this.die();
 	}
 }

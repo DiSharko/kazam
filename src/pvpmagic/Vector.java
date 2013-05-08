@@ -90,11 +90,11 @@ public class Vector {
 	}
 	
 	public String toNet() {
-		return x + " " + y;
+		return x + "," + y;
 	}
 	
 	public static Vector fromNet(String vectorString) throws IllegalArgumentException {
-		String[] vec = vectorString.split(" ");
+		String[] vec = vectorString.split(",");
 		if (vec.length != 2) {
 			throw new IllegalArgumentException("ERROR: More than 2 values. Invalid vector string.");
 		} else {

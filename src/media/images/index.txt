@@ -32,6 +32,7 @@ misc/chris
 misc/miraj
 misc/flag
 misc/menu
+misc/logo
 misc/confuseEffect
 misc/burnEffect
 misc/silenceEffect

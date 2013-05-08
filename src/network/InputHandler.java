@@ -8,19 +8,22 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class InputHandler extends Thread {
 	private Socket _client;
 	private PriorityBlockingQueue<String> _inputs;
 	private AtomicBoolean _running;
 	private int _id;
+	private AtomicInteger _playerCounter;
 	
-	public InputHandler(Socket client, PriorityBlockingQueue<String> inputs, AtomicBoolean running, int id) {
+	public InputHandler(Socket client, PriorityBlockingQueue<String> inputs, AtomicBoolean running, int id, AtomicInteger playerCounter) {
 		// TODO add id counter
 		_client = client;
 		_inputs = inputs;
 		_running = running;
 		_id = id;
+		_playerCounter = playerCounter;
 	}
 	
 	@Override
@@ -60,6 +63,7 @@ public class InputHandler extends Thread {
 		}
 		// declare disconnect
 		_inputs.put("DISCONNECTION\t" + _id);
+		_playerCounter.decrementAndGet();
 	}
 	
 }

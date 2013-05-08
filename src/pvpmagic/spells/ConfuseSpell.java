@@ -28,10 +28,10 @@ public class ConfuseSpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
-		target.changeHealth(-5);
+		target.changeHealth(-5, _caster);
 		if (target._type.equals(Player.TYPE)) {
 			Player p = (Player) target;
-			p.confuse(3000);
+			p.confuse(3000, _caster);
 			this.die();
 		}
 	}

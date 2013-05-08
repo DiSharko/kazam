@@ -95,10 +95,10 @@ public abstract class Unit {
 	boolean _canBeRooted = false;
 	public boolean _isRooted = false;
 	
-	public RootEffect root(long time){
+	public RootEffect root(long time, Player caster){
 		if (_canBeRooted) _isRooted = true;
 		_vel = new Vector(0,0);
-		RootEffect t = new RootEffect(numberOfIntervals(time), this);
+		RootEffect t = new RootEffect(numberOfIntervals(time), caster, this);
 		_timedEffects.put(t._type, t);
 		return t;
 	}
@@ -109,14 +109,14 @@ public abstract class Unit {
 	boolean _canBeSilenced = false;
 	boolean _isSilenced = false;
 	
-	public void silence(long time){ 
+	public void silence(long time, Player caster){ 
 		if (_canBeSilenced) _isSilenced = true; 
-		TimedEffect t = new SilenceEffect(numberOfIntervals(time), this);
+		TimedEffect t = new SilenceEffect(numberOfIntervals(time), caster, this);
 		_timedEffects.put(t._type, t);
 	}
-	public void kitty(long time){ 
+	public void kitty(long time, Player caster){ 
 		if (_canBeSilenced) _isSilenced = true; 
-		TimedEffect t = new KittyEffect(numberOfIntervals(time), this);
+		TimedEffect t = new KittyEffect(numberOfIntervals(time), caster, this);
 		_timedEffects.put(t._type, t);
 	}
 
@@ -139,14 +139,14 @@ public abstract class Unit {
 	
 	public void draw(View v){}
 	
-	public void changeMana(double amount) {
+	public void changeMana(double amount, Player caster) {
 		_mana += amount;
 		if (_mana < 0) _mana = 0;
 		else if (_mana > _maxMana) _mana = _maxMana;
 		//System.out.println("REDUCED MANA BY: " + amount + " MANA: " + _health);
 	}
 	
-	public void changeHealth(double amount) {
+	public void changeHealth(double amount, Player caster) {
 		_health += amount;
 		if (_health > _maxHealth) _health = _maxHealth;
 		//System.out.println("REDUCED HEALTH BY: " + amount + " HP: " + _health);
@@ -157,13 +157,15 @@ public abstract class Unit {
 	 * @param amount Amount to change mana (negative denotes decrease)
 	 * @param time Duration of effect in milliseconds
 	 */
-	public void changeMana(int amount, long time) {
+	public void changeMana(int amount, long time, Player caster) {
 		double intervals = numberOfIntervals(time);
 		TimedEffect t;
 		if (amount < 0) {
-			t = new ManaBurnEffect(intervals, changePerInterval(amount, intervals), this);	
+			t = new ManaBurnEffect(intervals, changePerInterval(amount, intervals), 
+					caster, this);	
 		} else {
-			t = new ManaBoostEffect(intervals, changePerInterval(amount, intervals), this);
+			t = new ManaBoostEffect(intervals, changePerInterval(amount, intervals), 
+					caster, this);
 		}
 		_timedEffects.put(t._type, t);
 		
@@ -173,13 +175,15 @@ public abstract class Unit {
 	 * @param amount Amount to change health (negative denotes decrease)
 	 * @param time Duration of effect in milliseconds
 	 */
-	public void changeHealth(int amount, long time) {
+	public void changeHealth(int amount, long time, Player caster) {
 		double intervals = numberOfIntervals(time);
 		TimedEffect t;
 		if (amount < 0) {
-			t = new HealthBurnEffect(intervals, changePerInterval(amount, intervals), this);
+			t = new HealthBurnEffect(intervals, changePerInterval(amount, intervals), 
+					caster, this);
 		} else {
-			t = new HealthBoostEffect(intervals, changePerInterval(amount, intervals), this);
+			t = new HealthBoostEffect(intervals, changePerInterval(amount, intervals), 
+					caster, this);
 		}
 		_timedEffects.put(t._type, t);	
 	}
