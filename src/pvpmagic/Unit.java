@@ -117,7 +117,8 @@ public abstract class Unit {
 	}
 	public void kitty(long time){ 
 		if (_canBeSilenced) _isSilenced = true; 
-		_timedEffects.add(new KittyEffect(numberOfIntervals(time), this));
+		TimedEffect t = new KittyEffect(numberOfIntervals(time), this);
+		_timedEffects.put(t._type, t);
 	}
 
 	public void collide(Collision c){

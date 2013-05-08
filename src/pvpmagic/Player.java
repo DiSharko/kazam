@@ -91,15 +91,6 @@ public class Player extends Unit {
 
 		_old = v.getGraphics().getComposite();
 		if (_hidden < 1) {
-			AlphaComposite ac = java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden);
-			v.getGraphics().setComposite(ac);
-			v.drawImage(Resource.get(_basicImage), _pos, _size);
-		} else if (_hidden == 1) {
-			v.drawImage(Resource.get(_basicImage), _pos, _size);
-		}
-		v.getGraphics().setComposite(_old);
-		v.drawImage(Resource.get(_basicImage), _pos, _size);
-		if (_hidden < 1) {
 			Composite old = v.getGraphics().getComposite();
 
 			v.getGraphics().setComposite(java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden));

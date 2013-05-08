@@ -42,7 +42,7 @@ public class FlagPedestal extends Unit {
 	@Override
 	public void collide(Collision c){
 		Unit u = c.other(this);
-		if (u._type.equals("Player")) {
+		if (u._type.equals(Player.TYPE)) {
 			Player p = (Player) u;
 			if (p._flag != null){
 				_flag = p._flag;

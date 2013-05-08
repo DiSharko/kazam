@@ -4,6 +4,8 @@ import java.awt.Image;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import pvpmagic.spells.Spell;
+
 
 public class Rock extends Unit {
 	public static Boolean STATICOBJ = true;
@@ -53,7 +55,7 @@ public class Rock extends Unit {
 	@Override
 	public void collide(Collision c){
 		Unit u = c.other(this);
-		if (u._type.equals("spell")){
+		if (u instanceof Spell){
 			u._health -= 10;
 		}
 	}

@@ -24,7 +24,7 @@ public class OpenSpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
-		if (target._type.equals("Door")) {
+		if (target._type.equals(Door.TYPE)) {
 			Door door = (Door) target;
 			door.open();
 			this.die();
