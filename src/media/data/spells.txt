@@ -2,9 +2,9 @@ Abracadabra
 Burn
 Cleanse
 Clone
+Confuse
 Dash
 Disarm
-Fear
 Felify
 Flash
 Hide

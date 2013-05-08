@@ -5,10 +5,9 @@ import java.awt.Composite;
 import java.awt.Image;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map.Entry;
 
-import pvpmagic.spells.FlashSpell;
+import pvpmagic.spells.DashSpell;
 import pvpmagic.spells.HideSpell;
 import pvpmagic.spells.Spell;
 
@@ -18,8 +17,10 @@ public class Player extends Unit {
 	public Vector _spawn;
 	public int _teamNum;
 	public int _spawnTimer = 0;
+	private int _flagGrabTimer = 0;
+	public boolean _flagable = true;
 	
-	String _characterName;
+	public String _characterName;
 	String _playerName;
 
 	public Vector _destination;
@@ -44,7 +45,7 @@ public class Player extends Unit {
 	double _velocity = 8;
 
 	public Player(GameData data, String characterName, String playerName, String[] spellNames){
-		super(data, TYPE, STATICOBJ);
+		super(data, TYPE, STATICOBJ, characterName);
 		_canBeRooted = true;
 		_canBeSilenced = true;
 
@@ -52,9 +53,11 @@ public class Player extends Unit {
 
 		_health = 100;
 		_mana = 100;
-		
-		_characterName = characterName;
 
+		_characterName = characterName;
+		_basicImage = _characterName;
+		_playerName = playerName;
+		
 		_pos = new Vector(-50, -20);
 		Image sprite = Resource.get(_characterName);
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70);
@@ -65,8 +68,6 @@ public class Player extends Unit {
 		_spells = spellNames;
 		_spellCastingTimes = new HashMap<String, Long>();
 
-		_characterName = characterName;
-		_playerName = playerName;
 
 		this._restitution = 0;
 
@@ -76,18 +77,16 @@ public class Player extends Unit {
 
 	@Override
 	public void draw(View v){
-
-		for (TimedEffect e : _timedEffects){
-			if (!e._display) continue;
-			if (e._type.equals(RootEffect.TYPE)){
-				v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
-			}
+		TimedEffect t = _timedEffects.get("Root");
+		if (t != null && t._type.equals(RootEffect.TYPE) && t._display){
+			v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
 		}
 
 		if (_flag != null) {
 			Vector flagPos = _pos.plus(40, 0);
 			v.rotate(new Vector(1.5, -1), flagPos);
-			v.drawImage(Resource.get("flag"), flagPos, _flag._size.mult(0.8));
+			
+			v.drawImage(Resource.get(_flag._basicImage), flagPos, _flag._size.mult(0.8));
 			v.unrotate();
 		}
 
@@ -95,37 +94,23 @@ public class Player extends Unit {
 		if (_hidden < 1) {
 			AlphaComposite ac = java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden);
 			v.getGraphics().setComposite(ac);
-			v.drawImage(Resource.get(_characterName), _pos, _size);
+			v.drawImage(Resource.get(_basicImage), _pos, _size);
 		} else if (_hidden == 1) {
-			v.drawImage(Resource.get(_characterName), _pos, _size);
+			v.drawImage(Resource.get(_basicImage), _pos, _size);
 		}
 		v.getGraphics().setComposite(_old);
-		v.drawImage(Resource.get(_characterName), _pos, _size);
-		if (_hidden < 1) {
-			Composite old = v.getGraphics().getComposite();
-
-			v.getGraphics().setComposite(java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden));
-			v.drawImage(Resource.get(_characterName), _pos, _size);
-
-			v.getGraphics().setComposite(old);
-		} else if (_hidden == 1) {
-			v.drawImage(Resource.get(_characterName), _pos, _size);
-		}
-
-		if (_isSilenced){
-
-		}
-		for (TimedEffect e : _timedEffects){
-			if (!e._display) continue;
-			if (e._type.equals(ConfuseEffect.TYPE)){
-				v.drawImage(Resource.get("confuseEffect"), _pos.plus(10, -30), 30);
-			} else if (e._type.equals(SilenceEffect.TYPE)){
-				v.drawImage(Resource.get("silenceEffect"), _pos.plus(30, -10), 30);
-			} else if (e._type.equals(HealthEffect.TYPE)){
-				if (e._changePerInterval < 0){
-					v.drawImage(Resource.get("burnEffect"), _pos.plus(3, _size.y-35), 50);
-				}
-			}
+		
+		t = _timedEffects.get(ConfuseEffect.TYPE);
+		if (t != null && t._type.equals(ConfuseEffect.TYPE) && t._display){
+			v.drawImage(Resource.get("confuseEffect"), _pos.plus(10, -30), 30);
+		} 
+		t = _timedEffects.get(SilenceEffect.TYPE);
+		if (t != null && t._type.equals(SilenceEffect.TYPE) && t._display){
+			v.drawImage(Resource.get("silenceEffect"), _pos.plus(30, -10), 30);
+		} 
+		t = _timedEffects.get(HealthBurnEffect.TYPE);
+		if (t != null && t._type.equals(HealthBurnEffect.TYPE) && t._display){
+			v.drawImage(Resource.get("burnEffect"), _pos.plus(3, _size.y-35), 50);
 		}
 
 	}
@@ -147,7 +132,14 @@ public class Player extends Unit {
 	@Override
 	public void update(){
 		super.update();
-
+		if(_flag != null) _flag.update();
+		if (_flagGrabTimer == 0) {
+			_flagable = true;
+		} else if (_flagGrabTimer > 0) {
+			_flagable = false;
+			_flagGrabTimer -= 1;
+		}
+		
 		//flag-stun checking
 		if(_isRooted && _isSilenced)
 			dropFlag();
@@ -197,9 +189,9 @@ public class Player extends Unit {
 
 	public void castSpell(Spell spell) {
 		_spellCastingTimes.put(spell._name, System.currentTimeMillis());
-		if (spell._name.equals("Flash")) {
-			FlashSpell s = (FlashSpell) spell;
-			s.flash();
+		if (spell._name.equals("Dash")) {
+			DashSpell s = (DashSpell) spell;
+			s.dash();
 		} else if (spell._name.equals("Hide")) {
 			HideSpell s = (HideSpell) spell;
 			s.hide();
@@ -217,22 +209,31 @@ public class Player extends Unit {
 		if (_flag == null) {
 			return; //nothing happens
 		} else {
-			double newx = 50 - Math.random()*101;
-			double newy = 50 - Math.random()*101;
-			Vector newpos = new Vector(this._pos.x + newx,this._pos.y + newy);
-			_flag._pos = newpos;
+			_flag._pos = this._pos;
+			double x = Math.random()*11 - 5;
+			double y = Math.random()*11 - 5;
+			while((x==0) && (y==0)) {
+				x = Math.random()*11 - 5;
+				y = Math.random()*11 - 5;
+			}
+			Vector newforce = new Vector(x,y).normalize().mult(5);
+			_flag.applyForce(newforce); 
 			_flag._delete = false;
 			_data._units.add(_flag);
+			_flagable = false;
+			_flagGrabTimer = 50;
 			_flag = null;
 		}
 	}
 
-	public void fear(long time) {
-		_timedEffects.add(new ConfuseEffect(numberOfIntervals(time), this));		
+	public void confuse(long time) {
+		TimedEffect t = new ConfuseEffect(numberOfIntervals(time), this);
+		_timedEffects.put(t._type, t);		
 	}
 
 	public void hide(long time) {
-		_timedEffects.add(new HideEffect(numberOfIntervals(time), this));
+		TimedEffect t = new HideEffect(numberOfIntervals(time), this);
+		_timedEffects.put(t._type, t);
 	}
 	@Override
 	public String toNet() {
@@ -241,8 +242,10 @@ public class Player extends Unit {
 			lastCastTimes += e.getKey() + "," + e.getValue() + ".";
 		}
 		String timedEffectsStr = "";
-		for (TimedEffect e : _timedEffects) {
-			timedEffectsStr += e.toNet() + ".";
+		for (Entry<String,TimedEffect> e : _timedEffects.entrySet()) {
+			if (e.getValue() != null) {	
+				timedEffectsStr += e.getValue().toNet() + ".";
+			}
 		}
 		return _netID +              						//index: 0
 				"\t" + (_staticObj ? "static" : _type) +  	//index: 1
@@ -279,10 +282,10 @@ public class Player extends Unit {
 			}
 			String[] tEffects; TimedEffect ef;
 			tEffects = networkString[8].split(".");
-			_timedEffects = new LinkedList<TimedEffect>();
+			_timedEffects = new HashMap<String, TimedEffect>();
 			for (String effect : tEffects) {
 				ef = TimedEffect.fromNet(effect, this);
-				if (ef != null) _timedEffects.add(ef);
+				if (ef != null) _timedEffects.put(ef._type, ef);
 			}
 
 		}

@@ -22,11 +22,10 @@ public class DisarmSpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
-		if (target._type.equals(Player.TYPE)){
-			target.silence(3000);
-			target.changeHealth(-5);
-			_health = 0;
-			//TODO: possibly make it so that your wand also gets knocked away
+		target.changeHealth(-5);
+		if(target instanceof Player) {
+			target.silence(5000);
+			this.die();
 		}
 	}
 

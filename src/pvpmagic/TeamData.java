@@ -13,7 +13,7 @@ public abstract class TeamData extends Unit{
 	private int spawnIndex;
 	
 	public TeamData (int teamNum, GameData data, String type) {
-		super(data, type, STATICOBJ);
+		super(data, type, STATICOBJ, null);
 		_spawnList = new ArrayList<Vector>();
 		_playerList = new ArrayList<Player>();
 		TEAM_NUM = teamNum;

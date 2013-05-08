@@ -17,8 +17,8 @@ public class Door extends Unit {
 	
 	private double _sizeScalar;
 	
-	public Door(GameData data, Vector pos, double size){
-		super(data, TYPE, STATICOBJ);
+	public Door(GameData data, Vector pos, double size, String basicImage){
+		super(data, TYPE, STATICOBJ, basicImage);
 		_pos = pos;
 		_sizeScalar = size;
 		
@@ -37,16 +37,16 @@ public class Door extends Unit {
 	}
 	
 	public void draw(View v){
-		v.drawImage(_locked ? Resource.get("door_closed") : Resource.get("door_open"), _pos, _size);
+		super.draw(v);
+		v.drawImage(Resource.get(_basicImage), _pos, _size);
 	}
 
 	@Override
 	public boolean canCollideWith(Unit u){
-		if (!_locked){
+		if (_basicImage.equals("door_open")){
 			if (u._type.equals(LockSpell.TYPE)) return true;
 			return false;
 		}
-		
 		return true;
 	}
 	
@@ -59,11 +59,11 @@ public class Door extends Unit {
 	}	
 	
 	public void lock() {
-		_locked = true;
+		_basicImage = "door_closed";
 		_size = _lockedSize;
 	}
 	public void open() {
-		_locked = false;
+		_basicImage = "door_open";
 		_size = _openSize;
 	}
 	

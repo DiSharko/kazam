@@ -4,14 +4,17 @@ import java.awt.Image;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import pvpmagic.spells.Spell;
+
 
 public class Rock extends Unit {
 	public static Boolean STATICOBJ = true;
 	public static String TYPE = "Rock";
-
+	private boolean _dead = false;
 	
-	public Rock(GameData data, Vector pos, double size){
-		super(data, TYPE, STATICOBJ);
+	public Rock(GameData data, Vector pos, double size, String basic){
+		super(data, TYPE, STATICOBJ, basic);
+		_basicImage = "rock";
 		_pos = pos;
 		Image sprite = Resource.get("rock");
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(size);
@@ -30,18 +33,30 @@ public class Rock extends Unit {
 	}
 	
 	public void draw(View v){
-		v.drawImage(Resource.get("rock"), _pos, _size);
+		super.draw(v);
+		if (!_dead) v.drawImage(Resource.get(_basicImage), _pos, _size);
+		else v.drawImage(Resource.get("deadrock"), _pos, _size);
 	}
 
 	@Override
-	public void changeHealth(double health){}
+	public void changeHealth(double amount){
+		System.out.println("rock hit");
+		_health -= 20;
+	}
+	
+	@Override
+	public void die(){
+		System.out.println("rock died");
+		_dead = true;
+		_collidable = false;
+		_drawUnder = true;
+	}
 	
 	@Override
 	public void collide(Collision c){
 		Unit u = c.other(this);
-		if (u._type.equals("spell")){
+		if (u instanceof Spell){
 			u._health -= 10;
-//			u._delete = true;
 		}
 	}
 	

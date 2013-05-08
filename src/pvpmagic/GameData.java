@@ -36,7 +36,7 @@ public class GameData {
 				for (int i = 0; i < 20; i++){
 					Vector pos = new Vector(Math.random()*600-300, Math.random()*600-300);
 
-					_units.add(new Rock(this, pos, Math.random()*50+20));
+					_units.add(new Rock(this, pos, Math.random()*50+20, "rockd"));
 				}
 			}
 			else {
@@ -98,7 +98,7 @@ public class GameData {
 
 
 	public void update(){
-		String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Fear", "Abracadabra"};
+		String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Confuse", "Felify"};
 		if (Math.random() < 0.1){
 			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*useableSpells.length)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
 		}
@@ -229,7 +229,7 @@ public class GameData {
 			if(linearr[0].equals("ROCK")) {
 				//line represents a rock: ROCK,500,500,150
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Rock(this, pos, Double.parseDouble(linearr[3])));
+				_units.add(new Rock(this, pos, Double.parseDouble(linearr[3]),"rock"));
 
 			} else if(linearr[0].equals("SPAWN")) {
 				//line represents a spawn point
@@ -237,7 +237,7 @@ public class GameData {
 				_teams.get(Integer.parseInt(linearr[1])).addSpawn(spawn);
 			} else if (linearr[0].equals("PILLAR")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Pillar(this, pos, Double.parseDouble(linearr[3])));
+				_units.add(new Pillar(this, pos, Double.parseDouble(linearr[3]), "pillar"));
 
 			} else if (linearr[0].equals("HWALL")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
@@ -250,18 +250,16 @@ public class GameData {
 			} else if(linearr[0].equals("DOOR")) {
 				//line represents a door: DOOR,500,500,250,250,50
 				Vector lockpos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Door(this, lockpos, Double.parseDouble(linearr[3])));
-
+				_units.add(new Door(this, lockpos, Double.parseDouble(linearr[3]),"door_closed"));
 			} else if(linearr[0].equals("FLAG")) {
 				//line represents a flag: FLAG,500,500,50
 				Vector pos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Flag(this, pos, Double.parseDouble(linearr[3])));
+				_units.add(new Flag(this, pos, Double.parseDouble(linearr[3]),"flag"));
 
 			} else if (linearr[0].equals("PEDASTAL")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[2]), -1.0*Double.parseDouble(linearr[3]));
-				FlagPedestal pd = new FlagPedestal(this, pos, Double.parseDouble(linearr[4]));
+				FlagPedestal pd = new FlagPedestal(this, pos, Double.parseDouble(linearr[4]),"rock");
 				_units.add(pd);
-
 				FlagTeamData ft = (FlagTeamData) _teams.get(Integer.parseInt(linearr[1]));
 				ft.setPed(pd);
 			} else {

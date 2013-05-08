@@ -18,7 +18,7 @@ public class CloneSpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		//do nothing if it hits something, just disappear
-		this._delete = true;
+		this.die();
 	}
 	
 	@Override
@@ -29,6 +29,6 @@ public class CloneSpell extends Spell {
 			v.drawImage(Resource.get("flag"), flagPos, _caster._flag._size.mult(0.8));
 			v.unrotate();
 		}
-		v.drawImage(Resource.get("player1_back"), _pos, _caster._size);
+		v.drawImage(Resource.get(_caster._characterName), _pos, _caster._size);
 	}
 }
