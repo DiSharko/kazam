@@ -235,8 +235,8 @@ public class GameScreen extends Screen {
 		_view._camera = _focus._pos;
 		_view._scale = (Math.min(_holder._h, _holder._w))/600.0;
 
-		//_view._camera = new Vector(750,-550);
-		//_view._scale = .3;
+//		_view._camera = new Vector(750,-550);
+//		_view._scale = 0.3;
 		//System.out.println(_view._scale);
 
 		if (_focus != null){
@@ -339,7 +339,7 @@ public class GameScreen extends Screen {
 		if (key == KeyEvent.VK_P){
 			System.out.println(_view.screenToGamePoint(new Vector(_xMouse, _yMouse)));
 			
-		_netOutputs.add(eventNetString);
+		//_netOutputs.add(eventNetString);
 		}
 
 	}
