@@ -46,7 +46,6 @@ public class Flag extends Unit {
 			Player player = (Player) u;
 			if(player._flagable) {
 				player._flag = this;
-				System.out.println("player has flag");
 				_delete = true;
 				_vel = new Vector(0,0);
 				_force = new Vector(0,0);

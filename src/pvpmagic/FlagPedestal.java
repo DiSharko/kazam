@@ -32,8 +32,6 @@ public class FlagPedestal extends Unit {
 	public void draw(View v){
 		if (_flag == null)
 			v.drawImage(Resource.get(_basicImage), _pos, _size);
-		else
-			v.drawImage(Resource.get("hwall"), _pos, _size);
 	}
 
 	@Override

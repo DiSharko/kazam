@@ -39,25 +39,7 @@ public class GameData {
 	}
 
 	public void setup(SetupScreen s){
-		if (s._currentTab.id.equals("hostTab") ||  s._currentTab.id.equals("dedicatedServer")){
-			if (s.getElement("selectedMap").name == null || s.getElement("selectedMap").name.equals("Random")) {
-				for (int i = 0; i < 20; i++){
-					Vector pos = new Vector(Math.random()*600-300, Math.random()*600-300);
-
-					_units.add(new Rock(this, pos, Math.random()*50+20, "rockd"));
-				}
-			}
-			else {
-				System.out.println("map name was not random: "+s.getElement("selectedMap").name);
-				try {
-					readInMap(s.getElement("selectedMap").name,null,null);
-				} catch (IOException e) {
-					System.out.println("IOException in setup.");
-					e.printStackTrace();
-				}
-			}
-		}
-
+		PriorityQueue<Player> pq = new PriorityQueue<Player>();
 		if (s._currentTab.id.equals("hostTab")){
 //			String characterName = s.getElement("selectedCharacter").name;
 
@@ -74,13 +56,20 @@ public class GameData {
 			_players.add(p);
 			_players.add(dummy);
 			
-			_teams.get(0).addPlayer(p);
-			_teams.get(1).addPlayer(dummy);
-			
 			_units.add(p);
 			_units.add(dummy);
-			dummy._pos = new Vector(-50, -30);
-
+			
+			pq.add(p);
+			pq.add(dummy);
+		}
+		if (s._currentTab.id.equals("hostTab") ||  s._currentTab.id.equals("dedicatedServer")){
+			//map selected, read it in
+			try {
+				readInMap(s.getElement("selectedMap").name,new AtomicInteger(),pq);
+			} catch (IOException e) {
+				System.out.println("IOException in setup.");
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -294,7 +283,7 @@ public class GameData {
 
 			} else if (linearr[0].equals("PEDASTAL")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[2]), -1.0*Double.parseDouble(linearr[3]));
-				FlagPedestal pd = new FlagPedestal(this, pos, Double.parseDouble(linearr[4]),"rock");
+				FlagPedestal pd = new FlagPedestal(this, pos, Double.parseDouble(linearr[4]),"flagPedestal");
 				pd._netID = counter.getAndIncrement();
 				_units.add(pd);
 				FlagTeamData ft = (FlagTeamData) _teams.get(Integer.parseInt(linearr[1]));
