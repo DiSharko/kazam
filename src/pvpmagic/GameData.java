@@ -11,7 +11,7 @@ import screen.TextInputLine;
 
 public class GameData {
 	private final int NEEDED = 3;
-	ArrayList<Unit> _units;
+	public ArrayList<Unit> _units;
 	ArrayList<Player> _players;
 
 	TeamData _teamdata;

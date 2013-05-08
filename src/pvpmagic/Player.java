@@ -24,7 +24,7 @@ public class Player extends Unit {
 	String _playerName;
 
 	public Vector _destination;
-
+	public boolean _connected;
 	double _spellCastingTime = 0;
 	Spell _spellToCast = null;
 	double _hidden = 1.0;
@@ -72,6 +72,8 @@ public class Player extends Unit {
 		this._restitution = 0;
 
 		_appliesFriction = true;
+		
+		_connected = true;
 
 	}
 
@@ -259,7 +261,10 @@ public class Player extends Unit {
 				"\t" + _isRooted +        					//index: 9
 				"\t" + _isSilenced +      					//index: 10
 				"\t" + lastCastTimes.substring(0, lastCastTimes.length() - 1) +
-				"\t" + timedEffectsStr.substring(0, timedEffectsStr.length() - 1);
+				"\t" + timedEffectsStr.substring(0, timedEffectsStr.length() - 1) +
+				"\t" + _basicImage +						//index: 13
+				"\t" + _connected;							//index: 14
+		
 
 		//when fromNet is called, throw away previous timed effects
 		//list, and instantiate new ones with (this) as target
@@ -273,15 +278,21 @@ public class Player extends Unit {
 			this._flag = (Flag) objectMap.get(Integer.parseInt(networkString[4]));
 			this._health = Double.parseDouble(networkString[5]);
 			this._mana = Double.parseDouble(networkString[6]);
+			this._vel = Vector.fromNet(networkString[7]);
+			this._force = Vector.fromNet(networkString[8]);
+			this._isRooted = Boolean.parseBoolean(networkString[9]);
+			this._isSilenced = Boolean.parseBoolean(networkString[10]);
+			this._basicImage = networkString[13];
+			this._connected = Boolean.parseBoolean(networkString[14]);
 
 			String[] lastCastTimes, sp;
-			lastCastTimes = networkString[7].split(".");
+			lastCastTimes = networkString[11].split(".");
 			for (String spell : lastCastTimes) {
 				sp = spell.split(",");
 				this._spellCastingTimes.put(sp[0], Long.parseLong(sp[1]));
 			}
 			String[] tEffects; TimedEffect ef;
-			tEffects = networkString[8].split(".");
+			tEffects = networkString[12].split(".");
 			_timedEffects = new HashMap<String, TimedEffect>();
 			for (String effect : tEffects) {
 				ef = TimedEffect.fromNet(effect, this);

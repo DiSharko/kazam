@@ -55,15 +55,17 @@ public class FlagPedestal extends Unit {
 	public String toNet() {
 		return _netID +
 				"\t" + (_staticObj ? "static" : _type) + 
-				"\t" + _flag._netID;
+				"\t" + _flag._netID +
+				"\t" + _basicImage;
 	}
 	
 	@Override
 	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
 		if (networkString[1].equals(_staticObj ? "static" : _type) 
 				&& _netID == Integer.parseInt(networkString[0])
-				&& networkString.length == 3) {
+				&& networkString.length == 4) {
 			_flag = (Flag) objectMap.get(Integer.parseInt(networkString[2]));
+			_basicImage = networkString[3];
 		}
 	}
 }

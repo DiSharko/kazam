@@ -35,11 +35,18 @@ public class Pillar extends Unit {
 		@Override
 		public String toNet() {
 			return _netID + 
-					"\t" + (_staticObj ? "static" : _type);
+					"\t" + (_staticObj ? "static" : _type) +
+					"\t" + _basicImage;
 		}
 
 		@Override
 		public void fromNet(String[] networkString,
-				HashMap<Integer, Unit> objectMap) {}
+				HashMap<Integer, Unit> objectMap) {
+			if (networkString[1].equals(_staticObj ? "static" : _type) 
+					&& _netID == Integer.parseInt(networkString[0])
+					&& networkString.length == 3) {
+				_basicImage = networkString[2];
+			}
+		}
 
 }
