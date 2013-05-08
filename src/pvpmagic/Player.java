@@ -259,8 +259,7 @@ public class Player extends Unit {
 	}
 	@Override
 	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
-		if (networkString[1].equals(_staticObj ? "static" : _type) 
-				&& validNetworkString(networkString, false)) {
+		if (networkString[1].equals(_staticObj ? "static" : _type)) {
 			this._pos = Vector.fromNet(networkString[2]);
 			this._destination = Vector.fromNet(networkString[3]);
 			this._flag = (Flag) objectMap.get(Integer.parseInt(networkString[4]));
@@ -300,7 +299,7 @@ public class Player extends Unit {
 
 	//networkString format = [id, type, <any data from toNetInit split on tabs>...]
 	public static Player fromNetInit(String[] networkString) {
-		if (networkString[1].equals("static") && validNetworkString(networkString, true)) {
+		if (networkString[1].equals("static")) {
 			String[] spells = networkString[4].split(" ");
 			Player p = new Player(null, networkString[2], networkString[3], spells);
 			p._destination = Vector.fromNet(networkString[6]);
@@ -310,14 +309,5 @@ public class Player extends Unit {
 		}
 		throw new RuntimeException("Called Player.fromNetInit on string: " 
 				+ Arrays.toString(networkString));
-	}
-
-	public static Boolean validNetworkString(String[] networkData, Boolean init) {
-		if ((init && networkData.length != 6) || (!init && networkData.length != 9)) {
-			System.err.println("ERROR: Invalid String from network - " + Arrays.toString(networkData));
-			return false;
-		} else {
-			return true;
-		}
 	}
 }

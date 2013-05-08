@@ -39,7 +39,7 @@ public class ClientSendThread extends Thread {
 			try {
 				_focusID.set(Integer.parseInt(line));
 			} catch (NumberFormatException e) {
-				
+				throw new IOException();
 			}
 			
 			// loop through commands
