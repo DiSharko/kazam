@@ -78,6 +78,9 @@ public class Player extends Unit {
 		this._restitution = 0;
 
 		_appliesFriction = true;
+		
+		_kills = 0;
+		_deaths = 0;
 	}
 
 	@Override
@@ -184,10 +187,11 @@ public class Player extends Unit {
 		if (_health > _maxHealth) _health = _maxHealth;
 		if (_health <= 0) {
 			caster._kills += 1;
-			System.out.println("GOT A KILL: ");
+			System.out.println("-----");
 			System.out.println(caster.toNet());
-			System.out.println("ON: ");
+			System.out.println("GOT A KILL ON: ");
 			System.out.println(this.toNet());
+			System.out.println("------");
 		}
 		//System.out.println("REDUCED HEALTH BY: " + amount + " HP: " + _health);
 	}
@@ -278,25 +282,29 @@ public class Player extends Unit {
 		if (timedEffectsStr.length() > 0) timedEffectsStr = 
 				timedEffectsStr.substring(0, timedEffectsStr.length() - 1);
 		
+		String pos = (_pos == null) ? null : _pos.toNet();
 		String dest = (_destination == null) ? null : _destination.toNet();
 		String flag = (_flag == null) ? null : Integer.toString(_flag._netID);
-		
+		String vel = (_vel == null) ? null : _vel.toNet();
+		String force = (_force == null) ? null : _force.toNet();
 		
 		return _netID +              						//index: 0
 				"\t" + (_staticObj ? "static" : _type) +  	//index: 1
-				"\t" + _pos.toNet() +      					//index: 2
+				"\t" + pos +      					//index: 2
 				"\t" + dest +				  				//index: 3
 				"\t" + flag +      							//index: 4
 				"\t" + _health +        					//index: 5
 				"\t" + _mana +          					//index: 6
-				"\t" + _vel.toNet() +      					//index: 7
-				"\t" + _force.toNet() +      				//index: 8
+				"\t" + vel +		      					//index: 7
+				"\t" + force +			      				//index: 8
 				"\t" + _isRooted +        					//index: 9
 				"\t" + _isSilenced +      					//index: 10
 				"\t" + lastCastTimes +
 				"\t" + timedEffectsStr +
 				"\t" + _basicImage +						//index: 13
-				"\t" + _connected;							//index: 14
+				"\t" + _connected +							//index: 14
+				"\t" + _kills +								//index: 15
+				"\t" + _deaths;								//index: 16
 		
 
 		//when fromNet is called, throw away previous timed effects
@@ -310,6 +318,14 @@ public class Player extends Unit {
 			this._flag = (Flag) objectMap.get(Integer.parseInt(networkString[4]));
 			this._health = Double.parseDouble(networkString[5]);
 			this._mana = Double.parseDouble(networkString[6]);
+			this._vel = Vector.fromNet(networkString[7]);
+			this._force = Vector.fromNet(networkString[8]);
+			this._isRooted = Boolean.parseBoolean(networkString[9]);
+			this._isSilenced = Boolean.parseBoolean(networkString[10]);
+			this._basicImage = networkString[13];
+			this._connected = Boolean.parseBoolean(networkString[14]);
+			this._kills = Integer.parseInt(networkString[15]);
+			this._deaths = Integer.parseInt(networkString[16]);
 
 			String[] lastCastTimes, sp;
 			lastCastTimes = networkString[7].split(".");
