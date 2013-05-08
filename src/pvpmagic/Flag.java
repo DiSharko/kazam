@@ -58,7 +58,8 @@ public class Flag extends Unit {
 		return _netID +
 				"\t" + (_staticObj ? "static" : _type) + 
 				"\t" + _pos + 
-				"\t" + _delete;
+				"\t" + _delete +
+				"\t" + _basicImage;
 	}
 	
 	@Override
@@ -68,6 +69,7 @@ public class Flag extends Unit {
 				&& networkString.length == 4) {
 			_pos = Vector.fromNet(networkString[2]);
 			_delete = Boolean.parseBoolean(networkString[3]);
+			_basicImage = networkString[4];
 		}
 	}
 }

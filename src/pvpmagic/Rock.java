@@ -64,15 +64,17 @@ public class Rock extends Unit {
 	public String toNet() {
 		return _netID +
 				"\t" + (_staticObj ? "static" : _type) + 
-				"\t" + _health;
+				"\t" + _health +
+				"\t" + _basicImage;
 	}
 	
 	@Override
 	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
 		if (networkString[1].equals(_staticObj ? "static" : _type) 
 				&& _netID == Integer.parseInt(networkString[0])
-				&& networkString.length == 3) {
+				&& networkString.length == 4) {
 			_health = Integer.parseInt(networkString[2]);
+			_basicImage = networkString[3];
 		}
 	}
 	
