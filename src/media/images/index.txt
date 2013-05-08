@@ -6,6 +6,7 @@ misc/door_open
 misc/deadrock
 misc/cat
 spells/icon
+spells/DisarmSpell
 spells/StunSpell
 spells/RootSpell
 spells/BurnSpell
@@ -18,6 +19,11 @@ spells/ShieldSpell
 spells/ConfuseSpell
 spells/CloneSpell
 spells/PushSpell
+spells/CleanseSpell
+spells/FlashSpell
+spells/DashSpell
+spells/FelifySpell
+spells/HideSpell
 misc/hwall
 misc/vwall
 misc/player1_back

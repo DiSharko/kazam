@@ -12,7 +12,7 @@ import pvpmagic.Vector;
 import pvpmagic.View;
 
 public class FearSpell extends Spell {
-	public static String TYPE = "FearSpell";
+	public static String TYPE = "ConfuseSpell";
 
 	public FearSpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
@@ -29,10 +29,9 @@ public class FearSpell extends Spell {
 	public void collide(Collision c){
 		Unit target = c.other(this);
 		target.changeHealth(-5);
-		if (target instanceof Player) {
+		if (target._type.equals(Player.TYPE)) {
 			Player p = (Player) target;
-			p.fear(3000);
-			this.die();
+			p.confuse(3000);
 		}
 	}
 	

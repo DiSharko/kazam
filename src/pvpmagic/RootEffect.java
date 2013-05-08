@@ -7,6 +7,7 @@ public class RootEffect extends TimedEffect {
 		_numberOfIntervals = numberOfIntervals;
 		_target = u;
 		_type = TYPE;
+		_toBeCleansed = true;
 	}
 
 	@Override

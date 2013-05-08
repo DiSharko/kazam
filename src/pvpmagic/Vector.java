@@ -56,6 +56,7 @@ public class Vector {
 	}
 	public final Vector normalize(){
 		double mag = mag();
+		if (mag == 0) return this;
 		return new Vector(x/mag, y/mag);
 	}
 	public final double dist(Vector v){

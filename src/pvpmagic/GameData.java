@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import pvpmagic.spells.Spell;
+import screen.TextInputLine;
 
 
 public class GameData {
@@ -50,14 +51,16 @@ public class GameData {
 		}
 
 		if (s._currentTab.id.equals("hostTab")){
-			String characterName = s.getElement("selectedCharacter").name;
+//			String characterName = s.getElement("selectedCharacter").name;
 
+			String playerName = ((TextInputLine)s.getElement("playerName")).getText();
+			
 			String[] spells = new String[8];
 			for (int i = 0; i < 8; i++){
 				spells[i] = s._spells[i].name;
 			}
 
-			Player p = new Player(this, characterName, null, spells, "player1_back");
+			Player p = new Player(this, playerName, null, spells, "player1_back");
 			Player dummy = new Player(this, "bob", "bobby", null, "player1_back");
 
 			_players.add(p);
@@ -102,14 +105,6 @@ public class GameData {
 		if (Math.random() < 0.09){
 			_players.get(1)._mana += 15;
 		}
-		
-		//		String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Fear"};
-		//		if (Math.random() < 0.1){
-		//			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*useableSpells.length)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
-		//		}
-		//		if (Math.random() < 0.09){
-		//			_players.get(1)._mana += 15;
-		//		}
 
 
 		// Deleting must be separate, after all updates and collisions

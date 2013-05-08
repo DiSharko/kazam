@@ -16,7 +16,7 @@ public class ConfuseSpell extends Spell {
 
 	public ConfuseSpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
-		_name = "Fear";
+		_name = "Confuse";
 		_cooldown = 1000;
 		_manaCost = 10;
 		Image sprite = Resource.get("ConfuseSpell");
@@ -29,10 +29,10 @@ public class ConfuseSpell extends Spell {
 	public void collide(Collision c){
 		Unit target = c.other(this);
 		target.changeHealth(-5);
-		if (target instanceof Player) {
+		if (target._type.equals(Player.TYPE)) {
 			Player p = (Player) target;
-			p.fear(3000);
-			this.die();
+			p.confuse(3000);
+			p.die();
 		}
 	}
 	
