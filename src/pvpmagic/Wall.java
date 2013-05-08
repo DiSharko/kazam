@@ -1,16 +1,18 @@
 package pvpmagic;
 
 import java.awt.Image;
+import java.util.HashMap;
 
 
 public class Wall extends Unit {
-	public static String TYPE = "all";
+	public static Boolean STATICOBJ = true;
+	public static String TYPE = "Wall";
 	public static String VWALL = "vwall";
 	public static String HWALL = "hwall";
 	private final boolean VERTICAL;
 	
 	public Wall(GameData data, Vector pos, double size, boolean vertical){
-		super(data, TYPE);
+		super(data, TYPE, STATICOBJ);
 		_pos = pos;
 		VERTICAL = vertical; //true is vertical, false is horizontal
 		Image sprite = Resource.get(VERTICAL ? VWALL : HWALL);
@@ -40,5 +42,13 @@ public class Wall extends Unit {
 	
 	@Override
 	public void changeHealth(double health){}
+	
+	@Override
+	public String toNet() {
+		return _type;
+	}
+	
+	@Override
+	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {}
 
 }

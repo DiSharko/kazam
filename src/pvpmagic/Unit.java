@@ -9,6 +9,7 @@ public abstract class Unit {
 	 */
 	public Integer _netID = null;
 	public String _type;
+	public Boolean _staticObj;
 	
 	/**
 	 * Internal attributes for drawing and update
@@ -17,7 +18,11 @@ public abstract class Unit {
 	protected boolean _delete = false;
 	protected Shape _shape;
 	
-	public Unit(GameData data, String type){ _data = data; _type = type; }
+	public Unit(GameData data, String type, Boolean staticObj){
+		_data = data; 
+		_type = type; 
+		_staticObj = staticObj;
+	}
 	
 	/**
 	 * Position and size vectors
@@ -190,26 +195,26 @@ public abstract class Unit {
 		this._netID = netID;
 	}
 	
-	public String toNet() {;
-		return _pos.toNet() +
-				"\t" + _size.toNet() +
-				"\t" + _vel.toNet() +
-				"\t" + _force.toNet() +
-				"\t" + _health +
-				"\t" + _mana +
-				"\t" + _isRooted +
-				"\t" + _isSilenced;
-				
-	}
-	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
+	public abstract String toNet(); //{;
+//		return _pos.toNet() +
+//				"\t" + _size.toNet() +
+//				"\t" + _vel.toNet() +
+//				"\t" + _force.toNet() +
+//				"\t" + _health +
+//				"\t" + _mana +
+//				"\t" + _isRooted +
+//				"\t" + _isSilenced;
+//				
+//	}
+	public abstract void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap); //{
 		//TO-DO: VALIDATION ON STRING
-		_pos = Vector.fromNet(networkString[0]);
-		_size = Vector.fromNet(networkString[1]); 
-		_vel = Vector.fromNet(networkString[2]);
-		_force = Vector.fromNet(networkString[3]);
-		_health = Double.parseDouble(networkString[4]);
-		_mana = Double.parseDouble(networkString[5]);
-		_isRooted = Boolean.parseBoolean(networkString[6]);
-		_isSilenced = Boolean.parseBoolean(networkString[7]);
-	}
+//		_pos = Vector.fromNet(networkString[0]);
+//		_size = Vector.fromNet(networkString[1]); 
+//		_vel = Vector.fromNet(networkString[2]);
+//		_force = Vector.fromNet(networkString[3]);
+//		_health = Double.parseDouble(networkString[4]);
+//		_mana = Double.parseDouble(networkString[5]);
+//		_isRooted = Boolean.parseBoolean(networkString[6]);
+//		_isSilenced = Boolean.parseBoolean(networkString[7]);
+//	}
 }

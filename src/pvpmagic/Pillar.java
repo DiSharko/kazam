@@ -1,12 +1,14 @@
 package pvpmagic;
 
 import java.awt.Image;
+import java.util.HashMap;
 
 public class Pillar extends Unit {
-		public static String TYPE = "pillar";
+		public static Boolean STATICOBJ = true;
+		public static String TYPE = "Pillar";
 		
 		public Pillar(GameData data, Vector pos, double size){
-			super(data, TYPE);
+			super(data, TYPE, STATICOBJ);
 			_pos = pos;
 			Image sprite = Resource.get(TYPE);
 			_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(size);
@@ -28,5 +30,15 @@ public class Pillar extends Unit {
 		
 		@Override
 		public void changeHealth(double health){}
+
+		@Override
+		public String toNet() {
+			return _netID + 
+					"\t" + (_staticObj ? "static" : _type);
+		}
+
+		@Override
+		public void fromNet(String[] networkString,
+				HashMap<Integer, Unit> objectMap) {}
 
 }

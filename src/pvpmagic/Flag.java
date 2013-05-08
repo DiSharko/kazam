@@ -2,14 +2,16 @@ package pvpmagic;
 
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Flag extends Unit {
-	public static String TYPE = "flag";
+	public static Boolean STATICOBJ = true;
+	public static String TYPE = "Flag";
 	public Vector _originalPos;
 	
 	public Flag(GameData data, Vector pos, double size){
-		super(data, TYPE);
+		super(data, TYPE, STATICOBJ);
 		_pos = pos;
 		_originalPos = pos;
 		
@@ -44,6 +46,23 @@ public class Flag extends Unit {
 			Player player = (Player) u;
 			player._flag = this;
 			_delete = true;
+		}
+	}
+	@Override
+	public String toNet() {
+		return _netID +
+				"\t" + (_staticObj ? "static" : _type) + 
+				"\t" + _pos + 
+				"\t" + _delete;
+	}
+	
+	@Override
+	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
+		if (networkString[1].equals(_staticObj ? "static" : _type) 
+				&& _netID == Integer.parseInt(networkString[0])
+				&& networkString.length == 4) {
+			_pos = Vector.fromNet(networkString[2]);
+			_delete = Boolean.parseBoolean(networkString[3]);
 		}
 	}
 }

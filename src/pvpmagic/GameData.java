@@ -13,8 +13,15 @@ public class GameData {
 	private final int NEEDED = 3;
 	ArrayList<Unit> _units;
 	ArrayList<Player> _players;
+
+	TeamData _teamdata;
+	
+	int _lastTick;
+	int _clientTick;
+
 	ArrayList<TeamData> _teams;
 	ArrayList<Player> _spawning;
+
 
 	public GameData(){
 		_units = new ArrayList<Unit>();
@@ -65,6 +72,10 @@ public class GameData {
 			_units.add(p);
 			_units.add(dummy);
 			dummy._pos = new Vector(-50, -30);
+			
+			// initialize network ticks to invalid values - game starts at 0
+			_lastTick = -1;
+			_clientTick = -1;
 
 		}
 	}
@@ -205,7 +216,7 @@ public class GameData {
 		linearr = line.split(",");
 		if(linearr[0].equals("NUMTEAMS")) {
 			for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
-				_teams.add(new FlagTeamData(i));
+				_teams.add(new FlagTeamData(i, this));
 			}
 		} else {
 			System.out.println("NUMBER OF TEAMS NOT IN MAP, invalid map file.");

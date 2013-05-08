@@ -2,6 +2,7 @@ package pvpmagic;
 
 
 import java.awt.Image;
+import java.util.HashMap;
 
 import pvpmagic.spells.LockSpell;
 
@@ -9,13 +10,15 @@ import pvpmagic.spells.LockSpell;
 public class Door extends Unit {
 	Vector _openSize;
 	Vector _lockedSize;
+	public static Boolean STATICOBJ = true;
+	public static String TYPE = "Door";
 	
 	boolean _locked = true;
 	
 	private double _sizeScalar;
 	
 	public Door(GameData data, Vector pos, double size){
-		super(data, "door");
+		super(data, TYPE, STATICOBJ);
 		_pos = pos;
 		_sizeScalar = size;
 		
@@ -62,5 +65,21 @@ public class Door extends Unit {
 	public void open() {
 		_locked = false;
 		_size = _openSize;
+	}
+	
+	@Override
+	public String toNet() {
+		return _netID + 
+				"\t" + (_staticObj ? "static" : _type) + 
+				"\t" + _locked;
+	}
+	
+	@Override
+	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
+		if (networkString[1].equals(_staticObj ? "static" : _type) 
+				&& _netID == Integer.parseInt(networkString[0])
+				&& networkString.length == 3) {
+			_locked = Boolean.parseBoolean(networkString[2]);
+		}
 	}
 }
