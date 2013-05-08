@@ -8,7 +8,7 @@ public class FlagTeamData extends TeamData{
 	private FlagPedestal _pedestal;
 	 	
 	public FlagTeamData(int teamNum, GameData data) {
-		super(teamNum, data);
+		super(teamNum, data, TYPE);
 	}
 	
 	public void setPed (FlagPedestal ped) {
@@ -30,16 +30,19 @@ public class FlagTeamData extends TeamData{
 
 	@Override
 	public String toNet() {
-		return _type +
-				"\t" + _teamScore;
+		return _netID +
+				"\t" + (_staticObj ? "static" : _type) +
+				"\t" + _teamScore +
+				"\t" + _pedestal._netID;
 	}
 
 	@Override
 	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
 		if (networkString[1].equals("FlagTeamData") 
 				&& _netID == Integer.parseInt(networkString[0])
-				&& networkString.length == 3) {
+				&& networkString.length == 4) {
 			_teamScore = Integer.parseInt(networkString[2]);
+			_pedestal = (FlagPedestal) objectMap.get(Integer.parseInt(networkString[3]));
 		}
 	}
 }

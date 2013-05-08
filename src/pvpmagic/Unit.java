@@ -9,6 +9,7 @@ public abstract class Unit {
 	 */
 	public Integer _netID = null;
 	public String _type;
+	public Boolean _staticObj;
 	
 	/**
 	 * Internal attributes for drawing and update
@@ -17,7 +18,11 @@ public abstract class Unit {
 	protected boolean _delete = false;
 	protected Shape _shape;
 	
-	public Unit(GameData data, String type){ _data = data; _type = type; }
+	public Unit(GameData data, String type, Boolean staticObj){
+		_data = data; 
+		_type = type; 
+		_staticObj = staticObj;
+	}
 	
 	/**
 	 * Position and size vectors
