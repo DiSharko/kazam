@@ -32,7 +32,7 @@ public class ConfuseSpell extends Spell {
 		if (target._type.equals(Player.TYPE)) {
 			Player p = (Player) target;
 			p.confuse(3000);
-			p.die();
+			this.die();
 		}
 	}
 	

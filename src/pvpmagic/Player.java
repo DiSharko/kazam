@@ -189,7 +189,7 @@ public class Player extends Unit {
 
 	public void castSpell(Spell spell) {
 		_spellCastingTimes.put(spell._name, System.currentTimeMillis());
-		if (spell._name.equals("Flash")) {
+		if (spell._name.equals("Dash")) {
 			DashSpell s = (DashSpell) spell;
 			s.dash();
 		} else if (spell._name.equals("Hide")) {

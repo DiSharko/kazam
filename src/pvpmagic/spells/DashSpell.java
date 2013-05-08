@@ -5,11 +5,11 @@ import pvpmagic.Player;
 import pvpmagic.Vector;
 
 public class DashSpell extends Spell {
-	public static String TYPE = "FlashSpell";
+	public static String TYPE = "DashSpell";
 
 	public DashSpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
-		_name = "Flash";
+		_name = "Dash";
 		_size = new Vector(10, 10);
 		_cooldown = 4000;
 		_manaCost = 10;
