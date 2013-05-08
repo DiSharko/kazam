@@ -13,8 +13,11 @@ public class GameData {
 	public enum GameMode { CTF, TEAM_DEATHMATCH }
 	
 	private final int NEEDED = 3;
+
+	private int _needed;
 	public ArrayList<Unit> _units;
 	ArrayList<Player> _players;
+	public String _gameType;
 
 	TeamData _teamdata;
 
@@ -22,6 +25,7 @@ public class GameData {
 	ArrayList<Player> _spawning;
 	
 	GameMode _gameMode;
+	public ArrayList<Player> _playerList; // pushed down from lobby/serverscreen
 
 
 	public GameData(){
@@ -116,11 +120,10 @@ public class GameData {
 			}
 		}
 		
-		//update teams' teamdatas, then check if anyone has one
-		for (TeamData td : _teams) td.update();
+		//check if any team has one
 		for (TeamData td : _teams) {
 			td.update();
-			if(td._teamScore == NEEDED) {
+			if(td._teamScore == _needed) {
 				//one team has won!!!
 				System.out.println("Team "+td.TEAM_NUM+" has won the game!");
 			}
@@ -195,7 +198,7 @@ public class GameData {
 	public void applyMovement(){
 		for (int i = 0; i < _units.size(); i++){
 			Unit e = _units.get(i);
-			if (!e._movable) continue;
+			if (!e._movable || e._pos == null) continue;
 
 			e._vel = e._vel.plus(e._force.div(e._mass));
 			if (e._appliesFriction) e._vel = e._vel.mult(0.96);
@@ -209,14 +212,32 @@ public class GameData {
 		BufferedReader br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/data/maps/"+mapname+".txt")));
 		String line; String[] linearr;
 		
+		//first read the setup line from the map file to see the number of teams and the gametype
 		line = br.readLine();
 		linearr = line.split(",");
-		if(linearr[0].equals("NUMTEAMS")) {
-			for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
-				_teams.add(new FlagTeamData(i, this));
+		if(linearr[0].equals("SETUP") && (linearr.length == 3)) {
+			if (linearr[2].equals("TEAM DEATHMATCH")) {
+				_gameType = "TEAM DEATHMATCH";
+				_needed = 12;
+				for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
+					DeathmatchTeamData data = new DeathmatchTeamData(i, this);
+					_teams.add((TeamData)data);
+					_units.add((Unit)data);
+				}
+			} else if (linearr[2].equals("TEAM FLAG")) {
+				_gameType = "TEAM FLAG";
+				_needed = 3;
+				for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
+					FlagTeamData data = new FlagTeamData(i, this);
+					_teams.add((TeamData)data);
+					_units.add((Unit)data);
+				}
+			} else {
+				System.out.println("Invalid game type in map file.");
+				System.exit(1);
 			}
 		} else {
-			System.out.println("NUMBER OF TEAMS NOT IN MAP, invalid map file.");
+			System.out.println("Invalid map file.");
 			System.exit(1);
 		}
 		

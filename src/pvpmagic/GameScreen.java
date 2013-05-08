@@ -9,12 +9,14 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import network.ClientNetworkable;
 import network.SyncedString;
 
 import pvpmagic.spells.Spell;
@@ -34,7 +36,8 @@ public class GameScreen extends Screen {
 	boolean _isHost;
 	HashMap<Integer,Unit> _staticMap;
 	HashMap<Integer,Unit> _dynamicMap;
-	int lobbyVersion;
+	int _lobbyVersion;
+	List<Player> _playerList;
 	
 	// Server vars - set in setup TODO
 	public PriorityBlockingQueue<String> _netInputs; // inputs used by server
@@ -53,10 +56,12 @@ public class GameScreen extends Screen {
 	SyncedString _lobbyData;
 	int _getPort;
 	int _sendPort;
+	ClientNetworkable _networker;
 	AtomicInteger _focusID;
-	PriorityQueue<Player> _players;
+	PriorityQueue<Player> _playerQueue;
 	int _lastTick;
 	int _clientTick;
+	ServerScreen _server; //only set if isHost is true
 	
 
 	GameData _data;
@@ -77,6 +82,8 @@ public class GameScreen extends Screen {
 	@Override
 	public void switchInto(){
 		_holder.setFPS(40);
+		_holder.hideBorder();
+		_holder._window.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	@Override
@@ -96,31 +103,28 @@ public class GameScreen extends Screen {
 		menu.w = menu.h = 60;
 		_interfaceElements.add(menu);
 		
-		_isClient = false;
 		_isHost = false;
-
-		startGame();
-	}
-
-	public void startGame(){
-		_holder.hideBorder();
-		_holder._window.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-
-		_data = new GameData();
-		_view = new View(_data);
-	}
-
-	public void configureGame(SetupScreen s){
-		_data.setup(s);
-		if (_data._players.size() > 0) setFocus(_data._players.get(0));
-		else System.out.println("No players in game!");
-
+		
 		onResize();
 	}
 
+	public void initializeGame(SetupScreen s){
+		_data = new GameData();
+		_data.setup(s);
+		
+		if (_data._players.size() > 0) setFocus(_data._players.get(0));
+		else System.out.println("No players in game!");
+
+		_view = new View(_data);
+		
+		onResize();
+	}
+	
 	private class VisionComparator implements Comparator<Unit> {
 		@Override
 		public int compare(Unit u1, Unit u2) {
+			if(u1._pos == null) return -1;
+			if(u2._pos == null) return 1;
 			if(!(u1._drawUnder && u2._drawUnder)) {
 				if (u1._drawUnder) return -1;
 				else if (u2._drawUnder) return 1;

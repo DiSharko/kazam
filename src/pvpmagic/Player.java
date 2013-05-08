@@ -28,11 +28,13 @@ public class Player extends Unit {
 	public double _deaths;
 
 	public Vector _destination;
-	public boolean _connected;
+
 	double _spellCastingTime = 0;
 	Spell _spellToCast = null;
 	double _hidden = 1.0;
 	Composite _old;
+	
+	public boolean _connected = false;
 
 	public String[] _spells;
 	//ArrayList<Carryable> inventory = new ArrayList<Carryable>();
@@ -55,13 +57,13 @@ public class Player extends Unit {
 
 		_mass = 3;
 
+		_characterName = characterName;
+		_basicImage = characterName;
+		_playerName = playerName;
+
 		_health = 100;
 		_mana = 100;
 
-		_characterName = characterName;
-		_basicImage = _characterName;
-		_playerName = playerName;
-		
 		_pos = new Vector(-50, -20);
 		Image sprite = Resource.get(_characterName);
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70);
@@ -76,9 +78,6 @@ public class Player extends Unit {
 		this._restitution = 0;
 
 		_appliesFriction = true;
-		
-		_connected = true;
-
 	}
 
 	@Override
@@ -98,13 +97,15 @@ public class Player extends Unit {
 
 		_old = v.getGraphics().getComposite();
 		if (_hidden < 1) {
-			AlphaComposite ac = java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden);
-			v.getGraphics().setComposite(ac);
+			Composite old = v.getGraphics().getComposite();
+
+			v.getGraphics().setComposite(java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden));
 			v.drawImage(Resource.get(_basicImage), _pos, _size);
+
+			v.getGraphics().setComposite(old);
 		} else if (_hidden == 1) {
 			v.drawImage(Resource.get(_basicImage), _pos, _size);
 		}
-		v.getGraphics().setComposite(_old);
 		
 		t = _timedEffects.get(ConfuseEffect.TYPE);
 		if (t != null && t._display){
@@ -139,6 +140,9 @@ public class Player extends Unit {
 	@Override
 	public void update(){
 		super.update();
+		if (!_connected) { // signal deletion if disconnected
+			_delete = true;
+		}
 		if(_flag != null) _flag.update();
 		if (_flagGrabTimer == 0) {
 			_flagable = true;
@@ -306,21 +310,15 @@ public class Player extends Unit {
 			this._flag = (Flag) objectMap.get(Integer.parseInt(networkString[4]));
 			this._health = Double.parseDouble(networkString[5]);
 			this._mana = Double.parseDouble(networkString[6]);
-			this._vel = Vector.fromNet(networkString[7]);
-			this._force = Vector.fromNet(networkString[8]);
-			this._isRooted = Boolean.parseBoolean(networkString[9]);
-			this._isSilenced = Boolean.parseBoolean(networkString[10]);
-			this._basicImage = networkString[13];
-			this._connected = Boolean.parseBoolean(networkString[14]);
 
 			String[] lastCastTimes, sp;
-			lastCastTimes = networkString[11].split(".");
+			lastCastTimes = networkString[7].split(".");
 			for (String spell : lastCastTimes) {
 				sp = spell.split(",");
 				this._spellCastingTimes.put(sp[0], Long.parseLong(sp[1]));
 			}
 			String[] tEffects; TimedEffect ef;
-			tEffects = networkString[12].split(".");
+			tEffects = networkString[8].split(".");
 			_timedEffects = new HashMap<String, TimedEffect>();
 			for (String effect : tEffects) {
 				ef = TimedEffect.fromNet(effect, objectMap);

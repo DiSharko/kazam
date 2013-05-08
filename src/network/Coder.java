@@ -1,5 +1,6 @@
 package network;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -52,13 +53,36 @@ public class Coder {
 	 * @param lobbyVersion version of lobby since start of hosting
 	 * @return lobby encoded as string
 	 */
-	public static String encodeLobby(List<Player> players, int map, int lobbyVersion) {
+	public static String encodeLobby(List<Player> players, String map, int lobbyVersion) {
 		String lobby = lobbyVersion + "\n";
 		lobby += map + "\n";
 		for (Player player : players) {
 			lobby += player._netID + "\t" + player.toNetInit() + "\n";
 		}
 		return lobby;
+	}
+	
+	/**
+	 * Called by client's lobby screen update() to decode lobby update and update lobby if it is indeed
+	 * an update over the current lobby version
+	 * @param lobbyData Encoded lobby data from server
+	 * @param lobby Lobby screen for client
+	 * @throws BadProtocolException on protocol from server being invalid, recommend disconnect
+	 */
+	public static void decodeLobby(String lobbyData, LobbyScreen lobby) throws BadProtocolException {
+		try {
+			String[] lobbyUpdate = lobbyData.split("[\n]");
+			if (Integer.parseInt(lobbyUpdate[0]) > lobby._lobbyVersion) {
+				lobby._settings.getElement("selectedMap").name = lobbyUpdate[1];
+				lobby._playerList.clear();
+				for (int i = 2; i < lobbyUpdate.length; i++) {
+					Player player = Player.fromNetInit(lobbyUpdate[i].split("[\t]"));
+					lobby._playerList.add(player);
+				}
+			}
+		} catch (Exception e) {
+			throw new BadProtocolException("ERROR: Bad protocol.");
+		}
 	}
 	
 	/**
@@ -110,13 +134,25 @@ public class Coder {
 					// update other values (id, pos, health) and add to dynamicMap
 					spell.fromNet(objInfo, staticMap);
 					dynamicMap.put(spell._netID, spell);
-					
-					// update game state
-					data.clearList();
-					data.addAll(staticMap.values());
-					data.addAll(dynamicMap.values());
 				}
 			}
+			// check for disconnected players and remove them from lobby list and static map
+			// leave priority queue and map alone
+			ArrayList<Player> removing = new ArrayList<Player>(data._playerList.size());
+			for (Player player : data._playerList) {
+				if (!player._connected) {
+					staticMap.remove(player._netID);
+					removing.add(player);
+				}
+			}
+			for (Player player : removing) {
+				data._playerList.remove(player);
+			}
+			
+			// update game state
+			data.clearList();
+			data.addAll(staticMap.values());
+			data.addAll(dynamicMap.values());
 		} catch (Exception e) {
 			throw new BadProtocolException("ERROR: Bad protocol.");
 		}
