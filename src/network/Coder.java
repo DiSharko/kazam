@@ -59,6 +59,7 @@ public class Coder {
 		for (Player player : players) {
 			lobby += player._netID + "\t" + player.toNetInit() + "\n";
 		}
+//		System.out.println("ENCODED: "+lobby);
 		return lobby;
 	}
 	
@@ -70,10 +71,11 @@ public class Coder {
 	 * @throws BadProtocolException on protocol from server being invalid, recommend disconnect
 	 */
 	public static void decodeLobby(String lobbyData, LobbyScreen lobby) throws BadProtocolException {
+//		System.out.println(lobbyData);
 		try {
-			String[] lobbyUpdate = lobbyData.split("[\n]");
+			String[] lobbyUpdate = lobbyData.split("\n");
 			if (Integer.parseInt(lobbyUpdate[0]) > lobby._lobbyVersion) {
-				lobby._settings.getElement("selectedMap").name = lobbyUpdate[1];
+				lobby._mapName = lobbyUpdate[1];
 				lobby._playerList.clear();
 				for (int i = 2; i < lobbyUpdate.length; i++) {
 					Player player = Player.fromNetInit(lobbyUpdate[i].split("[\t]"));
@@ -119,7 +121,8 @@ public class Coder {
 			String[] update = gameState.split("[\n]");
 			for (int i = 1; i < update.length; i++) { // skip tick line
 				String[] objInfo = update[i].split("[\t]");
-				Unit obj = staticMap.get(objInfo[ID]);
+				if (objInfo[ID].equals("")) continue; // for walls
+				Unit obj = staticMap.get(Integer.parseInt(objInfo[ID]));
 				if (obj != null) { // update static object
 					obj.fromNet(objInfo, staticMap);
 				} else { // spell
@@ -138,15 +141,16 @@ public class Coder {
 			}
 			// check for disconnected players and remove them from lobby list and static map
 			// leave priority queue and map alone
+			
 			ArrayList<Player> removing = new ArrayList<Player>(data._playerList.size());
 			for (Player player : data._playerList) {
 				if (!player._connected) {
-					staticMap.remove(player._netID);
 					removing.add(player);
 				}
 			}
 			for (Player player : removing) {
 				data._playerList.remove(player);
+				staticMap.remove(player._netID);
 			}
 			
 			// update game state
@@ -154,6 +158,7 @@ public class Coder {
 			data.addAll(staticMap.values());
 			data.addAll(dynamicMap.values());
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new BadProtocolException("ERROR: Bad protocol.");
 		}
 	}
@@ -166,7 +171,7 @@ public class Coder {
 	 * @param playerMap Map of players to IDs.
 	 * @throws BadProtocolException If the input string deviates protocol.  Recommend disconnection of or ignoring client.
 	 */
-	public static void handleEvent(String[] eventString, Player p, GameData data, HashMap<Integer,Player> playerMap) throws BadProtocolException {
+	public static void handleEvent(String[] eventString, GameData data, HashMap<Integer,Player> playerMap) throws BadProtocolException {
 		try {
 			// check for disconnection
 			if (eventString[0].equals("DISCONNECTION")) {
@@ -175,6 +180,7 @@ public class Coder {
 			} else {
 				//eventString is in the format netID \t timestamp \t <data>
 				Vector target = Vector.fromNet(eventString[3]);
+				Player p = playerMap.get(Integer.parseInt(eventString[0]));
 				if (eventString[2].equals("Q")) {
 					data.startCastingSpell(p, p._spells[0], target);
 				} else if (eventString[2].equals("W")){

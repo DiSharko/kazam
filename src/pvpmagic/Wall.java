@@ -45,7 +45,7 @@ public class Wall extends Unit {
 	
 	@Override
 	public String toNet() {
-		return _type;
+		return "";
 	}
 	
 	@Override

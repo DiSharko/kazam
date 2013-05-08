@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import pvpmagic.GameData.GameMode;
 import pvpmagic.spells.DashSpell;
 import pvpmagic.spells.HideSpell;
 import pvpmagic.spells.Spell;
@@ -246,8 +245,9 @@ public class Player extends Unit implements Comparable{
 			}
 			Vector newforce = new Vector(x,y).normalize().mult(5);
 			_flag.applyForce(newforce); 
-			_flag._delete = false;
-			_data._units.add(_flag);
+			_flag._basicImage = "flag";
+			_flag._collidable = true;
+			_flag._drawUnder = false;
 			_flagable = false;
 			_flagGrabTimer = 50;
 			_flag = null;
@@ -311,10 +311,11 @@ public class Player extends Unit implements Comparable{
 	}
 	@Override
 	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
+		//System.out.println(Arrays.toString(networkString));
 		if (networkString[1].equals(_staticObj ? "static" : _type)) {
 			this._pos = Vector.fromNet(networkString[2]);
 			this._destination = Vector.fromNet(networkString[3]);
-			this._flag = (Flag) objectMap.get(Integer.parseInt(networkString[4]));
+			if (!networkString[4].equals("null")) this._flag = (Flag) objectMap.get(Integer.parseInt(networkString[4]));
 			this._health = Double.parseDouble(networkString[5]);
 			this._mana = Double.parseDouble(networkString[6]);
 			this._vel = Vector.fromNet(networkString[7]);
@@ -323,8 +324,8 @@ public class Player extends Unit implements Comparable{
 			this._isSilenced = Boolean.parseBoolean(networkString[10]);
 			this._basicImage = networkString[13];
 			this._connected = Boolean.parseBoolean(networkString[14]);
-			this._kills = Integer.parseInt(networkString[15]);
-			this._deaths = Integer.parseInt(networkString[16]);
+			this._kills = Double.parseDouble(networkString[15]);
+			this._deaths = Double.parseDouble(networkString[16]);
 
 			String[] lastCastTimes, sp;
 			lastCastTimes = networkString[7].split(".");
@@ -352,9 +353,7 @@ public class Player extends Unit implements Comparable{
 		return  "static" +
 				"\t" + _characterName + 
 				"\t" + _playerName + 
-				"\t" + spells.substring(0, spells.length() - 1) +
-				"\t" + _pos.toNet() +
-				"\t" + _destination.toNet();
+				"\t" + spells.substring(0, spells.length() - 1);
 	}
 
 	//networkString format = [id, type, <any data from toNetInit split on tabs>...]
@@ -362,8 +361,6 @@ public class Player extends Unit implements Comparable{
 		if (networkString[1].equals("static")) {
 			String[] spells = networkString[4].split(" ");
 			Player p = new Player(null, networkString[2], networkString[3], spells);
-			p._destination = Vector.fromNet(networkString[6]);
-			p._pos = Vector.fromNet(networkString[5]);
 			p._netID = Integer.parseInt(networkString[0]);
 			return p;
 		}

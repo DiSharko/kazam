@@ -32,5 +32,6 @@ public abstract class TeamData extends Unit{
 		player._spawn = _spawnList.get(spawnIndex);
 		player._pos = player._spawn;
 		player._teamNum = TEAM_NUM;
+		player._pos = player._spawn;
 	}
 }

@@ -46,7 +46,9 @@ public class Flag extends Unit {
 			Player player = (Player) u;
 			if(player._flagable) {
 				player._flag = this;
-				_delete = true;
+				this._basicImage = "pillar";
+				this._collidable = false;
+				this._drawUnder = true;
 				_vel = new Vector(0,0);
 				_force = new Vector(0,0);
 			}

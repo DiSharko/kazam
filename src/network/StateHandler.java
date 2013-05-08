@@ -21,6 +21,7 @@ public class StateHandler extends Thread {
 		try {
 			synchronized(_client) {
 				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(_client.getOutputStream()));
+//				System.out.println("State handler "+_message);
 				writer.write(_message);
 				writer.write("EOT\n");
 				writer.flush();

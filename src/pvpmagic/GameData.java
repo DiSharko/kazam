@@ -17,9 +17,9 @@ public class GameData {
 	
 	private final int NEEDED = 3;
 
-	private int _needed;
+	private int _needed = NEEDED;
 	public ArrayList<Unit> _units;
-	ArrayList<Player> _players;
+	
 	public String _gameType;
 
 	TeamData _teamdata;
@@ -29,47 +29,48 @@ public class GameData {
 	
 	GameMode _gameMode;
 	public ArrayList<Player> _playerList; // pushed down from lobby/serverscreen
+	boolean _isClient;
+	AtomicInteger _idCounter;
 
-
-	public GameData(){
+	public GameData(ArrayList<Player> playerList, boolean isClient){
 		_units = new ArrayList<Unit>();
-		_players = new ArrayList<Player>();
+		_playerList = playerList;
 		_teams = new ArrayList<TeamData>();
 		_spawning = new ArrayList<Player>();
+		_isClient = isClient;
+		_idCounter = new AtomicInteger(0);
 	}
 
-	public void setup(SetupScreen s){
-		PriorityQueue<Player> pq = new PriorityQueue<Player>();
-		if (s._currentTab.id.equals("hostTab")){
-//			String characterName = s.getElement("selectedCharacter").name;
-
-			String playerName = ((TextInputLine)s.getElement("playerName")).getText();
-			
-			String[] spells = new String[8];
-			for (int i = 0; i < 8; i++){
-				spells[i] = s._spells[i].name;
-			}
-
-			Player p = new Player(this, "andrew", playerName, spells);
-			Player dummy = new Player(this, "diego", "bobby", null);
-
-			_players.add(p);
-			_players.add(dummy);
-			
-			_units.add(p);
-			_units.add(dummy);
-			
-			pq.add(p);
-			pq.add(dummy);
-		}
+	public void setup(SetupScreen s,String mapName){
+		
+		/**
 		if (s._currentTab.id.equals("hostTab") ||  s._currentTab.id.equals("dedicatedServer")){
-			//map selected, read it in
-			try {
-				readInMap(s.getElement("selectedMap").name,new AtomicInteger(),pq);
-			} catch (IOException e) {
-				System.out.println("IOException in setup.");
-				e.printStackTrace();
+			if (s.getElement("selectedMap").name == null || s.getElement("selectedMap").name.equals("Random")) {
+				for (int i = 0; i < 20; i++){
+					Vector pos = new Vector(Math.random()*600-300, Math.random()*600-300);
+
+					_units.add(new Rock(this, pos, Math.random()*50+20, "rockd"));
+				}
 			}
+			else {
+				System.out.println("map name was not random: "+s.getElement("selectedMap").name);
+				try {
+					readInMap(s.getElement("selectedMap").name,null,null);
+				} catch (IOException e) {
+					System.out.println("IOException in setup.");
+					e.printStackTrace();
+				}
+			}
+		}**/
+		
+		try {
+			PriorityQueue<Player> playerQueue = new PriorityQueue<Player>(_playerList.size()+1,new PlayerComparator());
+			playerQueue.addAll(_playerList);
+			_units.addAll(_playerList);
+			readInMap(mapName,_idCounter,playerQueue);
+		} catch (IOException e) {
+			System.out.println("IOException in setup.");
+			e.printStackTrace();
 		}
 	}
 
@@ -91,7 +92,7 @@ public class GameData {
 
 
 	public void update(){
-		String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Confuse", "Felify"};
+		//String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Confuse", "Felify"};
 //		if (Math.random() < 0.1){
 //			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*useableSpells.length)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
 //		}
@@ -289,7 +290,7 @@ public class GameData {
 				FlagTeamData ft = (FlagTeamData) _teams.get(Integer.parseInt(linearr[1]));
 				ft.setPed(pd);
 			} else {
-				System.out.println(line);
+				System.out.println("GD PRINT " + line);
 				System.out.println("Not enough types in map file being checked for.");
 			}
 		}

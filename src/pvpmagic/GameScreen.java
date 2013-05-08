@@ -6,17 +6,17 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import network.ClientNetworkable;
+import network.Coder;
 import network.SyncedString;
 
 import pvpmagic.spells.Spell;
@@ -26,42 +26,32 @@ import screen.Button;
 import screen.Screen;
 import screen.ScreenHolder;
 import screen.InterfaceElement;
+import screen.TransitionScreen.Transition;
 
 public class GameScreen extends Screen {
 
 	boolean DEBUG = false;
 	
-	// shared network vars - setup in setup TODO
+	// shared network vars - setup manually by lobby screen
 	boolean _isClient;
 	boolean _isHost;
 	HashMap<Integer,Unit> _staticMap;
 	HashMap<Integer,Unit> _dynamicMap;
-	int _lobbyVersion;
-	List<Player> _playerList;
+	ArrayList<Player> _playerList;
 	
-	// Server vars - set in setup TODO
-	public PriorityBlockingQueue<String> _netInputs; // inputs used by server
-	HashMap<Integer,Player> _playerMap;
-	AtomicBoolean _running;
-	AtomicBoolean _startedS;
-	int _port;
-	GameData _dataS;
-	int _tick;
-	
-	// Client vars - set in setup TODO
+	// Client vars - set up manually by lobby screen
 	ConcurrentLinkedQueue<String> _netOutputs; // outputs added to by client
 	AtomicBoolean _connected;
 	AtomicBoolean _started;
 	SyncedString _gameData;
 	SyncedString _lobbyData;
-	int _getPort;
-	int _sendPort;
 	ClientNetworkable _networker;
 	AtomicInteger _focusID;
-	PriorityQueue<Player> _playerQueue;
 	int _lastTick;
 	int _clientTick;
 	ServerScreen _server; //only set if isHost is true
+	HashMap<Integer,Player> _playerMap;
+	String _mapName;
 	
 
 	GameData _data;
@@ -103,21 +93,41 @@ public class GameScreen extends Screen {
 		menu.w = menu.h = 60;
 		_interfaceElements.add(menu);
 		
-		_isHost = false;
+		_isClient = false; // set by lobby otherwise after setup call
+		_isHost = false; // same here
+		_playerList = new ArrayList<Player>();
 		
 		onResize();
 	}
 
 	public void initializeGame(SetupScreen s){
-		_data = new GameData();
-		_data.setup(s);
+		_data = new GameData(_playerList,_isClient);
 		
-		if (_data._players.size() > 0) setFocus(_data._players.get(0));
-		else System.out.println("No players in game!");
+		// construct player map and set pointers to _data in players
+		if (_isClient) {
+			_playerMap = new HashMap<Integer,Player>();
+			for (Player player: _playerList) {
+				_playerMap.put(player._netID,player);
+				player._data = _data;
+			}
+		}
+		_data.setup(s,_mapName);
+		
+		// construct static map and set focus
+		if (_isClient) {
+			for (Unit unit : _data._units) {
+				_staticMap.put(unit._netID, unit);
+			}
+			setFocus(_playerMap.get(_focusID.get()));
+		} else {
+			if (_data._playerList.size() > 0) setFocus(_data._playerList.get(0));
+			else System.out.println("No players in game!");
+		}
 
 		_view = new View(_data);
 		
 		onResize();
+		
 	}
 	
 	private class VisionComparator implements Comparator<Unit> {
@@ -214,7 +224,7 @@ public class GameScreen extends Screen {
 		_focus = focus;
 		for (int i = 0; i < _focus._spells.length; i++){
 			String spell = _focus._spells[i];
-			if (spell != null){
+			if (spell != null && !spell.equals("null")){
 				Button b = new Button(this, spell, Resource.get(spell+"SpellIcon"));
 				b.name = spell;
 				b.namePositionFractionY = 0.8;
@@ -229,33 +239,113 @@ public class GameScreen extends Screen {
 	@Override
 	public void update(){
 		super.update();
+		
+//		System.out.println(_holder._screenList.get(0)._id);
 
-		_data.update();
 
-		_view._camera = _focus._pos;
-		_view._scale = (Math.min(_holder._h, _holder._w))/600.0;
+//		System.out.println("UPDATING");
 
-		//_view._camera = new Vector(750,-550);
-		//_view._scale = .3;
-		//System.out.println(_view._scale);
-
-		if (_focus != null){
-			_healthBar.current = _focus._health;
-			_healthBar.total = _focus._maxHealth;
-
-			_manaBar.current = _focus._mana;
-			_manaBar.total = _focus._maxMana;
+//		System.out.println(_data._units.contains(_focus));
+		
+		if (!_isClient) {
+			_data.update();
+	
+			_view._camera = _focus._pos;
+			_view._scale = (Math.min(_holder._h, _holder._w))/600.0;
+	
+			//_view._camera = new Vector(750,-550);
+			//_view._scale = .3;
+			//System.out.println(_view._scale);
+	
+			if (_focus != null){
+				_healthBar.current = _focus._health;
+				_healthBar.total = _focus._maxHealth;
+	
+				_manaBar.current = _focus._mana;
+				_manaBar.total = _focus._maxMana;
+			}
+		} else {
+			if (_connected.get()) {
+				try {
+					// first call server update if hosting
+					if (_isHost) {
+						_server.update();
+					}
+					
+					// now retrieve latest update
+					String gameUpdate = _gameData.getData();
+					String[] update = gameUpdate.split("\n");
+//					System.out.println("HERE: \""+gameUpdate+"\"");
+					int curTick = Integer.parseInt(update[0]);
+					
+					// if update is new, update game state
+					if (curTick != _lastTick) {
+						Coder.decodeGame(_data, gameUpdate, _staticMap, _dynamicMap);
+					}
+					
+					// if client is behind, move the client up
+					if (curTick >= _clientTick) {
+						_clientTick = curTick;
+					} else { // client is ahead, so predict as many frames as necessary to make up the difference
+						int diff = _clientTick - curTick;
+						for (int i = 0; i < diff; i++) {
+							_data.update();
+						}
+					}
+					// increment time counters
+					_lastTick = curTick;
+					_clientTick++;
+					
+					//update game screen display/camera
+					_view._camera = _focus._pos;
+					_view._scale = (Math.min(_holder._h, _holder._w))/600.0;
+			
+					//_view._camera = new Vector(750,-550);
+					//_view._scale = .3;
+					//System.out.println(_view._scale);
+			
+					if (_focus != null){
+						_healthBar.current = _focus._health;
+						_healthBar.total = _focus._maxHealth;
+			
+						_manaBar.current = _focus._mana;
+						_manaBar.total = _focus._maxMana;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					end();
+				}
+			} else {
+				end();
+			}
 		}
+		
 	}
 
 
+	// end gracefully with this function
+	public void end() {
+		_networker.disconnect();
+		if (!_isHost) {
+			_holder.transitionToScreen(Transition.FADE, "setup");
+		} else {
+			try {
+				_server._inputServer.kill();
+			} catch (IOException e) {}
+			try {
+				_server._stateServer.kill();
+			} catch (IOException e) {}
+			_holder.transitionToScreen(Transition.FADE, "setup");
+		}
+	}
 
 
 	@Override
 	public void onKeyPressed(KeyEvent e){
 		int key = e.getKeyCode();
 
-
+		//System.out.println("HERE");
+		
 		if (key == KeyEvent.VK_ESCAPE){
 			_holder.showBorder();
 			_holder.switchToScreen("pause");
@@ -280,66 +370,68 @@ public class GameScreen extends Screen {
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[0], target);
 			} else {
-				eventNetString = _lastTick + "Q\t" + target.toNet();
+				eventNetString = _lastTick + "\tQ\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_W){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[1], target);
 			} else {
-				eventNetString = _lastTick + "W\t" + target.toNet();
+				eventNetString = _lastTick + "\tW\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_E){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[2], target);
 			} else {
-				eventNetString = _lastTick + "E\t" + target.toNet();
+				eventNetString = _lastTick + "\tE\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_R){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[3], target);
 			} else {
-				eventNetString = _lastTick + "R\t" + target.toNet();
+				eventNetString = _lastTick + "\tR\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_A){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[4], target);
 			} else {
-				eventNetString = _lastTick + "A\t" + target.toNet();
+				eventNetString = _lastTick + "\tA\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_S){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[5], target);
 			} else {
-				eventNetString = _lastTick + "S\t" + target.toNet();
+				eventNetString = _lastTick + "\tS\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_D){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[6], target);
 			} else {
-				eventNetString = _lastTick + "D\t" + target.toNet();
+				eventNetString = _lastTick + "\tD\t" + target.toNet();
 			}
 		} else if (key == KeyEvent.VK_F){
 			if (!_isClient) {
 				_data.startCastingSpell(_focus, _focus._spells[7], target);
 			} else {
-				eventNetString = _lastTick + "F\t" + target.toNet();
+				eventNetString = _lastTick + "\tF\t" + target.toNet();
 			}
 		}
 		
-		if (!_isClient) {
-			if (key == 192) DEBUG = !DEBUG;
-		}
-
-		if (key == KeyEvent.VK_G){
-			try {
-				_data._units = new ArrayList<Unit>();
-				_data.readInMap("Chamber of Mysteries",null,null);
-			} catch (Exception e1){};
-		}
+//		if (!_isClient) {
+//			if (key == 192) DEBUG = !DEBUG;
+//		}
+//
+//		if (key == KeyEvent.VK_G){
+//			try {
+//				_data._units = new ArrayList<Unit>();
+//				_data.readInMap("Chamber of Mysteries",null,null);
+//			} catch (Exception e1){};
+//		}
 		if (key == KeyEvent.VK_P){
 			System.out.println(_view.screenToGamePoint(new Vector(_xMouse, _yMouse)));
 			
-		_netOutputs.add(eventNetString);
+		}
+		if (!eventNetString.equals("")) {
+			_netOutputs.add(eventNetString);
 		}
 
 	}
@@ -350,7 +442,7 @@ public class GameScreen extends Screen {
 			Vector point = _view.screenToGamePoint(new Vector(e.getX(), e.getY()));
 			if (_isClient) {
 				String eventNetString = _lastTick + "\t";
-				eventNetString = "CLICK\t" + point.toNet();
+				eventNetString += "CLICK\t" + point.toNet();
 				_netOutputs.add(eventNetString);
 			} else {
 				if (!_focus._isRooted) {

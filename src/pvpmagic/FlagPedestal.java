@@ -30,8 +30,7 @@ public class FlagPedestal extends Unit {
 	}
 	
 	public void draw(View v){
-		if (_flag == null)
-			v.drawImage(Resource.get(_basicImage), _pos, _size);
+		v.drawImage(Resource.get(_basicImage), _pos, _size);
 	}
 
 	@Override
@@ -63,7 +62,9 @@ public class FlagPedestal extends Unit {
 		if (networkString[1].equals(_staticObj ? "static" : _type) 
 				&& _netID == Integer.parseInt(networkString[0])
 				&& networkString.length == 4) {
-			_flag = (Flag) objectMap.get(Integer.parseInt(networkString[2]));
+			if (!networkString[2].equals("null")){
+				_flag = (Flag) objectMap.get(Integer.parseInt(networkString[2]));
+			}
 			_basicImage = networkString[3];
 		}
 	}

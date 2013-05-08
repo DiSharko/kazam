@@ -21,8 +21,9 @@ public class FlagTeamData extends TeamData{
 		if (_pedestal._flag != null) {
 			_teamScore += 1;
 			_pedestal._flag._pos = _pedestal._flag._originalPos;
-			_pedestal._flag._delete = false;
-			_pedestal._flag._data._units.add(_pedestal._flag);
+			_pedestal._flag._basicImage = "flag";
+			_pedestal._flag._collidable = true;
+			_pedestal._flag._drawUnder = false;
 			_pedestal._flag = null;
 		}
 	}
