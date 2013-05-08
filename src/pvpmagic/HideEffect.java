@@ -7,9 +7,10 @@ public class HideEffect extends TimedEffect {
 	private double _increment;
 	private double _appearVals;
 
-	public HideEffect(double numberOfIntervals, Player u) {
+	public HideEffect(double numberOfIntervals, Player caster, Player target) {
 		_numberOfIntervals = numberOfIntervals;
-		_target = u;
+		_caster = caster;
+		_target = target;
 		_appearVals = 40.0;
 		_disappearVals = _numberOfIntervals - _appearVals + 1;
 		_increment = 1.0/_appearVals;

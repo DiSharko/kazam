@@ -23,7 +23,7 @@ public class AbracadabraSpell extends Spell {
 	@Override
 	public void collide(Collision c) {
 		Unit target = c.other(this);
-		target.changeHealth((-2.0)*target._maxHealth);
+		target.changeHealth((-2.0)*target._maxHealth, _caster);
 	}
 	
 	@Override

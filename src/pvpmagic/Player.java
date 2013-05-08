@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import pvpmagic.GameData.GameMode;
 import pvpmagic.spells.DashSpell;
 import pvpmagic.spells.HideSpell;
 import pvpmagic.spells.Spell;
@@ -22,6 +23,9 @@ public class Player extends Unit {
 	
 	public String _characterName;
 	String _playerName;
+	
+	public double _kills;
+	public double _deaths;
 
 	public Vector _destination;
 	public boolean _connected;
@@ -127,6 +131,7 @@ public class Player extends Unit {
 		System.out.println("player died");
 		super.die();
 		dropFlag();
+		_deaths++;
 		_spawnTimer = 100;
 		_data._spawning.add(this);
 	}
@@ -147,8 +152,8 @@ public class Player extends Unit {
 			dropFlag();
 
 		//health and mana regeneration
-		changeHealth(0.125);
-		changeMana(0.125);
+		changeHealth(0.125, null);
+		changeMana(0.125, null);
 
 		Vector center = _pos.plus(_size.div(2.0));
 		if (_spellCastingTime > 0) _spellCastingTime--;
@@ -169,7 +174,21 @@ public class Player extends Unit {
 		}
 	}
 
-
+	@Override
+	public void changeHealth(double amount, Player caster) {
+		_health += amount;
+		if (_health > _maxHealth) _health = _maxHealth;
+		if (_health <= 0) {
+			caster._kills += 1;
+			System.out.println("GOT A KILL: ");
+			System.out.println(caster.toNet());
+			System.out.println("ON: ");
+			System.out.println(this.toNet());
+		}
+		//System.out.println("REDUCED HEALTH BY: " + amount + " HP: " + _health);
+	}
+	
+	
 	private void decrementMana(Spell spell) {
 		//Change the mechanics of this to make it decrease
 		//exponentially with quick successions of spells
@@ -186,7 +205,7 @@ public class Player extends Unit {
 			multiplier += 2;
 		}
 
-		changeMana((-1 * multiplier) * spell._manaCost);
+		changeMana((-1 * multiplier) * spell._manaCost, null);
 	}
 
 	public void castSpell(Spell spell) {
@@ -228,13 +247,13 @@ public class Player extends Unit {
 		}
 	}
 
-	public void confuse(long time) {
-		TimedEffect t = new ConfuseEffect(numberOfIntervals(time), this);
+	public void confuse(long time, Player caster) {
+		TimedEffect t = new ConfuseEffect(numberOfIntervals(time), caster, this);
 		_timedEffects.put(t._type, t);		
 	}
 
-	public void hide(long time) {
-		TimedEffect t = new HideEffect(numberOfIntervals(time), this);
+	public void hide(long time, Player caster) {
+		TimedEffect t = new HideEffect(numberOfIntervals(time), caster, this);
 		_timedEffects.put(t._type, t);
 	}
 	@Override
@@ -243,25 +262,35 @@ public class Player extends Unit {
 		for (Entry<String, Long> e : _spellCastingTimes.entrySet()) {
 			lastCastTimes += e.getKey() + "," + e.getValue() + ".";
 		}
+		if (lastCastTimes.length() > 0) lastCastTimes = 
+				lastCastTimes.substring(0, lastCastTimes.length() - 1);
+		
 		String timedEffectsStr = "";
 		for (Entry<String,TimedEffect> e : _timedEffects.entrySet()) {
 			if (e.getValue() != null) {	
 				timedEffectsStr += e.getValue().toNet() + ".";
 			}
 		}
+		if (timedEffectsStr.length() > 0) timedEffectsStr = 
+				timedEffectsStr.substring(0, timedEffectsStr.length() - 1);
+		
+		String dest = (_destination == null) ? null : _destination.toNet();
+		String flag = (_flag == null) ? null : Integer.toString(_flag._netID);
+		
+		
 		return _netID +              						//index: 0
 				"\t" + (_staticObj ? "static" : _type) +  	//index: 1
 				"\t" + _pos.toNet() +      					//index: 2
-				"\t" + _destination.toNet() +  				//index: 3
-				"\t" + _flag._netID +      					//index: 4
+				"\t" + dest +				  				//index: 3
+				"\t" + flag +      							//index: 4
 				"\t" + _health +        					//index: 5
 				"\t" + _mana +          					//index: 6
 				"\t" + _vel.toNet() +      					//index: 7
 				"\t" + _force.toNet() +      				//index: 8
 				"\t" + _isRooted +        					//index: 9
 				"\t" + _isSilenced +      					//index: 10
-				"\t" + lastCastTimes.substring(0, lastCastTimes.length() - 1) +
-				"\t" + timedEffectsStr.substring(0, timedEffectsStr.length() - 1) +
+				"\t" + lastCastTimes +
+				"\t" + timedEffectsStr +
 				"\t" + _basicImage +						//index: 13
 				"\t" + _connected;							//index: 14
 		
@@ -294,7 +323,7 @@ public class Player extends Unit {
 			tEffects = networkString[12].split(".");
 			_timedEffects = new HashMap<String, TimedEffect>();
 			for (String effect : tEffects) {
-				ef = TimedEffect.fromNet(effect, this);
+				ef = TimedEffect.fromNet(effect, objectMap);
 				if (ef != null) _timedEffects.put(ef._type, ef);
 			}
 

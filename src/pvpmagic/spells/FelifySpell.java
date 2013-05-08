@@ -23,9 +23,9 @@ public class FelifySpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
-		target.changeHealth(-5);
+		target.changeHealth(-5, _caster);
 		if (!(target instanceof Spell) && !(target instanceof Wall)) {
-			target.kitty(3000);
+			target.kitty(3000, _caster);
 			this.die();
 		}
 	}

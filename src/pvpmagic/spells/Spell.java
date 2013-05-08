@@ -82,7 +82,7 @@ public abstract class Spell extends Unit {
 	@Override
 	public void update(){
 		super.update();
-		changeHealth(-1.5);
+		changeHealth(-1.5, null);
 		time++;
 	}
 	

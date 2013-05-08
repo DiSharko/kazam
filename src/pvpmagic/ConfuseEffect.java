@@ -3,9 +3,9 @@ package pvpmagic;
 public class ConfuseEffect extends TimedEffect {
 	public static String TYPE = "ConfuseEffect";
 	
-	public ConfuseEffect(double numberOfIntervals, Player u) {
+	public ConfuseEffect(double numberOfIntervals, Player caster, Player target) {
 		_numberOfIntervals = numberOfIntervals;
-		_target = u;
+		_target = target;
 		_type = TYPE;
 		_toBeCleansed = true;
 	}

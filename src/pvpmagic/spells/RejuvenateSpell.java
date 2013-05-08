@@ -22,7 +22,7 @@ public class RejuvenateSpell extends Spell {
 	public void collide(Collision c){
 		Unit target = c.other(this);
 		if (target._type.equals(Player.TYPE)){
-			target.changeHealth(30, 2000);
+			target.changeHealth(30, 2000, _caster);
 			this.die();
 		}
 	}
