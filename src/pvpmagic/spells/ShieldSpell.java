@@ -25,7 +25,7 @@ public class ShieldSpell extends Spell {
 		}
 		
 		_castingTime = 0;
-		_cooldown = 10000;
+		_cooldown = 8000;
 		_manaCost = 20;
 	}
 	

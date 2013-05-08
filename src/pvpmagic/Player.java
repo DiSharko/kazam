@@ -29,6 +29,8 @@ public class Player extends Unit {
 	Spell _spellToCast = null;
 	double _hidden = 1.0;
 	Composite _old;
+	
+	public boolean _connected = false;
 
 	public String[] _spells;
 	//ArrayList<Carryable> inventory = new ArrayList<Carryable>();
@@ -44,18 +46,22 @@ public class Player extends Unit {
 
 	double _velocity = 8;
 
-	public Player(GameData data, String characterName, String playerName, String[] spellNames, String basicImage){
-		super(data, TYPE, STATICOBJ, basicImage);
+	public Player(GameData data, String characterName, String playerName, String[] spellNames){
+		super(data, TYPE, STATICOBJ, characterName);
 		_canBeRooted = true;
 		_canBeSilenced = true;
 
 		_mass = 3;
 
+		_characterName = characterName;
+		_basicImage = characterName;
+		_playerName = playerName;
+
 		_health = 100;
 		_mana = 100;
 
 		_pos = new Vector(-50, -20);
-		Image sprite = Resource.get("player1_back");
+		Image sprite = Resource.get(_characterName);
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70);
 
 		double hitBoxScale = .7;
@@ -64,8 +70,6 @@ public class Player extends Unit {
 		_spells = spellNames;
 		_spellCastingTimes = new HashMap<String, Long>();
 
-		_characterName = characterName;
-		_playerName = playerName;
 
 		this._restitution = 0;
 
@@ -131,6 +135,9 @@ public class Player extends Unit {
 	@Override
 	public void update(){
 		super.update();
+		if (!_connected) { // signal deletion if disconnected
+			_delete = true;
+		}
 		if(_flag != null) _flag.update();
 		if (_flagGrabTimer == 0) {
 			_flagable = true;
@@ -307,7 +314,7 @@ public class Player extends Unit {
 	public static Player fromNetInit(String[] networkString) {
 		if (networkString[1].equals("static")) {
 			String[] spells = networkString[4].split(" ");
-			Player p = new Player(null, networkString[2], networkString[3], spells, "player1_back");
+			Player p = new Player(null, networkString[2], networkString[3], spells);
 			p._destination = Vector.fromNet(networkString[6]);
 			p._pos = Vector.fromNet(networkString[5]);
 			p._netID = Integer.parseInt(networkString[0]);

@@ -52,10 +52,8 @@ public abstract class Spell extends Unit {
 	}
 	
 	public static Spell newSpell(GameData data, String name, Player caster, Vector dir){
-		if (name == null){
-			System.out.println("Given a null name!");
-			name = ""; //Temporary to enable null construction for Chris
-		}
+		if (name == null) return null;
+
 		if (name.equals("Stun")){ return new StunSpell(data, caster, dir); }
 		else if (name.equals("Disarm")) { return new DisarmSpell(data, caster, dir); }
 		else if (name.equals("Burn")) { return new BurnSpell(data, caster, dir); }
