@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ClientNetworker implements ClientNetworkable {
 
@@ -19,9 +20,10 @@ public class ClientNetworker implements ClientNetworkable {
 	private ConcurrentLinkedQueue<String> _inputs;
 	private AtomicBoolean _connected;
 	private AtomicBoolean _started;
+	private AtomicInteger _focusID;
 	
 	public ClientNetworker(int getPort, int sendPort, SyncedString initData, SyncedString gameData, ConcurrentLinkedQueue<String> inputs, 
-			AtomicBoolean connected, AtomicBoolean started) {
+			AtomicBoolean connected, AtomicBoolean started, AtomicInteger focusID) {
 		_getPort = getPort;
 		_sendPort = sendPort;
 		_initData = initData;
@@ -29,6 +31,7 @@ public class ClientNetworker implements ClientNetworkable {
 		_inputs = inputs;
 		_connected = connected;
 		_started = started;
+		_focusID = focusID;
 	}
 	
 	@Override
@@ -36,7 +39,7 @@ public class ClientNetworker implements ClientNetworkable {
 		try {
 			// set up input sending connection
 			_clientSend = new Socket(hostname, _sendPort);
-			_sendThread = new ClientSendThread(_clientSend,_inputs,_connected,clientData);
+			_sendThread = new ClientSendThread(_clientSend,_inputs,_connected,_focusID,clientData);
 			_sendThread.start();
 			
 			// set up game state connection

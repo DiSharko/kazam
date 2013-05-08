@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
+import java.util.Collection;
 import pvpmagic.spells.Spell;
 import screen.TextInputLine;
 
@@ -15,9 +15,6 @@ public class GameData {
 	ArrayList<Player> _players;
 
 	TeamData _teamdata;
-	
-	int _lastTick;
-	int _clientTick;
 
 	ArrayList<TeamData> _teams;
 	ArrayList<Player> _spawning;
@@ -72,10 +69,6 @@ public class GameData {
 			_units.add(p);
 			_units.add(dummy);
 			dummy._pos = new Vector(-50, -30);
-			
-			// initialize network ticks to invalid values - game starts at 0
-			_lastTick = -1;
-			_clientTick = -1;
 
 		}
 	}
@@ -99,12 +92,12 @@ public class GameData {
 
 	public void update(){
 		String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Confuse", "Felify"};
-		if (Math.random() < 0.1){
-			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*useableSpells.length)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
-		}
-		if (Math.random() < 0.09){
-			_players.get(1)._mana += 15;
-		}
+//		if (Math.random() < 0.1){
+//			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*useableSpells.length)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
+//		}
+//		if (Math.random() < 0.09){
+//			_players.get(1)._mana += 15;
+//		}
 
 
 		// Deleting must be separate, after all updates and collisions
@@ -268,6 +261,20 @@ public class GameData {
 			}
 		}
 		br.close();
+	}
+	
+	/**
+	 * For use by game state modifying methods in Coder, e.g. decodeGame() 
+	 */
+	public void clearList() {
+		_units.clear();
+	}
+
+	/**
+	 * For use by game state modifying methods in Coder, e.g. decodeGame() 
+	 */
+	public void addAll(Collection<? extends Unit> collection) {
+		_units.addAll(collection);
 	}
 
 }
