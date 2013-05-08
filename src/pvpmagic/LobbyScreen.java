@@ -16,7 +16,7 @@ public class LobbyScreen extends Screen {
 
 	boolean _connectedToServer = false;
 	String _serverIP = "123.456.789.1337";
-	SetupScreen _settings;
+	public SetupScreen _settings;
 
 	public LobbyScreen(ScreenHolder holder) {
 		super(holder, "lobby");
