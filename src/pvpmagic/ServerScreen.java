@@ -3,6 +3,8 @@ package pvpmagic;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import screen.Button;
@@ -13,7 +15,7 @@ import screen.TransitionScreen.Transition;
 
 public class ServerScreen extends Screen {
 
-	String _serverIP = "123.456.789.1337";
+	String _serverIP = "Error getting IP Address";
 	String _mapName = "";
 	
 	SetupScreen _settings;
@@ -33,8 +35,10 @@ public class ServerScreen extends Screen {
 		Button start = new Button(this, "start", 150, 50, "Start Game", -1);
 		_interfaceElements.add(start);
 
-		// connect to server...
-
+		try {
+			_serverIP = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {}
+		
 		onResize();
 	}
 
@@ -54,6 +58,12 @@ public class ServerScreen extends Screen {
 		String s = "Waiting for players to join...";
 		int sWidth = (int)g.getFontMetrics().getStringBounds(s, g).getWidth();
 		g.drawString(s, (int)(_holder._w/2-sWidth/2), 150);
+		
+		g.setFont(new Font("Helvetica", Font.PLAIN, 24));
+		s = "Server IP: "+_serverIP;
+		sWidth = (int)g.getFontMetrics().getStringBounds(s, g).getWidth();
+		g.drawString(s, (int)(_holder._w/2-sWidth/2), 250);
+
 	}
 
 	@Override
