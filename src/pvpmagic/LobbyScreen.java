@@ -16,6 +16,7 @@ public class LobbyScreen extends Screen {
 
 	boolean _connectedToServer = false;
 	String _serverIP = "123.456.789.1337";
+	SetupScreen _settings;
 
 	public LobbyScreen(ScreenHolder holder) {
 		super(holder, "lobby");
@@ -35,6 +36,7 @@ public class LobbyScreen extends Screen {
 	}
 	
 	public void getSettings(SetupScreen s){
+		_settings = s;
 		_serverIP = ((TextInputLine)s.getElement("ipAddress")).getText();
 		
 	}
