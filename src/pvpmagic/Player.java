@@ -5,7 +5,6 @@ import java.awt.Composite;
 import java.awt.Image;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map.Entry;
 
 import pvpmagic.spells.FlashSpell;
@@ -98,16 +97,16 @@ public class Player extends Unit {
 			v.drawImage(Resource.get("player1_back"), _pos, _size);
 		}
 		
-		t = _timedEffects.get("Confuse");
+		t = _timedEffects.get(ConfuseEffect.TYPE);
 		if (t != null && t._type.equals(ConfuseEffect.TYPE) && t._display){
 			v.drawImage(Resource.get("confuseEffect"), _pos.plus(10, -30), 30);
 		} 
-		t = _timedEffects.get("Silence");
+		t = _timedEffects.get(SilenceEffect.TYPE);
 		if (t != null && t._type.equals(SilenceEffect.TYPE) && t._display){
 			v.drawImage(Resource.get("silenceEffect"), _pos.plus(30, -10), 30);
 		} 
-		t = _timedEffects.get("HealthBurn");
-		if (t != null && t._type.equals(HealthBoostEffect.TYPE) && t._display){
+		t = _timedEffects.get(HealthBurnEffect.TYPE);
+		if (t != null && t._type.equals(HealthBurnEffect.TYPE) && t._display){
 			v.drawImage(Resource.get("burnEffect"), _pos.plus(3, _size.y-35), 50);
 		}
 

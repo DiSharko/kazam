@@ -98,7 +98,7 @@ public class GameData {
 
 
 	public void update(){
-		String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Confuse"};
+		String[] useableSpells = {"Open", "Summon", "Burn", "Confuse"};
 		if (Math.random() < 0.1){
 			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*useableSpells.length)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
 		}
