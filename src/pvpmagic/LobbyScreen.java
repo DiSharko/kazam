@@ -105,7 +105,8 @@ public class LobbyScreen extends Screen {
 	public void connect() throws UnknownHostException, NetworkException {
 
 		String playerName = ((TextInputLine)_settings.getElement("playerName")).getText();
-		String characterName = _settings.getElement("selectedCharacter").name;
+		//String characterName = _settings.getElement("selectedCharacter").name;
+		String characterName = "andrew";
 		
 		String[] spells = new String[8];
 		for (int i = 0; i < 8; i++){
