@@ -2,6 +2,7 @@ package pvpmagic;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 
 public abstract class Unit {
 	/**
@@ -69,11 +70,13 @@ public abstract class Unit {
 	/**
 	 * Effects that occur over time 
 	 */
-	public LinkedList<TimedEffect> _timedEffects = new LinkedList<TimedEffect>();
+	public HashMap<String, TimedEffect> _timedEffects = 
+			new HashMap<String, TimedEffect>();
 	private final int MILLISECONDS_PER_TICK = 25;
 	
 	public void die() {
 		this._delete = true;
+		_timedEffects = new HashMap<String, TimedEffect>();
 	}
 	
 	/**
@@ -85,7 +88,8 @@ public abstract class Unit {
 	public void root(long time){
 		if (_canBeRooted) _isRooted = true;
 		_vel = new Vector(0,0);
-		_timedEffects.add(new RootEffect(numberOfIntervals(time), this));
+		TimedEffect t = new RootEffect(numberOfIntervals(time), this);
+		_timedEffects.put(t._type, t);
 	}
 	
 	/**
@@ -96,7 +100,8 @@ public abstract class Unit {
 	
 	public void silence(long time){ 
 		if (_canBeSilenced) _isSilenced = true; 
-		_timedEffects.add(new SilenceEffect(numberOfIntervals(time), this));
+		TimedEffect t = new SilenceEffect(numberOfIntervals(time), this);
+		_timedEffects.put(t._type, t);
 	}
 
 	public void collide(Collision c){
@@ -106,18 +111,14 @@ public abstract class Unit {
 //		}
 	}
 	
-	public void update(){
-		LinkedList<TimedEffect> completedEffects = new LinkedList<TimedEffect>();
-		
-		for (TimedEffect e : _timedEffects) {
-			e.effect();
-			if (e._effectCompleted) {
-				completedEffects.add(e);
+	public void update(){	
+		for (Entry<String, TimedEffect> e : _timedEffects.entrySet()) {
+			if (e.getValue() == null) continue;
+			e.getValue().effect();
+			if (e.getValue()._effectCompleted) {
+				e.setValue(null);
 			}
 		}
-		
-		_timedEffects.removeAll(completedEffects);
-	
 	}
 	
 	public void draw(View v){}
@@ -141,9 +142,15 @@ public abstract class Unit {
 	 * @param time Duration of effect in milliseconds
 	 */
 	public void changeMana(int amount, long time) {
-		//System.out.println("STARTING MANA SPELL: HP - " + _health + " MANA - " + _mana);
 		double intervals = numberOfIntervals(time);
-		_timedEffects.add(new ManaEffect(intervals,changePerInterval(amount, intervals), this));
+		TimedEffect t;
+		if (amount < 0) {
+			t = new ManaBurnEffect(intervals, changePerInterval(amount, intervals), this);	
+		} else {
+			t = new ManaBoostEffect(intervals, changePerInterval(amount, intervals), this);
+		}
+		_timedEffects.put(t._type, t);
+		
 	}
 	/**
 	 * Increase/decrease health over time
@@ -151,9 +158,14 @@ public abstract class Unit {
 	 * @param time Duration of effect in milliseconds
 	 */
 	public void changeHealth(int amount, long time) {
-		//System.out.println("STARTING HEALTH SPELL: HP - " + _health + " MANA - " + _mana);
 		double intervals = numberOfIntervals(time);
-		_timedEffects.add(new HealthEffect(intervals, changePerInterval(amount, intervals), this));
+		TimedEffect t;
+		if (amount < 0) {
+			t = new HealthBurnEffect(intervals, changePerInterval(amount, intervals), this);
+		} else {
+			t = new HealthBoostEffect(intervals, changePerInterval(amount, intervals), this);
+		}
+		_timedEffects.put(t._type, t);	
 	}
 	
 	protected double numberOfIntervals(long time) {
@@ -164,25 +176,12 @@ public abstract class Unit {
 		return amount/numberOfIntervals;
 	}
 	public void cleanse() {
-		LinkedList<TimedEffect> toBeCleansed = new LinkedList<TimedEffect>();
-		for (TimedEffect e : _timedEffects) {
-			if (e instanceof HealthEffect) {
-				HealthEffect temp = (HealthEffect) e;
-				if (temp._changePerInterval < 0) {
-					toBeCleansed.add(e);
-				}
-			} else if (e instanceof ManaEffect) {
-				ManaEffect temp = (ManaEffect) e;
-				if (temp._changePerInterval < 0) {
-					toBeCleansed.add(e);
-				}
-			} else if (e instanceof SilenceEffect || e instanceof RootEffect
-					|| e instanceof ConfuseEffect) {
-				toBeCleansed.add(e);
+		for (Entry<String, TimedEffect> e : _timedEffects.entrySet()) {
+			if (e.getValue() == null) continue;
+			if (e.getValue()._toBeCleansed) {
+				e.setValue(null);
 			}
 		}
-		
-		_timedEffects.removeAll(toBeCleansed);
 	}
 	
 	public boolean canCollideWith(Unit u){

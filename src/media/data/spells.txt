@@ -4,7 +4,7 @@ Burn
 Cleanse
 Clone
 Disarm
-Fear
+Confuse
 Felify
 Flash
 Hide

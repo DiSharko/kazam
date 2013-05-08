@@ -74,12 +74,9 @@ public class Player extends Unit {
 
 	@Override
 	public void draw(View v){
-
-		for (TimedEffect e : _timedEffects){
-			if (!e._display) continue;
-			if (e._type.equals(RootEffect.TYPE)){
-				v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
-			}
+		TimedEffect t = _timedEffects.get("Root");
+		if (t != null && t._type.equals(RootEffect.TYPE) && t._display){
+			v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
 		}
 
 		if (_flag != null) {
@@ -109,19 +106,18 @@ public class Player extends Unit {
 		} else if (_hidden == 1) {
 			v.drawImage(Resource.get("player1_back"), _pos, _size);
 		}
-
-		if (_isSilenced){
-
-		}
-		for (TimedEffect e : _timedEffects){
-			if (!e._display) continue;
-			if (e._type.equals(ConfuseEffect.TYPE)){
-				v.drawImage(Resource.get("confuseEffect"), _pos.plus(10, -30), 30);
-			} else if (e._type.equals(SilenceEffect.TYPE)){
-				v.drawImage(Resource.get("silenceEffect"), _pos.plus(30, -10), 30);
-			} else if (e._type.equals(HealthEffect.TYPE)){
-				v.drawImage(Resource.get("burnEffect"), _pos.plus(3, _size.y-35), 50);
-			}
+		
+		t = _timedEffects.get("Confuse");
+		if (t != null && t._type.equals(ConfuseEffect.TYPE) && t._display){
+			v.drawImage(Resource.get("confuseEffect"), _pos.plus(10, -30), 30);
+		} 
+		t = _timedEffects.get("Silence");
+		if (t != null && t._type.equals(SilenceEffect.TYPE) && t._display){
+			v.drawImage(Resource.get("silenceEffect"), _pos.plus(30, -10), 30);
+		} 
+		t = _timedEffects.get("HealthBurn");
+		if (t != null && t._type.equals(HealthBoostEffect.TYPE) && t._display){
+			v.drawImage(Resource.get("burnEffect"), _pos.plus(3, _size.y-35), 50);
 		}
 
 	}
@@ -223,12 +219,14 @@ public class Player extends Unit {
 		}
 	}
 
-	public void fear(long time) {
-		_timedEffects.add(new ConfuseEffect(numberOfIntervals(time), this));		
+	public void confuse(long time) {
+		TimedEffect t = new ConfuseEffect(numberOfIntervals(time), this);
+		_timedEffects.put(t._type, t);		
 	}
 
 	public void hide(long time) {
-		_timedEffects.add(new HideEffect(numberOfIntervals(time), this));
+		TimedEffect t = new HideEffect(numberOfIntervals(time), this);
+		_timedEffects.put(t._type, t);
 	}
 	@Override
 	public String toNet() {
@@ -237,8 +235,10 @@ public class Player extends Unit {
 			lastCastTimes += e.getKey() + "," + e.getValue() + ".";
 		}
 		String timedEffectsStr = "";
-		for (TimedEffect e : _timedEffects) {
-			timedEffectsStr += e.toNet() + ".";
+		for (Entry<String,TimedEffect> e : _timedEffects.entrySet()) {
+			if (e.getValue() != null) {	
+				timedEffectsStr += e.getValue().toNet() + ".";
+			}
 		}
 		return _netID +              						//index: 0
 				"\t" + (_staticObj ? "static" : _type) +  	//index: 1
@@ -275,10 +275,10 @@ public class Player extends Unit {
 			}
 			String[] tEffects; TimedEffect ef;
 			tEffects = networkString[8].split(".");
-			_timedEffects = new LinkedList<TimedEffect>();
+			_timedEffects = new HashMap<String, TimedEffect>();
 			for (String effect : tEffects) {
 				ef = TimedEffect.fromNet(effect, this);
-				if (ef != null) _timedEffects.add(ef);
+				if (ef != null) _timedEffects.put(ef._type, ef);
 			}
 
 		}

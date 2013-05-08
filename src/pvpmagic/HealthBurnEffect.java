@@ -1,23 +1,22 @@
 package pvpmagic;
 
-public class RootEffect extends TimedEffect {
-	public static String TYPE = "RootEffect";
-	
-	public RootEffect(double numberOfIntervals, Unit u) {
+public class HealthBurnEffect extends TimedEffect {
+	public static String TYPE = "HealthBurnEffect";
+
+	public HealthBurnEffect(double numberOfIntervals, double changePerInterval, Unit u) {
 		_numberOfIntervals = numberOfIntervals;
+		_changePerInterval = changePerInterval;
 		_target = u;
 		_type = TYPE;
 		_toBeCleansed = true;
 	}
-
-	@Override
+	
 	public void effect() {
 		_effectCompleted = false;
 		if (_numberOfIntervals > 0) {
-			_target._isRooted = true;
+			_target.changeHealth(_changePerInterval);
 			_numberOfIntervals -= 1;
 		} else {
-			_target._isRooted = false;
 			_effectCompleted = true;
 		}
 	}

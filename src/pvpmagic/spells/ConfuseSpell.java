@@ -11,12 +11,12 @@ import pvpmagic.Unit;
 import pvpmagic.Vector;
 import pvpmagic.View;
 
-public class FearSpell extends Spell {
+public class ConfuseSpell extends Spell {
 	public static String TYPE = "ConfuseSpell";
 
-	public FearSpell(GameData data, Player caster, Vector dir) {
+	public ConfuseSpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
-		_name = "Fear";
+		_name = "Confuse";
 		_cooldown = 1000;
 		_manaCost = 10;
 		Image sprite = Resource.get("FearSpell");
