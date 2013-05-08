@@ -60,8 +60,8 @@ public class GameData {
 				spells[i] = s._spells[i].name;
 			}
 
-			Player p = new Player(this, "andrew", playerName, spells,null);
-			Player dummy = new Player(this, "diego", "bobby", null,null);
+			Player p = new Player(this, "andrew", playerName, spells);
+			Player dummy = new Player(this, "diego", "bobby", null);
 
 			_players.add(p);
 			_players.add(dummy);

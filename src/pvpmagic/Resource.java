@@ -37,6 +37,7 @@ public class Resource {
 		if (_images.containsKey(imageName)){
 			return _images.get(imageName);
 		}
+		System.out.println("Image get request for "+imageName+" - does not exist.");
 		return null;
 	}
 
