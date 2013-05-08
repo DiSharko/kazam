@@ -24,11 +24,13 @@ public class Player extends Unit {
 	String _playerName;
 
 	public Vector _destination;
-	public boolean _connected;
+
 	double _spellCastingTime = 0;
 	Spell _spellToCast = null;
 	double _hidden = 1.0;
 	Composite _old;
+	
+	public boolean _connected = false;
 
 	public String[] _spells;
 	//ArrayList<Carryable> inventory = new ArrayList<Carryable>();
@@ -51,13 +53,13 @@ public class Player extends Unit {
 
 		_mass = 3;
 
+		_characterName = characterName;
+		_basicImage = characterName;
+		_playerName = playerName;
+
 		_health = 100;
 		_mana = 100;
 
-		_characterName = characterName;
-		_basicImage = _characterName;
-		_playerName = playerName;
-		
 		_pos = new Vector(-50, -20);
 		Image sprite = Resource.get(_characterName);
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70);
@@ -72,15 +74,12 @@ public class Player extends Unit {
 		this._restitution = 0;
 
 		_appliesFriction = true;
-		
-		_connected = true;
-
 	}
 
 	@Override
 	public void draw(View v){
-		TimedEffect t = _timedEffects.get("Root");
-		if (t != null && t._type.equals(RootEffect.TYPE) && t._display){
+		TimedEffect t = _timedEffects.get(RootEffect.TYPE);
+		if (t != null && t._display){
 			v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
 		}
 
@@ -94,24 +93,26 @@ public class Player extends Unit {
 
 		_old = v.getGraphics().getComposite();
 		if (_hidden < 1) {
-			AlphaComposite ac = java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden);
-			v.getGraphics().setComposite(ac);
+			Composite old = v.getGraphics().getComposite();
+
+			v.getGraphics().setComposite(java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden));
 			v.drawImage(Resource.get(_basicImage), _pos, _size);
+
+			v.getGraphics().setComposite(old);
 		} else if (_hidden == 1) {
 			v.drawImage(Resource.get(_basicImage), _pos, _size);
 		}
-		v.getGraphics().setComposite(_old);
 		
 		t = _timedEffects.get(ConfuseEffect.TYPE);
-		if (t != null && t._type.equals(ConfuseEffect.TYPE) && t._display){
+		if (t != null && t._display){
 			v.drawImage(Resource.get("confuseEffect"), _pos.plus(10, -30), 30);
 		} 
 		t = _timedEffects.get(SilenceEffect.TYPE);
-		if (t != null && t._type.equals(SilenceEffect.TYPE) && t._display){
+		if (t != null && t._display){
 			v.drawImage(Resource.get("silenceEffect"), _pos.plus(30, -10), 30);
 		} 
 		t = _timedEffects.get(HealthBurnEffect.TYPE);
-		if (t != null && t._type.equals(HealthBurnEffect.TYPE) && t._display){
+		if (t != null && t._display){
 			v.drawImage(Resource.get("burnEffect"), _pos.plus(3, _size.y-35), 50);
 		}
 
@@ -264,10 +265,7 @@ public class Player extends Unit {
 				"\t" + _isRooted +        					//index: 9
 				"\t" + _isSilenced +      					//index: 10
 				"\t" + lastCastTimes.substring(0, lastCastTimes.length() - 1) +
-				"\t" + timedEffectsStr.substring(0, timedEffectsStr.length() - 1) +
-				"\t" + _basicImage +						//index: 13
-				"\t" + _connected;							//index: 14
-		
+				"\t" + timedEffectsStr.substring(0, timedEffectsStr.length() - 1);
 
 		//when fromNet is called, throw away previous timed effects
 		//list, and instantiate new ones with (this) as target
@@ -280,21 +278,15 @@ public class Player extends Unit {
 			this._flag = (Flag) objectMap.get(Integer.parseInt(networkString[4]));
 			this._health = Double.parseDouble(networkString[5]);
 			this._mana = Double.parseDouble(networkString[6]);
-			this._vel = Vector.fromNet(networkString[7]);
-			this._force = Vector.fromNet(networkString[8]);
-			this._isRooted = Boolean.parseBoolean(networkString[9]);
-			this._isSilenced = Boolean.parseBoolean(networkString[10]);
-			this._basicImage = networkString[13];
-			this._connected = Boolean.parseBoolean(networkString[14]);
 
 			String[] lastCastTimes, sp;
-			lastCastTimes = networkString[11].split(".");
+			lastCastTimes = networkString[7].split(".");
 			for (String spell : lastCastTimes) {
 				sp = spell.split(",");
 				this._spellCastingTimes.put(sp[0], Long.parseLong(sp[1]));
 			}
 			String[] tEffects; TimedEffect ef;
-			tEffects = networkString[12].split(".");
+			tEffects = networkString[8].split(".");
 			_timedEffects = new HashMap<String, TimedEffect>();
 			for (String effect : tEffects) {
 				ef = TimedEffect.fromNet(effect, this);

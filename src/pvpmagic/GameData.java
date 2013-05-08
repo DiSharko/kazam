@@ -94,12 +94,12 @@ public class GameData {
 
 	public void update(){
 		String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Confuse", "Felify"};
-		if (Math.random() < 0.1){
-			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*useableSpells.length)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
-		}
-		if (Math.random() < 0.09){
-			_players.get(1)._mana += 15;
-		}
+//		if (Math.random() < 0.1){
+//			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*useableSpells.length)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
+//		}
+//		if (Math.random() < 0.09){
+//			_players.get(1)._mana += 15;
+//		}
 
 
 		// Deleting must be separate, after all updates and collisions
