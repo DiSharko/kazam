@@ -11,7 +11,6 @@ public class LockSpell extends Spell {
 	public LockSpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
 		_name = "Lock";
-		_size = new Vector(10, 10);
 		_cooldown = 1000;
 		_manaCost = 10;
 		
@@ -24,10 +23,10 @@ public class LockSpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
-		if (target._type.equals("door")) {
+		if (target._type.equals(Door.TYPE)) {
 			Door door = (Door) target;
 			door.lock();
-			_health = 0;
+			this.die();
 		}
 	}
 	

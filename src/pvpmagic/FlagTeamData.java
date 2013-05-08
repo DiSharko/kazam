@@ -21,9 +21,12 @@ public class FlagTeamData extends TeamData{
 
 		if (_pedestal._flag != null) {
 			_teamScore += 1;
+			System.out.println("Flagdata flag orig pos = "+_pedestal._flag._originalPos);
 			_pedestal._flag._pos = _pedestal._flag._originalPos;
+			System.out.println("Flagdata flag pos = "+_pedestal._flag._pos);
 			_pedestal._flag._delete = false;
 			_pedestal._flag._data._units.add(_pedestal._flag);
+			System.out.println("Flagdata flag pos = "+_pedestal._flag._pos);
 			_pedestal._flag = null;
 		}
 	}

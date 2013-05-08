@@ -1,6 +1,5 @@
 package pvpmagic.spells;
 
-import java.awt.Color;
 import pvpmagic.*;
 
 public class CleanseSpell extends Spell {
@@ -15,15 +14,7 @@ public class CleanseSpell extends Spell {
 		setProperties(_size, 10);
 	}
 
-	@Override
-	public void collide(Collision c){
-		c.other(this).cleanse();
-		this._delete = true;
-	}
-	
-	@Override
-	public void draw(View v){
-		v.getGraphics().setColor(Color.green);
-		v.fillRect(_pos, _size);
+	public void cleanse() {
+		_caster.cleanse();
 	}
 }

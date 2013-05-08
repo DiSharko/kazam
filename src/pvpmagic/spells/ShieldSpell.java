@@ -2,10 +2,10 @@ package pvpmagic.spells;
 
 import pvpmagic.*;
 
-public class HideSpell extends Spell {
+public class ShieldSpell extends Spell {
 	public static String TYPE = "HideSpell";
 
-	public HideSpell(GameData data, Player caster, Vector dir){
+	public ShieldSpell(GameData data, Player caster, Vector dir){
 		super(data, TYPE, caster, dir);
 		_name = "Hide";
 		_cooldown = 10000;
@@ -13,7 +13,7 @@ public class HideSpell extends Spell {
 	}
 	
 	public void hide() {
-		if (_caster != null) _caster.hide(3500);
+		_data._units.add(new Shield());
 		this.die();
 	}
 }

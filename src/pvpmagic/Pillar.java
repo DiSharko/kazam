@@ -5,12 +5,13 @@ import java.util.HashMap;
 
 public class Pillar extends Unit {
 		public static Boolean STATICOBJ = true;
-		public static String TYPE = "Pillar";
+		public static String TYPE = "pillar";
 		
-		public Pillar(GameData data, Vector pos, double size){
-			super(data, TYPE, STATICOBJ);
+		public Pillar(GameData data, Vector pos, double size, String basicImage){
+			super(data, TYPE, STATICOBJ, basicImage);
 			_pos = pos;
-			Image sprite = Resource.get(TYPE);
+			Image sprite = Resource.get(_basicImage);
+			System.out.println(sprite);
 			_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(size);
 			
 			_movable = false;
@@ -20,7 +21,8 @@ public class Pillar extends Unit {
 		}
 		
 		public void draw(View v){
-			v.drawImage(Resource.get(TYPE), _pos, _size);
+			super.draw(v);
+			v.drawImage(Resource.get(_basicImage), _pos, _size);
 		}
 
 		@Override
@@ -34,11 +36,18 @@ public class Pillar extends Unit {
 		@Override
 		public String toNet() {
 			return _netID + 
-					"\t" + (_staticObj ? "static" : _type);
+					"\t" + (_staticObj ? "static" : _type) +
+					"\t" + _basicImage;
 		}
 
 		@Override
 		public void fromNet(String[] networkString,
-				HashMap<Integer, Unit> objectMap) {}
+				HashMap<Integer, Unit> objectMap) {
+			if (networkString[1].equals(_staticObj ? "static" : _type) 
+					&& _netID == Integer.parseInt(networkString[0])
+					&& networkString.length == 3) {
+				_basicImage = networkString[2];
+			}
+		}
 
 }

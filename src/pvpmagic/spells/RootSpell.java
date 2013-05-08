@@ -12,20 +12,20 @@ public class RootSpell extends Spell {
 		super(data, TYPE, caster, dir);
 		_name = "Root";
 		Image sprite = Resource.get("RootSpell");
-		_size = new Vector(sprite.getWidth(null)*scale, sprite.getHeight(null)*scale);
+		setProperties(new Vector(sprite.getWidth(null)*scale, sprite.getHeight(null)*scale), 15);
+		
 		_cooldown = 1000;
 		_manaCost = 10;
 		_shape = new Circle(this, new Vector(-12, -12), 12);
-		setProperties(_size, 15);
 	}
 	
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
+		target.changeHealth(-10);
 		if (target._type.equals(Player.TYPE)){
 			target.root(3000);
-			target.changeHealth(-5);
-			_health = 0;
+			this.die();
 		}
 	}
 	

@@ -10,8 +10,8 @@ public class FlagPedestal extends Unit {
 	public static String TYPE = "FlagPedestal";
 	Flag _flag = null;
 	
-	public FlagPedestal(GameData data, Vector pos, double size){
-		super(data, TYPE, STATICOBJ);
+	public FlagPedestal(GameData data, Vector pos, double size, String basicImage){
+		super(data, TYPE, STATICOBJ, basicImage);
 		_pos = pos;
 		Image sprite = Resource.get("rock");
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(size);
@@ -31,7 +31,7 @@ public class FlagPedestal extends Unit {
 	
 	public void draw(View v){
 		if (_flag == null)
-			v.drawImage(Resource.get("rock"), _pos, _size);
+			v.drawImage(Resource.get(_basicImage), _pos, _size);
 		else
 			v.drawImage(Resource.get("hwall"), _pos, _size);
 	}
@@ -42,7 +42,7 @@ public class FlagPedestal extends Unit {
 	@Override
 	public void collide(Collision c){
 		Unit u = c.other(this);
-		if (u._type.equals("player")) {
+		if (u._type.equals(Player.TYPE)) {
 			Player p = (Player) u;
 			if (p._flag != null){
 				_flag = p._flag;
@@ -55,15 +55,17 @@ public class FlagPedestal extends Unit {
 	public String toNet() {
 		return _netID +
 				"\t" + (_staticObj ? "static" : _type) + 
-				"\t" + _flag._netID;
+				"\t" + _flag._netID +
+				"\t" + _basicImage;
 	}
 	
 	@Override
 	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
 		if (networkString[1].equals(_staticObj ? "static" : _type) 
 				&& _netID == Integer.parseInt(networkString[0])
-				&& networkString.length == 3) {
+				&& networkString.length == 4) {
 			_flag = (Flag) objectMap.get(Integer.parseInt(networkString[2]));
+			_basicImage = networkString[3];
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package pvpmagic.spells;
 
-import java.awt.Color;
+import java.awt.Image;
 
 import pvpmagic.*;
 
@@ -10,23 +10,29 @@ public class DisarmSpell extends Spell {
 	public DisarmSpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
 		_name = "Disarm";
-		_size = new Vector(10, 10);
+
+		Image sprite = Resource.get("DisarmSpell");
+		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(80), 25);
+
+		_shape = new Circle(this, new Vector(-8, -8), 8);
 		_cooldown = 1000;
 		_manaCost = 10;
-		setProperties(_size, 4);
 	}
-	
+
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
-		target.silence(5000);
 		target.changeHealth(-5);
-		//TODO: possibly make it so that your wand also gets knocked away
+		if(target instanceof Player) {
+			target.silence(5000);
+			this.die();
+		}
 	}
-	
+
 	@Override
 	public void draw(View v){
-		v.getGraphics().setColor(Color.yellow);
-		v.fillRect(_pos, _size);
+		v.rotate(_vel, _pos);
+		v.drawImage(Resource.get("DisarmSpell"), _pos.minus(8,8), _size);
+		v.unrotate();
 	}
 }

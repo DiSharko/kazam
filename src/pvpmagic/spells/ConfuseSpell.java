@@ -11,15 +11,15 @@ import pvpmagic.Unit;
 import pvpmagic.Vector;
 import pvpmagic.View;
 
-public class FearSpell extends Spell {
+public class ConfuseSpell extends Spell {
 	public static String TYPE = "ConfuseSpell";
 
-	public FearSpell(GameData data, Player caster, Vector dir) {
+	public ConfuseSpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
-		_name = "Fear";
+		_name = "Confuse";
 		_cooldown = 1000;
 		_manaCost = 10;
-		Image sprite = Resource.get("FearSpell");
+		Image sprite = Resource.get("ConfuseSpell");
 		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(50), 15);
 	
 		_shape = new Circle(this, new Vector(-9,-9), 9);
@@ -32,13 +32,14 @@ public class FearSpell extends Spell {
 		if (target._type.equals(Player.TYPE)) {
 			Player p = (Player) target;
 			p.confuse(3000);
+			this.die();
 		}
 	}
 	
 	@Override
 	public void draw(View v){
 		v.rotate(_vel, _pos);
-		v.drawImage(Resource.get("FearSpell"), _pos.plus(-9,-9), _size);
+		v.drawImage(Resource.get("ConfuseSpell"), _pos.plus(-9,-9), _size);
 		v.unrotate();
 	}
 

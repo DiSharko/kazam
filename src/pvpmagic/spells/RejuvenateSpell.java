@@ -23,7 +23,7 @@ public class RejuvenateSpell extends Spell {
 		Unit target = c.other(this);
 		if (target._type.equals(Player.TYPE)){
 			target.changeHealth(30, 2000);
-			_health = 0;
+			this.die();
 		}
 	}
 	
