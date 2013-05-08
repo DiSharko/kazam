@@ -37,7 +37,7 @@ public class Flag extends Unit {
 	}
 
 	@Override
-	public void changeHealth(double h){};
+	public void changeHealth(double h, Player caster){};
 	
 	@Override
 	public void collide(Collision c){
@@ -55,9 +55,10 @@ public class Flag extends Unit {
 	}
 	@Override
 	public String toNet() {
+		String pos = (_pos == null) ? null : _pos.toNet();
 		return _netID +
 				"\t" + (_staticObj ? "static" : _type) + 
-				"\t" + _pos + 
+				"\t" + pos + 
 				"\t" + _delete +
 				"\t" + _basicImage;
 	}

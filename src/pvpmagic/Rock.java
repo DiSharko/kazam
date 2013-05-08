@@ -39,7 +39,7 @@ public class Rock extends Unit {
 	}
 
 	@Override
-	public void changeHealth(double amount){
+	public void changeHealth(double amount, Player caster){
 		System.out.println("rock hit");
 		_health -= 20;
 	}

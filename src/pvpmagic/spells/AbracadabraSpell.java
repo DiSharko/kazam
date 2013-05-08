@@ -24,7 +24,7 @@ public class AbracadabraSpell extends Spell {
 	public void collide(Collision c) {
 		Unit target = c.other(this);
 		if (target._type.equals(Player.TYPE)){
-			target.changeHealth((-2.0)*target._maxHealth);
+			target.changeHealth((-2.0)*target._maxHealth, _caster);
 			this.die();
 		}
 	}

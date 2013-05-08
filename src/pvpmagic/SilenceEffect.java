@@ -3,9 +3,11 @@ package pvpmagic;
 public class SilenceEffect extends TimedEffect {
 	public static String TYPE = "SilenceEffect";
 
-	public SilenceEffect(double numberOfIntervals, Unit u) {
+	public SilenceEffect(double numberOfIntervals, 
+			Player caster, Unit target) {
 		_numberOfIntervals = numberOfIntervals;
-		_target = u;
+		_caster = caster;
+		_target = target;
 		_type = TYPE;
 		_toBeCleansed = true;
 	}

@@ -13,14 +13,21 @@ import screen.TextInputLine;
 
 
 public class GameData {
+	public enum GameMode { CTF, TEAM_DEATHMATCH }
+	
 	private final int NEEDED = 3;
+
+	private int _needed = NEEDED;
 	public ArrayList<Unit> _units;
+	
+	public String _gameType;
 
 	TeamData _teamdata;
 
 	ArrayList<TeamData> _teams;
 	ArrayList<Player> _spawning;
 	
+	GameMode _gameMode;
 	public ArrayList<Player> _playerList; // pushed down from lobby/serverscreen
 	boolean _isClient;
 	AtomicInteger _idCounter;
@@ -48,7 +55,7 @@ public class GameData {
 			else {
 				System.out.println("map name was not random: "+s.getElement("selectedMap").name);
 				try {
-					readInMap(s.getElement("selectedMap").name);
+					readInMap(s.getElement("selectedMap").name,null,null);
 				} catch (IOException e) {
 					System.out.println("IOException in setup.");
 					e.printStackTrace();
@@ -130,11 +137,10 @@ public class GameData {
 			}
 		}
 		
-		//update teams' teamdatas, then check if anyone has one
-		for (TeamData td : _teams) td.update();
+		//check if any team has one
 		for (TeamData td : _teams) {
 			td.update();
-			if(td._teamScore == NEEDED) {
+			if(td._teamScore == _needed) {
 				//one team has won!!!
 				System.out.println("Team "+td.TEAM_NUM+" has won the game!");
 			}
@@ -209,7 +215,7 @@ public class GameData {
 	public void applyMovement(){
 		for (int i = 0; i < _units.size(); i++){
 			Unit e = _units.get(i);
-			if (!e._movable) continue;
+			if (!e._movable || e._pos == null) continue;
 
 			e._vel = e._vel.plus(e._force.div(e._mass));
 			if (e._appliesFriction) e._vel = e._vel.mult(0.96);
@@ -219,18 +225,38 @@ public class GameData {
 		}
 	}
 
-	public void readInMap(String mapname) throws IOException {
+	public void readInMap(String mapname, AtomicInteger counter, PriorityQueue<Player> pq) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/media/data/maps/"+mapname+".txt")));
 		String line; String[] linearr;
 		
+		//first read the setup line from the map file to see the number of teams and the gametype
 		line = br.readLine();
 		linearr = line.split(",");
-		if(linearr[0].equals("NUMTEAMS")) {
-			for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
-				_teams.add(new FlagTeamData(i, this));
+		if(linearr[0].equals("SETUP") && (linearr.length == 3)) {
+			if (linearr[2].equals("TEAM DEATHMATCH")) {
+				_gameType = "TEAM DEATHMATCH";
+				_needed = 12;
+				for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
+					DeathmatchTeamData data = new DeathmatchTeamData(i, this);
+					data._netID = counter.getAndIncrement();
+					_teams.add((TeamData)data);
+					_units.add((Unit)data);
+				}
+			} else if (linearr[2].equals("TEAM FLAG")) {
+				_gameType = "TEAM FLAG";
+				_needed = 3;
+				for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
+					FlagTeamData data = new FlagTeamData(i, this);
+					data._netID = counter.getAndIncrement();
+					_teams.add((TeamData)data);
+					_units.add((Unit)data);
+				}
+			} else {
+				System.out.println("Invalid game type in map file.");
+				System.exit(1);
 			}
 		} else {
-			System.out.println("NUMBER OF TEAMS NOT IN MAP, invalid map file.");
+			System.out.println("Invalid map file.");
 			System.exit(1);
 		}
 		
@@ -240,36 +266,50 @@ public class GameData {
 			if(linearr[0].equals("ROCK")) {
 				//line represents a rock: ROCK,500,500,150
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Rock(this, pos, Double.parseDouble(linearr[3]),"rock"));
-
+				Rock r = new Rock(this, pos, Double.parseDouble(linearr[3]),"rock");
+				r._netID = counter.getAndIncrement();
+				_units.add(r);
+				
 			} else if(linearr[0].equals("SPAWN")) {
 				//line represents a spawn point
 				Vector spawn = new Vector(Double.parseDouble(linearr[2]),-1.0*Double.parseDouble(linearr[3]));
 				_teams.get(Integer.parseInt(linearr[1])).addSpawn(spawn);
+				
 			} else if (linearr[0].equals("PILLAR")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Pillar(this, pos, Double.parseDouble(linearr[3]), "pillar"));
+				Pillar p = new Pillar(this, pos, Double.parseDouble(linearr[3]), "pillar");
+				p._netID = counter.getAndIncrement();
+				_units.add(p);
 
 			} else if (linearr[0].equals("HWALL")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Wall(this, pos, Double.parseDouble(linearr[3]), false));
+				Wall w = new Wall(this, pos, Double.parseDouble(linearr[3]), false);
+				w._netID = counter.getAndIncrement();
+				_units.add(w);
 
 			} else if (linearr[0].equals("VWALL")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Wall(this, pos, Double.parseDouble(linearr[3]), true));
+				Wall w = new Wall(this, pos, Double.parseDouble(linearr[3]), true);
+				w._netID = counter.getAndIncrement();
+				_units.add(w);
 
 			} else if(linearr[0].equals("DOOR")) {
 				//line represents a door: DOOR,500,500,250,250,50
 				Vector lockpos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Door(this, lockpos, Double.parseDouble(linearr[3]),"door_closed"));
+				Door d = new Door(this, lockpos, Double.parseDouble(linearr[3]),"door_closed");
+				d._netID = counter.getAndIncrement();
+				_units.add(d);
 			} else if(linearr[0].equals("FLAG")) {
 				//line represents a flag: FLAG,500,500,50
 				Vector pos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Flag(this, pos, Double.parseDouble(linearr[3]),"flag"));
+				Flag f = new Flag(this, pos, Double.parseDouble(linearr[3]),"flag");
+				f._netID = counter.getAndIncrement();
+				_units.add(f);
 
 			} else if (linearr[0].equals("PEDASTAL")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[2]), -1.0*Double.parseDouble(linearr[3]));
 				FlagPedestal pd = new FlagPedestal(this, pos, Double.parseDouble(linearr[4]),"rock");
+				pd._netID = counter.getAndIncrement();
 				_units.add(pd);
 				FlagTeamData ft = (FlagTeamData) _teams.get(Integer.parseInt(linearr[1]));
 				ft.setPed(pd);
@@ -279,6 +319,16 @@ public class GameData {
 			}
 		}
 		br.close();
+		
+		int curr = 0;
+		int max = this._teams.size();
+		Player p;
+		while (!pq.isEmpty()) {
+			p = pq.poll();
+			_teams.get(curr).addPlayer(p);
+			curr++;
+			if (curr == max) curr = 0;
+		}
 	}
 	
 	/**

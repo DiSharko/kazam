@@ -3,9 +3,11 @@ package pvpmagic;
 public class KittyEffect extends TimedEffect {
 	public static String TYPE = "KittyEffect";
 
-	public KittyEffect(double numberOfIntervals, Unit u) {
+	public KittyEffect(double numberOfIntervals, 
+			Player caster, Unit target) {
 		_numberOfIntervals = numberOfIntervals;
-		_target = u;
+		_caster = caster;
+		_target = target;
 		_type = TYPE;
 	}
 

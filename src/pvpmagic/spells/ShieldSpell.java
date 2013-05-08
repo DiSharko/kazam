@@ -32,7 +32,7 @@ public class ShieldSpell extends Spell {
 	@Override
 	public void update(){
 		super.update();
-		changeHealth(-1.5);
+		changeHealth(-1.5, _caster);
 	}
 
 	@Override

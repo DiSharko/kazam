@@ -18,7 +18,6 @@ public class FlagTeamData extends TeamData{
 	@Override
 	public void update() {
 		//update scores
-
 		if (_pedestal._flag != null) {
 			_teamScore += 1;
 			System.out.println("Flagdata flag orig pos = "+_pedestal._flag._originalPos);
@@ -33,10 +32,16 @@ public class FlagTeamData extends TeamData{
 
 	@Override
 	public String toNet() {
+		String pedestal;
+		if (_pedestal == null) { 
+			throw new RuntimeException("ERROR: Team " + TEAM_NUM + "'s pedestal is null.");
+		} else { 
+			pedestal = Integer.toString(_pedestal._netID);
+		}
 		return _netID +
 				"\t" + (_staticObj ? "static" : _type) +
 				"\t" + _teamScore +
-				"\t" + _pedestal._netID;
+				"\t" + pedestal;
 	}
 
 	@Override

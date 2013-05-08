@@ -22,9 +22,9 @@ public class DisarmSpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
-		target.changeHealth(-5);
+		target.changeHealth(-5, _caster);
 		if(target instanceof Player) {
-			target.silence(5000);
+			target.silence(5000, _caster);
 			this.die();
 		}
 	}

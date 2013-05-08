@@ -51,7 +51,7 @@ public class Door extends Unit {
 	}
 	
 	@Override
-	public void changeHealth(double health){}
+	public void changeHealth(double health, Player caster){}
 	
 	@Override
 	public void collide(Collision c){
