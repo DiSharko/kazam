@@ -45,6 +45,8 @@ public class GameScreen extends Screen {
 	@Override
 	public void switchInto(){
 		_holder.setFPS(40);
+		_holder.hideBorder();
+		_holder._window.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	@Override
@@ -65,26 +67,22 @@ public class GameScreen extends Screen {
 		_interfaceElements.add(menu);
 		
 		_isClient = false;
-
-		startGame();
-	}
-
-	public void startGame(){
-		_holder.hideBorder();
-		_holder._window.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-
-		_data = new GameData();
-		_view = new View(_data);
-	}
-
-	public void configureGame(SetupScreen s){
-		_data.setup(s);
-		if (_data._players.size() > 0) setFocus(_data._players.get(0));
-		else System.out.println("No players in game!");
-
+		
 		onResize();
 	}
 
+	public void initializeGame(SetupScreen s){
+		_data = new GameData();
+		_data.setup(s);
+		
+		if (_data._players.size() > 0) setFocus(_data._players.get(0));
+		else System.out.println("No players in game!");
+
+		_view = new View(_data);
+		
+		onResize();
+	}
+	
 	private class VisionComparator implements Comparator<Unit> {
 		@Override
 		public int compare(Unit u1, Unit u2) {

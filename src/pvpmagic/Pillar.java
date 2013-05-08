@@ -11,7 +11,6 @@ public class Pillar extends Unit {
 			super(data, TYPE, STATICOBJ, basicImage);
 			_pos = pos;
 			Image sprite = Resource.get(_basicImage);
-			System.out.println(sprite);
 			_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(size);
 			
 			_movable = false;
