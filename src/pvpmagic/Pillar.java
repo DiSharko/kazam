@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class Pillar extends Unit {
 		public static Boolean STATICOBJ = true;
-		public static String TYPE = "Pillar";
+		public static String TYPE = "pillar";
 		
 		public Pillar(GameData data, Vector pos, double size){
 			super(data, TYPE, STATICOBJ);

@@ -4,6 +4,7 @@ misc/pillar
 misc/door_closed
 misc/door_open
 spells/icon
+spells/DisarmSpell
 spells/StunSpell
 spells/RootSpell
 spells/BurnSpell
@@ -16,6 +17,11 @@ spells/ShieldSpell
 spells/FearSpell
 spells/CloneSpell
 spells/PushSpell
+spells/CleanseSpell
+spells/FlashSpell
+spells/DashSpell
+spells/FelifySpell
+spells/HideSpell
 misc/hwall
 misc/vwall
 misc/player1_back

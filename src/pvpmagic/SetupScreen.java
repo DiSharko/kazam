@@ -369,7 +369,7 @@ public class SetupScreen extends Screen {
 				}
 			}
 
-			if (_currentTab.id.equals("hostTab") || _currentTab.id.equals("serverTab")){
+			if (_currentTab.id.equals("hostTab")){
 //				if (e.id.equals("selectedGameType")){
 //					e.x = 55;
 //					e.y = _tabHeight + 350;
@@ -386,6 +386,16 @@ public class SetupScreen extends Screen {
 				}
 			}
 
+
+			if (_currentTab.id.equals("serverTab")){
+				if (e.id.equals("selectedMap")){
+					e.x = 140;
+					e.y = _tabHeight + 30;
+				} else if (e.id.equals("mapChooser")){
+					e.x = 122;
+					e.y = _tabHeight + 205;
+				}
+			}
 		}
 		for (int i = 0; i < _spells.length; i++){
 			_spells[i].x = 85*(i%4) + 50;

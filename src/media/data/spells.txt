@@ -1,10 +1,11 @@
 Abracadabra
-Blind
 Burn
 Cleanse
 Clone
+Dash
 Disarm
 Fear
+Felify
 Flash
 Hide
 Lock
@@ -13,6 +14,5 @@ Push
 Rejuvenate
 Root
 Shield
-Shine
 Stun
 Summon
