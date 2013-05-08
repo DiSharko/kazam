@@ -94,6 +94,7 @@ public abstract class Spell extends Unit {
 		_netID = Integer.parseInt(networkString[0]);
 		_pos = Vector.fromNet(networkString[4]);
 		_health = Double.parseDouble(networkString[5]);
+		_vel = Vector.fromNet(networkString[6]);
 	}
 	@Override
 	public String toNet() {
@@ -102,6 +103,7 @@ public abstract class Spell extends Unit {
 				"\t" + _caster._netID +
 				"\t" + _dir.toNet() +
 				"\t" + _pos.toNet() +
-				"\t" + _health;
+				"\t" + _health +
+				"\t" + _vel.toNet();
 	}
 }

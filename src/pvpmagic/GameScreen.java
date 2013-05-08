@@ -66,6 +66,7 @@ public class GameScreen extends Screen {
 
 	public GameScreen(ScreenHolder holder) {
 		super(holder, "game");
+		_mapName = "Department of Secrets";
 
 	}
 
