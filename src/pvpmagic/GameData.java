@@ -72,31 +72,6 @@ public class GameData {
 			System.out.println("IOException in setup.");
 			e.printStackTrace();
 		}
-
-		if (!_isClient){
-//			String characterName = s.getElement("selectedCharacter").name;
-
-			String playerName = ((TextInputLine)s.getElement("playerName")).getText();
-			
-			String[] spells = new String[8];
-			for (int i = 0; i < 8; i++){
-				spells[i] = s._spells[i].name;
-			}
-
-			Player p = new Player(this, "andrew", playerName, spells);
-			Player dummy = new Player(this, "diego", "bobby", null);
-
-			_playerList.add(p);
-			_playerList.add(dummy);
-			
-			_teams.get(0).addPlayer(p);
-			_teams.get(1).addPlayer(dummy);
-			
-			_units.add(p);
-			_units.add(dummy);
-			dummy._pos = new Vector(-50, -30);
-
-		}
 	}
 
 	public void startCastingSpell(Player caster, String spellName, Vector dir){
@@ -309,7 +284,7 @@ public class GameData {
 
 			} else if (linearr[0].equals("PEDASTAL")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[2]), -1.0*Double.parseDouble(linearr[3]));
-				FlagPedestal pd = new FlagPedestal(this, pos, Double.parseDouble(linearr[4]),"rock");
+				FlagPedestal pd = new FlagPedestal(this, pos, Double.parseDouble(linearr[4]),"flagPedestal");
 				pd._netID = counter.getAndIncrement();
 				_units.add(pd);
 				FlagTeamData ft = (FlagTeamData) _teams.get(Integer.parseInt(linearr[1]));

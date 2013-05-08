@@ -11,7 +11,7 @@ import pvpmagic.spells.DashSpell;
 import pvpmagic.spells.HideSpell;
 import pvpmagic.spells.Spell;
 
-public class Player extends Unit {
+public class Player extends Unit implements Comparable{
 	public static Boolean STATICOBJ = true;
 	public static String TYPE = "Player";
 	public Vector _spawn;
@@ -63,7 +63,6 @@ public class Player extends Unit {
 		_health = 100;
 		_mana = 100;
 
-		_pos = new Vector(-50, -20);
 		Image sprite = Resource.get(_characterName);
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70);
 
@@ -246,8 +245,9 @@ public class Player extends Unit {
 			}
 			Vector newforce = new Vector(x,y).normalize().mult(5);
 			_flag.applyForce(newforce); 
-			_flag._delete = false;
-			_data._units.add(_flag);
+			_flag._basicImage = "flag";
+			_flag._collidable = true;
+			_flag._drawUnder = false;
 			_flagable = false;
 			_flagGrabTimer = 50;
 			_flag = null;
@@ -366,5 +366,10 @@ public class Player extends Unit {
 		}
 		throw new RuntimeException("Called Player.fromNetInit on string: " 
 				+ Arrays.toString(networkString));
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+		return 0;
 	}
 }

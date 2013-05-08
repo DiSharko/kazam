@@ -40,13 +40,11 @@ public class Rock extends Unit {
 
 	@Override
 	public void changeHealth(double amount, Player caster){
-		System.out.println("rock hit");
 		_health -= 20;
 	}
 	
 	@Override
 	public void die(){
-		System.out.println("rock died");
 		_dead = true;
 		_collidable = false;
 		_drawUnder = true;

@@ -5,6 +5,8 @@ misc/door_closed
 misc/door_open
 misc/deadrock
 misc/cat
+misc/player1_back
+misc/flagPedestal
 spells/icon
 spells/DisarmSpell
 spells/StunSpell
