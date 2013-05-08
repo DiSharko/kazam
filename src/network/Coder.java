@@ -56,7 +56,8 @@ public class Coder {
 	}
 	
 	/**
-	 * Called by server game loop to encode game state for broadcasting
+	 * Called by server game loop to encode game state for broadcasting.  Adds IDs to
+	 * units without IDs at call time (like spells).
 	 * @param units list of units in the game state - AFTER update() has been called
 	 * @return game state encoded as string
 	 */

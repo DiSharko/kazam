@@ -9,7 +9,11 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import network.SyncedString;
 
 import pvpmagic.spells.Spell;
 
@@ -24,8 +28,21 @@ public class GameScreen extends Screen {
 	boolean DEBUG = false;
 	
 	boolean _isClient;
-	public PriorityBlockingQueue<String> _netInputs = new PriorityBlockingQueue<String>();
-
+	
+	// Server vars - set in setup TODO
+	public PriorityBlockingQueue<String> _netInputs; // inputs used by server
+	
+	// Client vars - set in setup TODO
+	ConcurrentLinkedQueue<String> _netOutputs; // outputs added to by client
+	AtomicBoolean _connected;
+	AtomicBoolean _started;
+	SyncedString _gameData;
+	SyncedString _lobbyData;
+	int getPort;
+	int sendPort;
+	int focusID;
+	PriorityQueue<Player> players;
+	
 
 	GameData _data;
 	Player _focus;
@@ -298,7 +315,7 @@ public class GameScreen extends Screen {
 		if (key == KeyEvent.VK_P){
 			System.out.println(_view.screenToGamePoint(new Vector(_xMouse, _yMouse)));
 			
-		_netInputs.add(eventNetString);
+		_netOutputs.add(eventNetString);
 		}
 
 	}
@@ -310,7 +327,7 @@ public class GameScreen extends Screen {
 			if (_isClient) {
 				String eventNetString = _data._lastTick + "\t";
 				eventNetString = "CLICK\t" + point.toNet();
-				_netInputs.add(eventNetString);
+				_netOutputs.add(eventNetString);
 			} else {
 				if (!_focus._isRooted) {
 					_focus._destination = point;
