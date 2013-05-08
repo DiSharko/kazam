@@ -11,11 +11,11 @@ public class AbracadabraSpell extends Spell {
 		super(data, TYPE, caster, dir);
 		_name = "Abracadabra";
 		_size = new Vector(10, 10);
-		_cooldown = 5000;
+		_cooldown = 6000;
 		_manaCost = 10;
 		
 		Image sprite = Resource.get("AbracadabraSpell");
-		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70), 14);
+		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70), 13);
 		
 		_shape = new Circle(this, new Vector(-8, -8), 8);
 	}
@@ -23,7 +23,10 @@ public class AbracadabraSpell extends Spell {
 	@Override
 	public void collide(Collision c) {
 		Unit target = c.other(this);
-		target.changeHealth((-2.0)*target._maxHealth);
+		if (target._type.equals(Player.TYPE)){
+			target.changeHealth((-2.0)*target._maxHealth);
+			_health = 0;
+		}
 	}
 	
 	@Override

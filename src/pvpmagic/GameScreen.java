@@ -150,7 +150,7 @@ public class GameScreen extends Screen {
 					g.setColor(new Color(1,0.7f,0.7f,0.7f));
 					g.fillRoundRect(x, y, _spellButtonSize, _spellButtonSize, 15, 15);
 				}
-				if (_focus._isSilenced){
+				if (_focus._isSilenced && !_focusSpellButtons[i].name.equals("Cleanse")){
 					g.drawImage(Resource.get("silenceEffect"), x, y, 60, 45, null);
 				}
 			}

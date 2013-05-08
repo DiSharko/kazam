@@ -34,8 +34,6 @@ public class SummonSpell extends Spell {
 		Unit target = c.other(this);
 		Vector dir = _caster._pos.minus(target._pos).normalize().mult(10);
 		if (target._type.equals("flag")) {
-			System.out.println(dir);
-			System.out.println("here");
 			target.applyForce(dir);
 			_health = 0;
 		}

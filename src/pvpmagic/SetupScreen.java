@@ -32,7 +32,7 @@ public class SetupScreen extends Screen {
 
 	Button[] _spells;
 
-	ChooserScreen _characterChooserScreen;
+//	ChooserScreen _characterChooserScreen;
 	ChooserScreen _spellChooserScreen;
 	ChooserScreen _spellAllChooserScreen;
 
@@ -78,22 +78,22 @@ public class SetupScreen extends Screen {
 		_hostGameElements.add(playerName);
 
 		// CHARACTER
-		Button characterChooser = new Button(this, "characterChooser", 200, 50, "Choose New Character", -1);
-		characterChooser.setColors(_bgColor, new Color(0.5f,0.5f,0.5f,0.2f), new Color(0.3f,0.3f,0.3f,0.3f), null);
-		_joinGameElements.add(characterChooser);
-		_hostGameElements.add(characterChooser);
-
-		Button selectedCharacter = new Button(this, "selectedCharacter", 165, 165);
-		selectedCharacter.setColors(_bgColor, new Color(0.5f,0.5f,0.5f,0.2f), new Color(0.3f,0.3f,0.3f,0.3f), null);
-		_joinGameElements.add(selectedCharacter);
-		_hostGameElements.add(selectedCharacter);
-
-		_characterChooserScreen = new ChooserScreen(_holder, "characterChooser");
-		_characterChooserScreen._caller = this;
-		for (int i = 0; i < Resource._characters.size(); i++){
-			String name = Resource._characters.get(i);
-			_characterChooserScreen._choices.addButton(new Button(this, name, 100, 100, name, -1));
-		}
+//		Button characterChooser = new Button(this, "characterChooser", 200, 50, "Choose New Character", -1);
+//		characterChooser.setColors(_bgColor, new Color(0.5f,0.5f,0.5f,0.2f), new Color(0.3f,0.3f,0.3f,0.3f), null);
+//		_joinGameElements.add(characterChooser);
+//		_hostGameElements.add(characterChooser);
+//
+//		Button selectedCharacter = new Button(this, "selectedCharacter", 165, 165);
+//		selectedCharacter.setColors(_bgColor, new Color(0.5f,0.5f,0.5f,0.2f), new Color(0.3f,0.3f,0.3f,0.3f), null);
+//		_joinGameElements.add(selectedCharacter);
+//		_hostGameElements.add(selectedCharacter);
+//
+//		_characterChooserScreen = new ChooserScreen(_holder, "characterChooser");
+//		_characterChooserScreen._caller = this;
+//		for (int i = 0; i < Resource._characters.size(); i++){
+//			String name = Resource._characters.get(i);
+//			_characterChooserScreen._choices.addButton(new Button(this, name, 100, 100, name, -1));
+//		}
 
 		// SPELLS
 		_spellChooserScreen = new ChooserScreen(_holder, "spellChooser");
@@ -170,6 +170,10 @@ public class SetupScreen extends Screen {
 			_mapChooserScreen._choices.addButton(new Button(null, name, 100, 100, name, -1));
 		}
 
+		
+		TextInputLine ipAddress = new TextInputLine(this, "ipAddress", 20);
+		ipAddress.h = 20;
+		_joinGameElements.add(ipAddress);
 
 
 		displayTab(hostTab);
@@ -211,7 +215,6 @@ public class SetupScreen extends Screen {
 
 		g.setColor(_bgColor);
 		g.fillRect(0, 0, w, _tabHeight);
-
 	}
 
 	@Override
@@ -229,7 +232,13 @@ public class SetupScreen extends Screen {
 		if (_currentTab.id.equals("joinTab") || _currentTab.id.equals("hostTab")){
 			g.setColor(Color.black);
 			g.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-			g.drawString("Choose your name:", 195, 135);
+			g.drawString("Choose your name:", 55, 135);
+		}
+		
+		if (_currentTab.id.equals("joinTab")){
+			g.setColor(Color.black);
+			g.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+			g.drawString("Connect to IP Address:", 35, 435);
 		}
 	}
 
@@ -239,8 +248,8 @@ public class SetupScreen extends Screen {
 			displayTab((Button)e);
 		} else if (e.id.equals("home")){
 			_holder.transitionToScreen(Transition.FADE,"welcome");
-		} else if (e.id.equals("characterChooser") || e.id.equals("selectedCharacter")){
-			_holder.showChooser(_characterChooserScreen);
+//		} else if (e.id.equals("characterChooser") || e.id.equals("selectedCharacter")){
+//			_holder.showChooser(_characterChooserScreen);
 		} else if (e.id.startsWith("spell_")){
 			_spellChooserScreen._callingElement = e;
 			_holder.showChooser(_spellChooserScreen);
@@ -264,9 +273,9 @@ public class SetupScreen extends Screen {
 
 	@Override
 	public void returnChoice(ChooserScreen c){
-		if (c._name.equals("characterChooser")){
-			if (c._chosen != null) getElement("selectedCharacter").name = c._chosen.name;
-		} else if (c._name.equals("spellChooser")){
+//		if (c._name.equals("characterChooser")){
+//			if (c._chosen != null) getElement("selectedCharacter").name = c._chosen.name;
+		if (c._name.equals("spellChooser")){
 			if (c._callingElement != null && c._callingElement.id.startsWith("spell_")){ // for choosing 1 spell
 				if (c._chosen != null){
 					if (c._callingElement.name != null && !c._callingElement.equals("")){
@@ -333,59 +342,63 @@ public class SetupScreen extends Screen {
 			}
 
 			// Setup for each different tab layout:
+			if (_currentTab.id.equals("joinTab")){
+				if (e.id.equals("ipAddress")){
+					e.x = 210;
+					e.y = _tabHeight + 325;
+					e.h = 20;
+				}
+			}
+			
 			if (_currentTab.id.equals("joinTab") || _currentTab.id.equals("hostTab")){
-				if (e.id.equals("selectedCharacter")){
-					e.x = 55;
-					e.y = _tabHeight + 75;
-				} else if (e.id.equals("characterChooser")){
-					e.x = 37;
-					e.y = _tabHeight + 250;
-				} else if (e.id.equals("spellChooser")){
-					e.x = 420;
+//				if (e.id.equals("selectedCharacter")){
+//					e.x = 55;
+//					e.y = _tabHeight + 75;
+//				} else if (e.id.equals("characterChooser")){
+//					e.x = 37;
+//					e.y = _tabHeight + 250;
+//				} else 
+				if (e.id.equals("spellChooser")){
+					e.x = 120;
 					e.y = _tabHeight + 250;
 				}
 				if (e.id.equals("playerName")){
-					e.x = 350;
+					e.x = 210;
 					e.y = _tabHeight + 25;
 					e.h = 20;
 				}
 			}
 
 			if (_currentTab.id.equals("hostTab")){
-				if (e.id.equals("selectedGameType")){
-					e.x = 55;
-					e.y = _tabHeight + 350;
-				} else if (e.id.equals("gameTypeChooser")){
-					e.x = 37;
-					e.y = _tabHeight + 525;
-				} else if (e.id.equals("selectedMap")){
-					e.x = 440;
+//				if (e.id.equals("selectedGameType")){
+//					e.x = 55;
+//					e.y = _tabHeight + 350;
+//				} else if (e.id.equals("gameTypeChooser")){
+//					e.x = 37;
+//					e.y = _tabHeight + 525;
+//				} else 
+				if (e.id.equals("selectedMap")){
+					e.x = 140;
 					e.y = _tabHeight + 350;
 				} else if (e.id.equals("mapChooser")){
-					e.x = 423;
+					e.x = 122;
 					e.y = _tabHeight + 525;
 				}
 			}
 
 
 			if (_currentTab.id.equals("serverTab")){
-				if (e.id.equals("selectedGameType")){
-					e.x = 55;
-					e.y = _tabHeight + 30;
-				} else if (e.id.equals("gameTypeChooser")){
-					e.x = 37;
-					e.y = _tabHeight + 205;
-				} else if (e.id.equals("selectedMap")){
-					e.x = 430;
+				if (e.id.equals("selectedMap")){
+					e.x = 140;
 					e.y = _tabHeight + 30;
 				} else if (e.id.equals("mapChooser")){
-					e.x = 412;
+					e.x = 122;
 					e.y = _tabHeight + 205;
 				}
 			}
 		}
 		for (int i = 0; i < _spells.length; i++){
-			_spells[i].x = 85*(i%4) + 350;
+			_spells[i].x = 85*(i%4) + 50;
 			_spells[i].y = 85*(i/4) + _tabHeight + 75;
 		}
 	}
