@@ -58,7 +58,7 @@ public class WelcomeScreen extends Screen {
 //		
 //		g.setColor(Color.black);
 //		g.drawString(s, (int)(_holder._w/2-sWidth/2), 150);
-		g.drawImage(Resource.get("splashlogo"), (int)(_holder._w/2-761/2), 90, null);
+		g.drawImage(Resource.get("splashlogo"), (int)(_holder._w/2-660/2), 106, null);
 
 		if (hoverElement != null){
 			int bx = (int) hoverElement.x;
