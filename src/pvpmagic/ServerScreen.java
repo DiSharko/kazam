@@ -113,8 +113,8 @@ public class ServerScreen extends Screen {
 		// setup client to connect with this server
 		LobbyScreen lobby = (LobbyScreen) _holder.getScreen("lobby");
 		lobby.setup();
-		lobby._isHost = true;
-		lobby._isClient = true;
+		lobby._isHost = _isHost;
+		lobby._isClient = _isClient;
 		lobby._server = this;
 		lobby._serverIP = "localhost"; // instead of call to lobby.getSettings()
 		lobby._settings = _settings; // instead of call to lobby.getSettings()

@@ -258,11 +258,17 @@ public class GameScreen extends Screen {
 		} else {
 			if (_connected.get()) {
 				try {
+					// first call server update if hosting
+					if (_isHost) {
+						_server.update();
+					}
+					
+					// now retrieve latest update
 					String gameUpdate = _gameData.getData();
 					String[] update = gameUpdate.split("\n");
 					int curTick = Integer.parseInt(update[0]);
 					
-					// if update is new
+					// if update is new, update game state
 					if (curTick != _lastTick) {
 						Coder.decodeGame(_data, gameUpdate, _staticMap, _dynamicMap);
 					}
@@ -302,7 +308,6 @@ public class GameScreen extends Screen {
 				end();
 			}
 		}
-		
 		
 	}
 
@@ -412,7 +417,9 @@ public class GameScreen extends Screen {
 		if (key == KeyEvent.VK_P){
 			System.out.println(_view.screenToGamePoint(new Vector(_xMouse, _yMouse)));
 			
-		_netOutputs.add(eventNetString);
+		}
+		if (!eventNetString.equals("")) {
+			_netOutputs.add(eventNetString);
 		}
 
 	}
