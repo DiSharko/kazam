@@ -51,6 +51,7 @@ public class GameScreen extends Screen {
 	int _clientTick;
 	ServerScreen _server; //only set if isHost is true
 	HashMap<Integer,Player> _playerMap;
+	String _mapName;
 	
 
 	GameData _data;
@@ -110,7 +111,7 @@ public class GameScreen extends Screen {
 				player._data = _data;
 			}
 		}
-		_data.setup(s);
+		_data.setup(s,_mapName);
 		
 		// construct static map and set focus
 		if (_isClient) {

@@ -49,6 +49,7 @@ public class LobbyScreen extends Screen {
 	AtomicInteger _focusID;
 	ClientNetworkable _networker;
 	ServerScreen _server; //only set if isHost is true
+	public String _mapName;
 
 	public LobbyScreen(ScreenHolder holder) {
 		super(holder, "lobby");
@@ -165,6 +166,7 @@ public class LobbyScreen extends Screen {
 			gameScreen._lastTick = -1;
 			gameScreen._clientTick = -1;
 			gameScreen._server = _server;
+			gameScreen._mapName = _mapName;
 
 			// initialize game data and switch to game screen
 			gameScreen.initializeGame(_settings);

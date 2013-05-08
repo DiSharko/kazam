@@ -198,7 +198,7 @@ public class ServerScreen extends Screen {
 				_playerMap.put(player._netID,player);
 				player._data = _data;
 			}
-			_data.setup(_settings);
+			_data.setup(_settings,_mapName);
 			for (Unit unit : _data._units) {
 				_staticMap.put(unit._netID, unit);
 			}

@@ -75,7 +75,7 @@ public class Coder {
 		try {
 			String[] lobbyUpdate = lobbyData.split("\n");
 			if (Integer.parseInt(lobbyUpdate[0]) > lobby._lobbyVersion) {
-				lobby._settings.getElement("selectedMap").name = lobbyUpdate[1];
+				lobby._mapName = lobbyUpdate[1];
 				lobby._playerList.clear();
 				for (int i = 2; i < lobbyUpdate.length; i++) {
 					Player player = Player.fromNetInit(lobbyUpdate[i].split("[\t]"));

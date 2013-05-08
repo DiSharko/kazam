@@ -41,7 +41,7 @@ public class GameData {
 		_idCounter = new AtomicInteger(0);
 	}
 
-	public void setup(SetupScreen s){
+	public void setup(SetupScreen s,String mapName){
 		
 		/**
 		if (s._currentTab.id.equals("hostTab") ||  s._currentTab.id.equals("dedicatedServer")){
@@ -67,7 +67,7 @@ public class GameData {
 			PriorityQueue<Player> playerQueue = new PriorityQueue<Player>(_playerList.size()+1,new PlayerComparator());
 			playerQueue.addAll(_playerList);
 			_units.addAll(_playerList);
-			readInMap(s.getElement("selectedMap").name,_idCounter,playerQueue);
+			readInMap(mapName,_idCounter,playerQueue);
 		} catch (IOException e) {
 			System.out.println("IOException in setup.");
 			e.printStackTrace();
