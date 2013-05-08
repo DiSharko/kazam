@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.PriorityQueue;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import pvpmagic.spells.Spell;
 import screen.TextInputLine;
 
@@ -12,7 +15,6 @@ import screen.TextInputLine;
 public class GameData {
 	private final int NEEDED = 3;
 	public ArrayList<Unit> _units;
-	ArrayList<Player> _players;
 
 	TeamData _teamdata;
 
@@ -20,16 +22,21 @@ public class GameData {
 	ArrayList<Player> _spawning;
 	
 	public ArrayList<Player> _playerList; // pushed down from lobby/serverscreen
+	boolean _isClient;
+	AtomicInteger _idCounter;
 
-
-	public GameData(){
+	public GameData(ArrayList<Player> playerList, boolean isClient){
 		_units = new ArrayList<Unit>();
-		_players = new ArrayList<Player>();
+		_playerList = playerList;
 		_teams = new ArrayList<TeamData>();
 		_spawning = new ArrayList<Player>();
+		_isClient = isClient;
+		_idCounter = new AtomicInteger(0);
 	}
 
 	public void setup(SetupScreen s){
+		
+		/**
 		if (s._currentTab.id.equals("hostTab") ||  s._currentTab.id.equals("dedicatedServer")){
 			if (s.getElement("selectedMap").name == null || s.getElement("selectedMap").name.equals("Random")) {
 				for (int i = 0; i < 20; i++){
@@ -47,9 +54,18 @@ public class GameData {
 					e.printStackTrace();
 				}
 			}
+		}**/
+		
+		try {
+			PriorityQueue<Player> playerQueue = new PriorityQueue<Player>(_playerList.size(),new PlayerComparator());
+			playerQueue.addAll(_playerList);
+			readInMap(s.getElement("selectedMap").name,_idCounter,playerQueue);
+		} catch (IOException e) {
+			System.out.println("IOException in setup.");
+			e.printStackTrace();
 		}
 
-		if (s._currentTab.id.equals("hostTab")){
+		if (!_isClient){
 //			String characterName = s.getElement("selectedCharacter").name;
 
 			String playerName = ((TextInputLine)s.getElement("playerName")).getText();
@@ -62,8 +78,8 @@ public class GameData {
 			Player p = new Player(this, "andrew", playerName, spells);
 			Player dummy = new Player(this, "diego", "bobby", null);
 
-			_players.add(p);
-			_players.add(dummy);
+			_playerList.add(p);
+			_playerList.add(dummy);
 			
 			_teams.get(0).addPlayer(p);
 			_teams.get(1).addPlayer(dummy);
@@ -93,7 +109,7 @@ public class GameData {
 
 
 	public void update(){
-		String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Confuse", "Felify"};
+		//String[] useableSpells = {"Lock", "Open", "Summon", "Rejuvenate", "Push", "Confuse", "Felify"};
 //		if (Math.random() < 0.1){
 //			startCastingSpell(_players.get(1), useableSpells[(int)(Math.random()*useableSpells.length)], _players.get(0)._pos.plus(_players.get(0)._size.div(2)));
 //		}

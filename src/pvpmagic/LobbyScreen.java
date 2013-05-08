@@ -4,6 +4,15 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import network.ClientNetworkable;
+import network.SyncedString;
 
 import screen.Button;
 import screen.InterfaceElement;
@@ -17,6 +26,29 @@ public class LobbyScreen extends Screen {
 	boolean _connectedToServer = false;
 	String _serverIP = "123.456.789.1337";
 	SetupScreen _settings;
+	
+	// shared network vars - setup in setup TODO
+	boolean _isClient;
+	boolean _isHost;
+	HashMap<Integer,Unit> _staticMap;
+	HashMap<Integer,Unit> _dynamicMap;
+	int _lobbyVersion;
+	List<Player> _playerList;
+	
+	// Client vars - set in setup TODO
+	ConcurrentLinkedQueue<String> _netOutputs; // outputs added to by client
+	AtomicBoolean _connected;
+	AtomicBoolean _started;
+	SyncedString _gameData;
+	SyncedString _lobbyData;
+	int _getPort;
+	int _sendPort;
+	ClientNetworkable _networker;
+	AtomicInteger _focusID;
+	PriorityQueue<Player> _playerQueue;
+	int _lastTick;
+	int _clientTick;
+	ServerScreen _server; //only set if isHost is true
 
 	public LobbyScreen(ScreenHolder holder) {
 		super(holder, "lobby");
@@ -31,6 +63,7 @@ public class LobbyScreen extends Screen {
 
 
 		// connect to server...
+		
 		
 		onResize();
 	}

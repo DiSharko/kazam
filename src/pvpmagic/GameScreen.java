@@ -9,7 +9,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -37,7 +36,7 @@ public class GameScreen extends Screen {
 	HashMap<Integer,Unit> _staticMap;
 	HashMap<Integer,Unit> _dynamicMap;
 	int _lobbyVersion;
-	List<Player> _playerList;
+	ArrayList<Player> _playerList;
 	
 	// Server vars - set in setup TODO
 	public PriorityBlockingQueue<String> _netInputs; // inputs used by server
@@ -103,16 +102,18 @@ public class GameScreen extends Screen {
 		menu.w = menu.h = 60;
 		_interfaceElements.add(menu);
 		
+		_isClient = true;
 		_isHost = false;
+		_playerList = new ArrayList<Player>();
 		
 		onResize();
 	}
 
 	public void initializeGame(SetupScreen s){
-		_data = new GameData();
+		_data = new GameData(_playerList,_isClient);
 		_data.setup(s);
 		
-		if (_data._players.size() > 0) setFocus(_data._players.get(0));
+		if (_data._playerList.size() > 0) setFocus(_data._playerList.get(0));
 		else System.out.println("No players in game!");
 
 		_view = new View(_data);
