@@ -15,9 +15,11 @@ public class RootEffect extends TimedEffect {
 		_effectCompleted = false;
 		if (_numberOfIntervals > 0) {
 			_target._isRooted = true;
+			_target._movable = false;
 			_numberOfIntervals -= 1;
 		} else {
 			_target._isRooted = false;
+			_target._movable = true;
 			_effectCompleted = true;
 		}
 	}

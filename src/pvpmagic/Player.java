@@ -70,13 +70,12 @@ public class Player extends Unit {
 		this._restitution = 0;
 
 		_appliesFriction = true;
-
 	}
 
 	@Override
 	public void draw(View v){
-		TimedEffect t = _timedEffects.get("Root");
-		if (t != null && t._type.equals(RootEffect.TYPE) && t._display){
+		TimedEffect t = _timedEffects.get(RootEffect.TYPE);
+		if (t != null && t._display){
 			v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
 		}
 
@@ -101,15 +100,15 @@ public class Player extends Unit {
 		}
 		
 		t = _timedEffects.get(ConfuseEffect.TYPE);
-		if (t != null && t._type.equals(ConfuseEffect.TYPE) && t._display){
+		if (t != null && t._display){
 			v.drawImage(Resource.get("confuseEffect"), _pos.plus(10, -30), 30);
 		} 
 		t = _timedEffects.get(SilenceEffect.TYPE);
-		if (t != null && t._type.equals(SilenceEffect.TYPE) && t._display){
+		if (t != null && t._display){
 			v.drawImage(Resource.get("silenceEffect"), _pos.plus(30, -10), 30);
 		} 
 		t = _timedEffects.get(HealthBurnEffect.TYPE);
-		if (t != null && t._type.equals(HealthBurnEffect.TYPE) && t._display){
+		if (t != null && t._display){
 			v.drawImage(Resource.get("burnEffect"), _pos.plus(3, _size.y-35), 50);
 		}
 
@@ -266,8 +265,7 @@ public class Player extends Unit {
 	}
 	@Override
 	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
-		if (networkString[1].equals(_staticObj ? "static" : _type) 
-				&& validNetworkString(networkString, false)) {
+		if (networkString[1].equals(_staticObj ? "static" : _type)) {
 			this._pos = Vector.fromNet(networkString[2]);
 			this._destination = Vector.fromNet(networkString[3]);
 			this._flag = (Flag) objectMap.get(Integer.parseInt(networkString[4]));
@@ -307,7 +305,7 @@ public class Player extends Unit {
 
 	//networkString format = [id, type, <any data from toNetInit split on tabs>...]
 	public static Player fromNetInit(String[] networkString) {
-		if (networkString[1].equals("static") && validNetworkString(networkString, true)) {
+		if (networkString[1].equals("static")) {
 			String[] spells = networkString[4].split(" ");
 			Player p = new Player(null, networkString[2], networkString[3], spells, "player1_back");
 			p._destination = Vector.fromNet(networkString[6]);
@@ -317,14 +315,5 @@ public class Player extends Unit {
 		}
 		throw new RuntimeException("Called Player.fromNetInit on string: " 
 				+ Arrays.toString(networkString));
-	}
-
-	public static Boolean validNetworkString(String[] networkData, Boolean init) {
-		if ((init && networkData.length != 6) || (!init && networkData.length != 9)) {
-			System.err.println("ERROR: Invalid String from network - " + Arrays.toString(networkData));
-			return false;
-		} else {
-			return true;
-		}
 	}
 }

@@ -265,11 +265,12 @@ public class SetupScreen extends Screen {
 		} else if (e.id.equals("mapChooser") || e.id.equals("selectedMap")){
 			_holder.showChooser(_mapChooserScreen);
 		} else if (e.id.equals("host")){
-			_holder.transitionToScreen(Transition.FADE, "game");
-			_holder.getScreen("game").setup();
-			((GameScreen)(_holder.getScreen("game"))).configureGame(this);
+			_holder.transitionToScreen(Transition.FADE, "server");
+			((ServerScreen)_holder.getScreen("server")).getSettings(this);
+			_holder.getScreen("server").setup();
 		} else if (e.id.equals("connect")){
 			_holder.transitionToScreen(Transition.FADE, "lobby");
+			((LobbyScreen)_holder.getScreen("lobby")).getSettings(this);
 			_holder.getScreen("lobby").setup();
 		}
 	}
@@ -314,7 +315,7 @@ public class SetupScreen extends Screen {
 
 	@Override
 	public void update(){
-		onResize();
+//		onResize();
 	}
 
 	@Override
