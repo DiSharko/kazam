@@ -222,18 +222,18 @@ public class GameData {
 			if (linearr[2].equals("TEAM DEATHMATCH")) {
 				_gameType = "TEAM DEATHMATCH";
 				_needed = 12;
-				System.out.println("sdfasdf");
 				for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
 					DeathmatchTeamData data = new DeathmatchTeamData(i, this);
+					data._netID = counter.getAndIncrement();
 					_teams.add((TeamData)data);
 					_units.add((Unit)data);
 				}
 			} else if (linearr[2].equals("TEAM FLAG")) {
 				_gameType = "TEAM FLAG";
 				_needed = 3;
-				System.out.println("slkjl");
 				for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
 					FlagTeamData data = new FlagTeamData(i, this);
+					data._netID = counter.getAndIncrement();
 					_teams.add((TeamData)data);
 					_units.add((Unit)data);
 				}
@@ -252,36 +252,50 @@ public class GameData {
 			if(linearr[0].equals("ROCK")) {
 				//line represents a rock: ROCK,500,500,150
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Rock(this, pos, Double.parseDouble(linearr[3]),"rock"));
-
+				Rock r = new Rock(this, pos, Double.parseDouble(linearr[3]),"rock");
+				r._netID = counter.getAndIncrement();
+				_units.add(r);
+				
 			} else if(linearr[0].equals("SPAWN")) {
 				//line represents a spawn point
 				Vector spawn = new Vector(Double.parseDouble(linearr[2]),-1.0*Double.parseDouble(linearr[3]));
 				_teams.get(Integer.parseInt(linearr[1])).addSpawn(spawn);
+				
 			} else if (linearr[0].equals("PILLAR")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Pillar(this, pos, Double.parseDouble(linearr[3]), "pillar"));
+				Pillar p = new Pillar(this, pos, Double.parseDouble(linearr[3]), "pillar");
+				p._netID = counter.getAndIncrement();
+				_units.add(p);
 
 			} else if (linearr[0].equals("HWALL")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Wall(this, pos, Double.parseDouble(linearr[3]), false));
+				Wall w = new Wall(this, pos, Double.parseDouble(linearr[3]), false);
+				w._netID = counter.getAndIncrement();
+				_units.add(w);
 
 			} else if (linearr[0].equals("VWALL")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[1]),-1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Wall(this, pos, Double.parseDouble(linearr[3]), true));
+				Wall w = new Wall(this, pos, Double.parseDouble(linearr[3]), true);
+				w._netID = counter.getAndIncrement();
+				_units.add(w);
 
 			} else if(linearr[0].equals("DOOR")) {
 				//line represents a door: DOOR,500,500,250,250,50
 				Vector lockpos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Door(this, lockpos, Double.parseDouble(linearr[3]),"door_closed"));
+				Door d = new Door(this, lockpos, Double.parseDouble(linearr[3]),"door_closed");
+				d._netID = counter.getAndIncrement();
+				_units.add(d);
 			} else if(linearr[0].equals("FLAG")) {
 				//line represents a flag: FLAG,500,500,50
 				Vector pos = new Vector(Double.parseDouble(linearr[1]), -1.0*Double.parseDouble(linearr[2]));
-				_units.add(new Flag(this, pos, Double.parseDouble(linearr[3]),"flag"));
+				Flag f = new Flag(this, pos, Double.parseDouble(linearr[3]),"flag");
+				f._netID = counter.getAndIncrement();
+				_units.add(f);
 
 			} else if (linearr[0].equals("PEDASTAL")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[2]), -1.0*Double.parseDouble(linearr[3]));
 				FlagPedestal pd = new FlagPedestal(this, pos, Double.parseDouble(linearr[4]),"rock");
+				pd._netID = counter.getAndIncrement();
 				_units.add(pd);
 				FlagTeamData ft = (FlagTeamData) _teams.get(Integer.parseInt(linearr[1]));
 				ft.setPed(pd);
@@ -291,6 +305,16 @@ public class GameData {
 			}
 		}
 		br.close();
+		
+		int curr = 0;
+		int max = this._teams.size();
+		Player p;
+		while (!pq.isEmpty()) {
+			p = pq.poll();
+			_teams.get(curr).addPlayer(p);
+			curr++;
+			if (curr == max) curr = 0;
+		}
 	}
 	
 	/**
