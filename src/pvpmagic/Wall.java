@@ -5,13 +5,14 @@ import java.util.HashMap;
 
 
 public class Wall extends Unit {
+	public static Boolean STATICOBJ = true;
 	public static String TYPE = "Wall";
 	public static String VWALL = "vwall";
 	public static String HWALL = "hwall";
 	private final boolean VERTICAL;
 	
 	public Wall(GameData data, Vector pos, double size, boolean vertical){
-		super(data, TYPE);
+		super(data, TYPE, STATICOBJ);
 		_pos = pos;
 		VERTICAL = vertical; //true is vertical, false is horizontal
 		Image sprite = Resource.get(VERTICAL ? VWALL : HWALL);

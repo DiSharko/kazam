@@ -6,11 +6,12 @@ import java.util.HashMap;
 
 
 public class Rock extends Unit {
+	public static Boolean STATICOBJ = true;
 	public static String TYPE = "Rock";
 
 	
 	public Rock(GameData data, Vector pos, double size){
-		super(data, TYPE);
+		super(data, TYPE, STATICOBJ);
 		_pos = pos;
 		Image sprite = Resource.get("rock");
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(size);
@@ -46,13 +47,14 @@ public class Rock extends Unit {
 	
 	@Override
 	public String toNet() {
-		return _type + 
+		return _netID +
+				"\t" + (_staticObj ? "static" : _type) + 
 				"\t" + _health;
 	}
 	
 	@Override
 	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
-		if (networkString[1].equals("Rock") 
+		if (networkString[1].equals(_staticObj ? "static" : _type) 
 				&& _netID == Integer.parseInt(networkString[0])
 				&& networkString.length == 3) {
 			_health = Integer.parseInt(networkString[2]);

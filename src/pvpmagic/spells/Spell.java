@@ -6,6 +6,7 @@ import java.util.HashMap;
 import pvpmagic.*;
 
 public abstract class Spell extends Unit {
+	public static Boolean STATICOBJ = false;
 	
 	int time = 0;
 	
@@ -26,7 +27,7 @@ public abstract class Spell extends Unit {
 	
 
 	public Spell(GameData data, String type, Player caster, Vector target) {
-		super(data, type);
+		super(data, type, STATICOBJ);
 		if (data == null || type == null || caster == null || target == null) return;
 		_appliesRestitution = false;
 		_caster = caster;
@@ -105,7 +106,6 @@ public abstract class Spell extends Unit {
 	@Override
 	public String toNet() {
 		return _netID +
-				"\t" + "SPELL" +
 				"\t" + _name +
 				"\t" + _caster._netID +
 				"\t" + _dir.toNet() +

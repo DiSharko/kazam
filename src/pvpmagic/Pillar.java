@@ -4,10 +4,11 @@ import java.awt.Image;
 import java.util.HashMap;
 
 public class Pillar extends Unit {
+		public static Boolean STATICOBJ = true;
 		public static String TYPE = "Pillar";
 		
 		public Pillar(GameData data, Vector pos, double size){
-			super(data, TYPE);
+			super(data, TYPE, STATICOBJ);
 			_pos = pos;
 			Image sprite = Resource.get(TYPE);
 			_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(size);
@@ -32,8 +33,8 @@ public class Pillar extends Unit {
 
 		@Override
 		public String toNet() {
-			// TODO Auto-generated method stub
-			return _type;
+			return _netID + 
+					"\t" + (_staticObj ? "static" : _type);
 		}
 
 		@Override
