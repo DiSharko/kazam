@@ -14,6 +14,6 @@ public class HideSpell extends Spell {
 	
 	public void hide() {
 		if (_caster != null) _caster.hide(3500);
-		this._delete = true;
+		this.die();
 	}
 }

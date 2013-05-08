@@ -28,6 +28,7 @@ public class FearSpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
+		target.changeHealth(-5);
 		if (target._type.equals(Player.TYPE)) {
 			Player p = (Player) target;
 			p.confuse(3000);

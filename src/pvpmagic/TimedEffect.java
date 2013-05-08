@@ -24,6 +24,7 @@ public abstract class TimedEffect {
 			System.out.println("ERROR: newTimedEffect given a null argument!");
 			return null;
 		}
+
 		if (type.equals(ConfuseEffect.TYPE)){ return new ConfuseEffect(numberOfIntervals, (Player) target); }
 		else if (type.equals(HealthBurnEffect.TYPE)) { return new HealthBurnEffect(numberOfIntervals, changePerInterval, target); }
 		else if (type.equals(HealthBoostEffect.TYPE)) { return new HealthBoostEffect(numberOfIntervals, changePerInterval, target); }

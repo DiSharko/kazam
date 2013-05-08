@@ -3,6 +3,8 @@ misc/rock
 misc/pillar
 misc/door_closed
 misc/door_open
+misc/deadrock
+misc/cat
 spells/icon
 spells/DisarmSpell
 spells/StunSpell
@@ -14,7 +16,7 @@ spells/OpenSpell
 spells/SummonSpell
 spells/AbracadabraSpell
 spells/ShieldSpell
-spells/FearSpell
+spells/ConfuseSpell
 spells/CloneSpell
 spells/PushSpell
 spells/CleanseSpell

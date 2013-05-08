@@ -22,8 +22,7 @@ public class PushSpell extends Spell {
 	
 	@Override
 	public void collide(Collision c){
-		this._health = 0;
-		//TODO: gotta do displacement effects
+		this.die();
 		Unit target = c.other(this);
 		target.changeHealth(-5);
 		if (target._type.equals(Player.TYPE) && !target.equals(_caster)) {
@@ -35,7 +34,6 @@ public class PushSpell extends Spell {
 			//p.applyForce(f.mult(30));
 			p._vel = f.mult(15);
 		}
-		//c.other(this).applyForce(new Vector());
 	}
 	
 	@Override

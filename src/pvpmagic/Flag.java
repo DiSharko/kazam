@@ -10,8 +10,8 @@ public class Flag extends Unit {
 	public static String TYPE = "Flag";
 	public Vector _originalPos;
 	
-	public Flag(GameData data, Vector pos, double size){
-		super(data, TYPE, STATICOBJ);
+	public Flag(GameData data, Vector pos, double size, String basic){
+		super(data, TYPE, STATICOBJ, basic);
 		_pos = pos;
 		_originalPos = pos;
 		
@@ -32,7 +32,8 @@ public class Flag extends Unit {
 	}
 	
 	public void draw(View v){
-		v.drawImage(Resource.get("flag"), _pos, _size);
+		super.draw(v);
+		v.drawImage(Resource.get(_basicImage), _pos, _size);
 	}
 
 	@Override
@@ -41,11 +42,15 @@ public class Flag extends Unit {
 	@Override
 	public void collide(Collision c){
 		Unit u = c.other(this);
-		if (u._type.equals(Player.TYPE)){
-			System.out.println("player has flag");
+		if (u._type.equals("Player")){
 			Player player = (Player) u;
-			player._flag = this;
-			_delete = true;
+			if(player._flagable) {
+				player._flag = this;
+				System.out.println("player has flag");
+				_delete = true;
+				_vel = new Vector(0,0);
+				_force = new Vector(0,0);
+			}
 		}
 	}
 	@Override

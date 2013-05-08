@@ -19,7 +19,7 @@ public class ConfuseSpell extends Spell {
 		_name = "Confuse";
 		_cooldown = 1000;
 		_manaCost = 10;
-		Image sprite = Resource.get("FearSpell");
+		Image sprite = Resource.get("ConfuseSpell");
 		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(50), 15);
 	
 		_shape = new Circle(this, new Vector(-9,-9), 9);
@@ -28,16 +28,18 @@ public class ConfuseSpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
+		target.changeHealth(-5);
 		if (target._type.equals(Player.TYPE)) {
 			Player p = (Player) target;
 			p.confuse(3000);
+			p.die();
 		}
 	}
 	
 	@Override
 	public void draw(View v){
 		v.rotate(_vel, _pos);
-		v.drawImage(Resource.get("FearSpell"), _pos.plus(-9,-9), _size);
+		v.drawImage(Resource.get("ConfuseSpell"), _pos.plus(-9,-9), _size);
 		v.unrotate();
 	}
 

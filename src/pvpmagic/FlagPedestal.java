@@ -10,8 +10,8 @@ public class FlagPedestal extends Unit {
 	public static String TYPE = "FlagPedestal";
 	Flag _flag = null;
 	
-	public FlagPedestal(GameData data, Vector pos, double size){
-		super(data, TYPE, STATICOBJ);
+	public FlagPedestal(GameData data, Vector pos, double size, String basicImage){
+		super(data, TYPE, STATICOBJ, basicImage);
 		_pos = pos;
 		Image sprite = Resource.get("rock");
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(size);
@@ -31,7 +31,7 @@ public class FlagPedestal extends Unit {
 	
 	public void draw(View v){
 		if (_flag == null)
-			v.drawImage(Resource.get("rock"), _pos, _size);
+			v.drawImage(Resource.get(_basicImage), _pos, _size);
 		else
 			v.drawImage(Resource.get("hwall"), _pos, _size);
 	}

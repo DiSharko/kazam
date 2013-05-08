@@ -17,7 +17,18 @@ public abstract class Unit {
 	 */
 	protected GameData _data;
 	protected boolean _delete = false;
+	protected boolean _drawUnder = false;
 	protected Shape _shape;
+	protected String _basicImage;
+	protected String _oldImage;
+	
+	public Unit(GameData data, String type, Boolean staticObj, String basic){
+		_data = data; 
+		_type = type; 
+		_staticObj = staticObj;
+		_basicImage = basic;
+		_oldImage = basic;
+	}
 	
 	public Unit(GameData data, String type, Boolean staticObj){
 		_data = data; 
@@ -102,6 +113,11 @@ public abstract class Unit {
 	public void silence(long time){ 
 		if (_canBeSilenced) _isSilenced = true; 
 		TimedEffect t = new SilenceEffect(numberOfIntervals(time), this);
+		_timedEffects.put(t._type, t);
+	}
+	public void kitty(long time){ 
+		if (_canBeSilenced) _isSilenced = true; 
+		TimedEffect t = new KittyEffect(numberOfIntervals(time), this);
 		_timedEffects.put(t._type, t);
 	}
 
