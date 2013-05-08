@@ -67,8 +67,6 @@ public class SetupScreen extends Screen {
 		_tabs.add(serverTab);
 		Button home = new Button(this, "home", 50, 30, "Home", KeyEvent.VK_ESCAPE);
 		_tabs.add(home);
-		Button play = new Button(this, "play", 50, 30, "Play", -1);
-		_tabs.add(play);
 
 
 		// PLAYER NAME
@@ -174,6 +172,12 @@ public class SetupScreen extends Screen {
 		TextInputLine ipAddress = new TextInputLine(this, "ipAddress", 20);
 		ipAddress.h = 20;
 		_joinGameElements.add(ipAddress);
+		
+		Button connect = new Button(this, "connect", 200, 100, "Connect", -1);
+		_joinGameElements.add(connect);
+		
+		Button host = new Button(this, "host", 200, 100, "Host Game", -1);
+		_hostGameElements.add(host);
 
 
 		displayTab(hostTab);
@@ -260,14 +264,13 @@ public class SetupScreen extends Screen {
 //			_holder.showChooser(_gameTypeChooserScreen);
 		} else if (e.id.equals("mapChooser") || e.id.equals("selectedMap")){
 			_holder.showChooser(_mapChooserScreen);
-		} else if (e.id.equals("play")){
-			//			if (getElement("selectedMap").name == null) {
-			//				JOptionPane.showMessageDialog(null, "Please choose a map!", "PvP Magic", JOptionPane.ERROR_MESSAGE);
-			//			} else {
+		} else if (e.id.equals("host")){
 			_holder.transitionToScreen(Transition.FADE, "game");
 			_holder.getScreen("game").setup();
 			((GameScreen)(_holder.getScreen("game"))).configureGame(this);
-			//			}
+		} else if (e.id.equals("connect")){
+			_holder.transitionToScreen(Transition.FADE, "lobby");
+			_holder.getScreen("lobby").setup();
 		}
 	}
 
@@ -336,9 +339,14 @@ public class SetupScreen extends Screen {
 			} else if (e.id.equals("home")){
 				e.x = 10;
 				e.y = _tabHeight-40;
-			} else if (e.id.equals("play")){
-				e.x = _holder._w - e.w - 15;
-				e.y = _tabHeight-40;
+			}
+			
+			if (e.id.equals("connect")){
+				e.x = 120;
+				e.y = _tabHeight + 400;
+			} else if (e.id.equals("host")){
+				e.x = 120;
+				e.y = _tabHeight + 400;
 			}
 
 			// Setup for each different tab layout:
@@ -370,22 +378,14 @@ public class SetupScreen extends Screen {
 			}
 
 			if (_currentTab.id.equals("hostTab")){
-//				if (e.id.equals("selectedGameType")){
-//					e.x = 55;
-//					e.y = _tabHeight + 350;
-//				} else if (e.id.equals("gameTypeChooser")){
-//					e.x = 37;
-//					e.y = _tabHeight + 525;
-//				} else 
 				if (e.id.equals("selectedMap")){
-					e.x = 140;
-					e.y = _tabHeight + 350;
+					e.x = 540;
+					e.y = _tabHeight + 75;
 				} else if (e.id.equals("mapChooser")){
-					e.x = 122;
-					e.y = _tabHeight + 525;
+					e.x = 522;
+					e.y = _tabHeight + 250;
 				}
 			}
-
 
 			if (_currentTab.id.equals("serverTab")){
 				if (e.id.equals("selectedMap")){

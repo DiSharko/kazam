@@ -52,9 +52,11 @@ public class Player extends Unit {
 
 		_health = 100;
 		_mana = 100;
+		
+		_characterName = characterName;
 
 		_pos = new Vector(-50, -20);
-		Image sprite = Resource.get("player1_back");
+		Image sprite = Resource.get(_characterName);
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70);
 
 		double hitBoxScale = .7;
@@ -93,21 +95,21 @@ public class Player extends Unit {
 		if (_hidden < 1) {
 			AlphaComposite ac = java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden);
 			v.getGraphics().setComposite(ac);
-			v.drawImage(Resource.get("player1_back"), _pos, _size);
+			v.drawImage(Resource.get(_characterName), _pos, _size);
 		} else if (_hidden == 1) {
-			v.drawImage(Resource.get("player1_back"), _pos, _size);
+			v.drawImage(Resource.get(_characterName), _pos, _size);
 		}
 		v.getGraphics().setComposite(_old);
-		v.drawImage(Resource.get("player1_back"), _pos, _size);
+		v.drawImage(Resource.get(_characterName), _pos, _size);
 		if (_hidden < 1) {
 			Composite old = v.getGraphics().getComposite();
 
 			v.getGraphics().setComposite(java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden));
-			v.drawImage(Resource.get("player1_back"), _pos, _size);
+			v.drawImage(Resource.get(_characterName), _pos, _size);
 
 			v.getGraphics().setComposite(old);
 		} else if (_hidden == 1) {
-			v.drawImage(Resource.get("player1_back"), _pos, _size);
+			v.drawImage(Resource.get(_characterName), _pos, _size);
 		}
 
 		if (_isSilenced){

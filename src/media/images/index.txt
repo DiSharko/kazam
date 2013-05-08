@@ -24,7 +24,10 @@ spells/FelifySpell
 spells/HideSpell
 misc/hwall
 misc/vwall
-misc/player1_back
+misc/andrew
+misc/diego
+misc/chris
+misc/miraj
 misc/flag
 misc/menu
 misc/confuseEffect
