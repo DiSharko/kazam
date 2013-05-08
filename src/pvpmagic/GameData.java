@@ -13,6 +13,10 @@ import screen.TextInputLine;
 
 
 public class GameData {
+	public enum GameMode { CTF, TEAM_DEATHMATCH }
+	
+	private final int NEEDED = 3;
+
 	private int _needed;
 	public ArrayList<Unit> _units;
 	ArrayList<Player> _players;
@@ -23,6 +27,7 @@ public class GameData {
 	ArrayList<TeamData> _teams;
 	ArrayList<Player> _spawning;
 	
+	GameMode _gameMode;
 	public ArrayList<Player> _playerList; // pushed down from lobby/serverscreen
 
 

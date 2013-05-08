@@ -22,9 +22,9 @@ public class RootSpell extends Spell {
 	@Override
 	public void collide(Collision c){
 		Unit target = c.other(this);
-		target.changeHealth(-10);
+		target.changeHealth(-10, _caster);
 		if (target._type.equals(Player.TYPE)){
-			target.root(3000);
+			target.root(3000, _caster);
 			this.die();
 		}
 	}

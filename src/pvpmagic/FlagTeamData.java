@@ -32,10 +32,16 @@ public class FlagTeamData extends TeamData{
 
 	@Override
 	public String toNet() {
+		String pedestal;
+		if (_pedestal == null) { 
+			throw new RuntimeException("ERROR: Team " + TEAM_NUM + "'s pedestal is null.");
+		} else { 
+			pedestal = Integer.toString(_pedestal._netID);
+		}
 		return _netID +
 				"\t" + (_staticObj ? "static" : _type) +
 				"\t" + _teamScore +
-				"\t" + _pedestal._netID;
+				"\t" + pedestal;
 	}
 
 	@Override

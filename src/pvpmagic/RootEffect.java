@@ -3,9 +3,11 @@ package pvpmagic;
 public class RootEffect extends TimedEffect {
 	public static String TYPE = "RootEffect";
 	
-	public RootEffect(double numberOfIntervals, Unit u) {
+	public RootEffect(double numberOfIntervals, 
+			Player caster, Unit target) {
 		_numberOfIntervals = numberOfIntervals;
-		_target = u;
+		_caster = caster;
+		_target = target;
 		_type = TYPE;
 		_toBeCleansed = true;
 	}
