@@ -118,6 +118,7 @@ public abstract class Spell extends Unit {
 		_pos = Vector.fromNet(networkString[4]);
 		_health = Double.parseDouble(networkString[5]);
 		_vel = Vector.fromNet(networkString[6]);
+		_caster = (Player) objectMap.get(networkString[1]);
 	}
 	@Override
 	public String toNet() {

@@ -9,7 +9,6 @@ import java.util.PriorityQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import pvpmagic.spells.Spell;
-import screen.TextInputLine;
 
 
 public class GameData {
@@ -21,8 +20,6 @@ public class GameData {
 	public ArrayList<Unit> _units;
 	
 	public String _gameType;
-
-	TeamData _teamdata;
 
 	ArrayList<TeamData> _teams;
 	ArrayList<Player> _spawning;
@@ -128,7 +125,7 @@ public class GameData {
 			p = _spawning.get(i);
 			if (p._spawnTimer == 0) {
 				//done spawning
-				System.out.println("player done spawning");
+//				System.out.println("player done spawning");
 				p._pos = p._spawn;
 				p._delete = false;
 				p._health = p._maxHealth;

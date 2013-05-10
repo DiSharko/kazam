@@ -131,9 +131,11 @@ public class Player extends Unit implements Comparable{
 
 	@Override
 	public void die() {
-		System.out.println("player died");
-		super.die();
+		_timedEffects = new HashMap<String, TimedEffect>();
 		dropFlag();
+		this._collidable = false;
+		this._drawUnder = true;
+		this._basicImage = _characterName + "_splat";
 		_deaths++;
 		_spawnTimer = 100;
 		_data._spawning.add(this);
@@ -242,9 +244,7 @@ public class Player extends Unit implements Comparable{
 			}
 			Vector newforce = new Vector(x,y).normalize().mult(5);
 			_flag.applyForce(newforce); 
-			_flag._basicImage = "flag";
 			_flag._collidable = true;
-			_flag._drawUnder = false;
 			_flagable = false;
 			_flagGrabTimer = 50;
 			_flag = null;
@@ -301,7 +301,10 @@ public class Player extends Unit implements Comparable{
 				"\t" + _connected +							//index: 14
 				"\t" + _kills +								//index: 15
 				"\t" + _deaths +							//index: 16
-				"\t" + _hidden;								//index: 17
+				"\t" + _collidable + 						//index: 17
+				"\t" + _drawUnder + 						//index: 18
+				"\t" + _spawnTimer +						//index: 19
+				"\t" + _hidden;								//index: 20
 
 		//when fromNet is called, throw away previous timed effects
 		//list, and instantiate new ones with (this) as target
@@ -323,7 +326,10 @@ public class Player extends Unit implements Comparable{
 			this._connected = Boolean.parseBoolean(networkString[14]);
 			this._kills = Double.parseDouble(networkString[15]);
 			this._deaths = Double.parseDouble(networkString[16]);
-			this._hidden = Double.parseDouble(networkString[17]);
+			this._collidable = Boolean.parseBoolean(networkString[17]);
+			this._drawUnder = Boolean.parseBoolean(networkString[18]);
+			this._spawnTimer = Integer.parseInt(networkString[19]);
+			this._hidden = Double.parseDouble(networkString[20]);
 
 			String[] lastCastTimes, sp;
 			lastCastTimes = networkString[7].split(".");
@@ -338,7 +344,6 @@ public class Player extends Unit implements Comparable{
 				ef = TimedEffect.fromNet(effect, objectMap);
 				if (ef != null) _timedEffects.put(ef._type, ef);
 			}
-
 		}
 	}		
 

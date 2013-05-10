@@ -33,7 +33,7 @@ public class Flag extends Unit {
 	
 	public void draw(View v){
 		super.draw(v);
-		v.drawImage(Resource.get(_basicImage), _pos, _size);
+		if (_collidable) v.drawImage(Resource.get(_basicImage), _pos, _size);
 	}
 
 	@Override
@@ -46,9 +46,7 @@ public class Flag extends Unit {
 			Player player = (Player) u;
 			if(player._flagable) {
 				player._flag = this;
-				this._basicImage = "pillar";
 				this._collidable = false;
-				this._drawUnder = true;
 				_vel = new Vector(0,0);
 				_force = new Vector(0,0);
 			}
@@ -57,21 +55,27 @@ public class Flag extends Unit {
 	@Override
 	public String toNet() {
 		String pos = (_pos == null) ? null : _pos.toNet();
+		String vel = (_vel == null) ? null : _vel.toNet();
+		String force = (_force == null) ? null : _force.toNet();
+		System.out.println("flag to net");
 		return _netID +
 				"\t" + (_staticObj ? "static" : _type) + 
 				"\t" + pos + 
 				"\t" + _delete +
-				"\t" + _basicImage;
+				"\t" + _basicImage + 
+				"\t" + _collidable +
+				"\t" + vel +
+				"\t" + force;
 	}
 	
 	@Override
 	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
-		if (networkString[1].equals(_staticObj ? "static" : _type) 
-				&& _netID == Integer.parseInt(networkString[0])
-				&& networkString.length == 4) {
-			_pos = Vector.fromNet(networkString[2]);
-			_delete = Boolean.parseBoolean(networkString[3]);
-			_basicImage = networkString[4];
-		}
+		_pos = Vector.fromNet(networkString[2]);
+		_delete = Boolean.parseBoolean(networkString[3]);
+		_basicImage = networkString[4];
+		_collidable = Boolean.parseBoolean(networkString[5]);
+		System.out.println(_collidable);
+		_vel = Vector.fromNet(networkString[6]);
+		_force = Vector.fromNet(networkString[7]);
 	}
 }

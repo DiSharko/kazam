@@ -13,7 +13,7 @@ public class FlagPedestal extends Unit {
 	public FlagPedestal(GameData data, Vector pos, double size, String basicImage){
 		super(data, TYPE, STATICOBJ, basicImage);
 		_pos = pos;
-		Image sprite = Resource.get("rock");
+		Image sprite = Resource.get("flagPedestal");
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(size);
 		_movable = false;
 		
