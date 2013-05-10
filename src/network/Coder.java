@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import pvpmagic.*;
-import pvpmagic.spells.Spell;
-
+import pvpmagic.spells.*;
 public class Coder {
 	
 	private final static int ID = 0;
@@ -188,7 +187,7 @@ public class Coder {
 				} else if (eventString[2].equals("E")){
 					data.startCastingSpell(p, p._spells[2], target);
 				} else if (eventString[2].equals("R")){
-					data.startCastingSpell(p, p._spells[2], target);
+					data.startCastingSpell(p, p._spells[3], target);
 				} else if (eventString[2].equals("A")){
 					data.startCastingSpell(p, p._spells[4], target);
 				} else if (eventString[2].equals("S")){

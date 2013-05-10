@@ -128,7 +128,7 @@ public class GameData {
 			p = _spawning.get(i);
 			if (p._spawnTimer == 0) {
 				//done spawning
-				System.out.println("player done spawning");
+//				System.out.println("player done spawning");
 				p._pos = p._spawn;
 				p._delete = false;
 				p._health = p._maxHealth;

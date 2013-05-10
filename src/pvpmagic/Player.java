@@ -84,6 +84,7 @@ public class Player extends Unit implements Comparable{
 	@Override
 	public void draw(View v){
 		TimedEffect t = _timedEffects.get(RootEffect.TYPE);
+		// TODO figure out why these sprites are drawn only on first two intervals, possible timestamp problem?
 		if (t != null && t._display){
 			v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
 		}
@@ -186,12 +187,8 @@ public class Player extends Unit implements Comparable{
 		_health += amount;
 		if (_health > _maxHealth) _health = _maxHealth;
 		if (_health <= 0) {
-			caster._kills += 1;
-			System.out.println("-----");
-			System.out.println(caster.toNet());
-			System.out.println("GOT A KILL ON: ");
-			System.out.println(this.toNet());
-			System.out.println("------");
+			if (caster._netID != _netID) caster._kills += 1;
+			this.die();
 		}
 		//System.out.println("REDUCED HEALTH BY: " + amount + " HP: " + _health);
 	}
@@ -290,7 +287,7 @@ public class Player extends Unit implements Comparable{
 		
 		return _netID +              						//index: 0
 				"\t" + (_staticObj ? "static" : _type) +  	//index: 1
-				"\t" + pos +      					//index: 2
+				"\t" + pos +      							//index: 2
 				"\t" + dest +				  				//index: 3
 				"\t" + flag +      							//index: 4
 				"\t" + _health +        					//index: 5
@@ -307,8 +304,8 @@ public class Player extends Unit implements Comparable{
 				"\t" + _deaths +							//index: 16
 				"\t" + _collidable + 						//index: 17
 				"\t" + _drawUnder + 						//index: 18
-				"\t" + _spawnTimer;							//index: 19
-		
+				"\t" + _spawnTimer +						//index: 19
+				"\t" + _hidden;								//index: 20
 
 		//when fromNet is called, throw away previous timed effects
 		//list, and instantiate new ones with (this) as target
@@ -333,6 +330,7 @@ public class Player extends Unit implements Comparable{
 			this._collidable = Boolean.parseBoolean(networkString[17]);
 			this._drawUnder = Boolean.parseBoolean(networkString[18]);
 			this._spawnTimer = Integer.parseInt(networkString[19]);
+			this._hidden = Double.parseDouble(networkString[20]);
 
 			String[] lastCastTimes, sp;
 			lastCastTimes = networkString[7].split(".");

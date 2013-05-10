@@ -46,7 +46,6 @@ public class ClientSendThread extends Thread {
 			while (_connected.get()) {
 				String command = _inputs.poll();
 				if (command != null) {
-					System.out.println("COMMAND " + command);
 					writer.write(command + "\n");
 					writer.flush();
 				}
