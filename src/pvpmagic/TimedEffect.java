@@ -59,12 +59,13 @@ public abstract class TimedEffect {
 				"," + _numberOfIntervals +
 				"," + _changePerInterval +
 				"," +  casterID +
-				"," + _target._netID;
+				"," + _target._netID + 
+				"," + _display;
 	}
 	
 	public static TimedEffect fromNet(String effectNetString, HashMap<Integer, Unit> objectMap) {
 		String[] args = effectNetString.split(",");
-		Player caster;
+		Player caster; TimedEffect t;
 		if (Boolean.parseBoolean(args[1])) {
 			if (!args[4].equals("null")) {
 				caster = null;
@@ -73,11 +74,13 @@ public abstract class TimedEffect {
 			}
 			Unit target = objectMap.get(Integer.parseInt(args[5]));
 			if (args[3].equals("null")) {
-				return newTimedEffect(args[0], Double.parseDouble(args[2]), caster, target);
+				t = newTimedEffect(args[0], Double.parseDouble(args[2]), caster, target);
 			} else {
-				return newTimedEffect(args[0], Double.parseDouble(args[2]), caster, target, 
+				t = newTimedEffect(args[0], Double.parseDouble(args[2]), caster, target, 
 						Double.parseDouble(args[4]));
 			}
+			t._display = Boolean.parseBoolean(args[6]);
+			return t;
 		}
 		return null;
 	}

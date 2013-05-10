@@ -46,7 +46,7 @@ public class InputHandler extends Thread {
 			while(_running.get()) {
 				//System.out.println("blocking read?");
 				String input = reader.readLine();
-				System.out.println("INPUTHANDLER" + _id + "\t" + input);
+				//System.out.println("INPUTHANDLER" + _id + "\t" + input);
 				_inputs.put(_id + "\t" + input);
 			}
 			

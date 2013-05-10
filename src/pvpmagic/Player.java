@@ -84,6 +84,7 @@ public class Player extends Unit implements Comparable{
 	@Override
 	public void draw(View v){
 		TimedEffect t = _timedEffects.get(RootEffect.TYPE);
+		// TODO figure out why these sprites are drawn only on first two intervals, possible timestamp problem?
 		if (t != null && t._display){
 			v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
 		}
@@ -184,12 +185,8 @@ public class Player extends Unit implements Comparable{
 		_health += amount;
 		if (_health > _maxHealth) _health = _maxHealth;
 		if (_health <= 0) {
-			caster._kills += 1;
-			System.out.println("-----");
-			System.out.println(caster.toNet());
-			System.out.println("GOT A KILL ON: ");
-			System.out.println(this.toNet());
-			System.out.println("------");
+			if (caster._netID != _netID) caster._kills += 1;
+			this.die();
 		}
 		//System.out.println("REDUCED HEALTH BY: " + amount + " HP: " + _health);
 	}
@@ -289,7 +286,7 @@ public class Player extends Unit implements Comparable{
 		
 		return _netID +              						//index: 0
 				"\t" + (_staticObj ? "static" : _type) +  	//index: 1
-				"\t" + pos +      					//index: 2
+				"\t" + pos +      							//index: 2
 				"\t" + dest +				  				//index: 3
 				"\t" + flag +      							//index: 4
 				"\t" + _health +        					//index: 5
@@ -303,8 +300,8 @@ public class Player extends Unit implements Comparable{
 				"\t" + _basicImage +						//index: 13
 				"\t" + _connected +							//index: 14
 				"\t" + _kills +								//index: 15
-				"\t" + _deaths;								//index: 16
-		
+				"\t" + _deaths +							//index: 16
+				"\t" + _hidden;								//index: 17
 
 		//when fromNet is called, throw away previous timed effects
 		//list, and instantiate new ones with (this) as target
@@ -326,6 +323,7 @@ public class Player extends Unit implements Comparable{
 			this._connected = Boolean.parseBoolean(networkString[14]);
 			this._kills = Double.parseDouble(networkString[15]);
 			this._deaths = Double.parseDouble(networkString[16]);
+			this._hidden = Double.parseDouble(networkString[17]);
 
 			String[] lastCastTimes, sp;
 			lastCastTimes = networkString[7].split(".");
