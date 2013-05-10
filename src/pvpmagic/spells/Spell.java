@@ -5,26 +5,42 @@ import java.util.HashMap;
 import pvpmagic.*;
 
 public abstract class Spell extends Unit {
-	public static Boolean STATICOBJ = false;
+	static Boolean STATICOBJ = false;
 	
-	int time = 0;
-	
+	/**
+	 * The caster of the spell
+	 */
 	protected Player _caster;
-	protected Integer _casterNetID;
-	protected double _damage;
+	/**
+	 * The name of the spell
+	 */
+	public String _name;
+	/**
+	 * The amount of time taken to cast the spell (wind-up)
+	 */
+	public double _castingTime = 5;
+	/**
+	 * The amount of waiting time before the spell can be used again
+	 */
 	public double _cooldown = 0;
+	/**
+	 * The cost in mana for casting the spell
+	 */
 	public double _manaCost = 0;
 	
-	
-	public double _castingTime = 5;
-	
-	public String _name;
-	
+	/**
+	 * The velocity of the spell object itself
+	 */
 	double _velocity = 1;
-
+	/**
+	 * The direction vector in which it moves
+	 */
 	Vector _dir;
+	/**
+	 * The amount of intervals/frames since the casting of the spell
+	 */
+	int _timeSinceCast = 0;
 	
-
 	public Spell(GameData data, String type, Player caster, Vector target) {
 		super(data, type, STATICOBJ, null);
 		if (data == null || type == null || caster == null || target == null) return;
@@ -50,7 +66,14 @@ public abstract class Spell extends Unit {
 
 		// Adjust spell to start outside player
 	}
-	
+	/**
+	 * Instantiates new spell based on parameters
+	 * @param data The backing GameData object in which the spell is instantiated
+	 * @param name The name of the spell
+	 * @param caster The caster of the spell, as a Player object
+	 * @param dir The direction vector in which the spell is moving
+	 * @return Specific new subclass of spell with fields filled in with parameters
+	 */
 	public static Spell newSpell(GameData data, String name, Player caster, Vector dir){
 		if (name == null) return null;
 
@@ -81,12 +104,12 @@ public abstract class Spell extends Unit {
 	public void update(){
 		super.update();
 		changeHealth(-1.5, null);
-		time++;
+		_timeSinceCast++;
 	}
 	
 	@Override
 	public boolean canCollideWith(Unit u){
-		if (u == _caster && time < 15) return false;
+		if (u == _caster && _timeSinceCast < 15) return false;
 		return true;
 	}
 	@Override
