@@ -92,10 +92,10 @@ public abstract class Spell extends Unit {
 	@Override
 	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
 		_netID = Integer.parseInt(networkString[0]);
+		_caster = (Player) objectMap.get(Integer.parseInt(networkString[2]));
 		_pos = Vector.fromNet(networkString[4]);
 		_health = Double.parseDouble(networkString[5]);
 		_vel = Vector.fromNet(networkString[6]);
-		_caster = (Player) objectMap.get(networkString[1]);
 	}
 	@Override
 	public String toNet() {

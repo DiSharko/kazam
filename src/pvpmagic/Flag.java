@@ -33,7 +33,8 @@ public class Flag extends Unit {
 	
 	public void draw(View v){
 		super.draw(v);
-		if (_collidable) v.drawImage(Resource.get(_basicImage), _pos, _size);
+		if (_collidable) 
+			v.drawImage(Resource.get(_basicImage), _pos, _size);
 	}
 
 	@Override
@@ -47,6 +48,7 @@ public class Flag extends Unit {
 			if(player._flagable) {
 				player._flag = this;
 				this._collidable = false;
+				this._drawUnder = true;
 				_vel = new Vector(0,0);
 				_force = new Vector(0,0);
 			}
@@ -63,6 +65,7 @@ public class Flag extends Unit {
 				"\t" + _delete +
 				"\t" + _basicImage + 
 				"\t" + _collidable +
+				"\t" + _drawUnder + 
 				"\t" + vel +
 				"\t" + force;
 	}

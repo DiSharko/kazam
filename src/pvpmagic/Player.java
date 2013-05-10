@@ -160,8 +160,8 @@ public class Player extends Unit implements Comparable{
 			dropFlag();
 
 		//health and mana regeneration
-		changeHealth(0.125, null);
-		changeMana(0.125, null);
+		changeHealth(0.125, this);
+		changeMana(0.125, this);
 
 		Vector center = _pos.plus(_size.div(2.0));
 		if (_spellCastingTime > 0) _spellCastingTime--;
@@ -245,6 +245,7 @@ public class Player extends Unit implements Comparable{
 			Vector newforce = new Vector(x,y).normalize().mult(5);
 			_flag.applyForce(newforce); 
 			_flag._collidable = true;
+			_flag._drawUnder = false;
 			_flagable = false;
 			_flagGrabTimer = 50;
 			_flag = null;
@@ -344,6 +345,7 @@ public class Player extends Unit implements Comparable{
 				ef = TimedEffect.fromNet(effect, objectMap);
 				if (ef != null) _timedEffects.put(ef._type, ef);
 			}
+
 		}
 	}		
 
