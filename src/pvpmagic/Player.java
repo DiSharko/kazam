@@ -245,7 +245,6 @@ public class Player extends Unit implements Comparable{
 			Vector newforce = new Vector(x,y).normalize().mult(5);
 			_flag.applyForce(newforce); 
 			_flag._collidable = true;
-			_flag._drawUnder = false;
 			_flagable = false;
 			_flagGrabTimer = 50;
 			_flag = null;
@@ -345,7 +344,6 @@ public class Player extends Unit implements Comparable{
 				ef = TimedEffect.fromNet(effect, objectMap);
 				if (ef != null) _timedEffects.put(ef._type, ef);
 			}
-
 		}
 	}		
 
