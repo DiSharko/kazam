@@ -23,6 +23,7 @@ public class FlagTeamData extends TeamData{
 			_pedestal._flag._pos = _pedestal._flag._originalPos;
 			_pedestal._flag._basicImage = "flag";
 			_pedestal._flag._collidable = true;
+			_pedestal._flag._drawUnder = false;
 			_pedestal._flag = null;
 		}
 	}
