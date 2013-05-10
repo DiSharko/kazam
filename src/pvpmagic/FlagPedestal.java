@@ -13,7 +13,7 @@ public class FlagPedestal extends Unit {
 	public FlagPedestal(GameData data, Vector pos, double size, String basicImage){
 		super(data, TYPE, STATICOBJ, basicImage);
 		_pos = pos;
-		Image sprite = Resource.get("rock");
+		Image sprite = Resource.get("flagPedestal");
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(size);
 		_movable = false;
 		
@@ -30,10 +30,7 @@ public class FlagPedestal extends Unit {
 	}
 	
 	public void draw(View v){
-		if (_flag == null)
-			v.drawImage(Resource.get(_basicImage), _pos, _size);
-		else
-			v.drawImage(Resource.get("hwall"), _pos, _size);
+		v.drawImage(Resource.get(_basicImage), _pos, _size);
 	}
 
 	@Override

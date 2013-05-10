@@ -9,7 +9,6 @@ import java.util.PriorityQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import pvpmagic.spells.Spell;
-import screen.TextInputLine;
 
 
 public class GameData {
@@ -21,8 +20,6 @@ public class GameData {
 	public ArrayList<Unit> _units;
 	
 	public String _gameType;
-
-	TeamData _teamdata;
 
 	ArrayList<TeamData> _teams;
 	ArrayList<Player> _spawning;
@@ -71,31 +68,6 @@ public class GameData {
 		} catch (IOException e) {
 			System.out.println("IOException in setup.");
 			e.printStackTrace();
-		}
-
-		if (!_isClient){
-//			String characterName = s.getElement("selectedCharacter").name;
-
-			String playerName = ((TextInputLine)s.getElement("playerName")).getText();
-			
-			String[] spells = new String[8];
-			for (int i = 0; i < 8; i++){
-				spells[i] = s._spells[i].name;
-			}
-
-			Player p = new Player(this, "andrew", playerName, spells);
-			Player dummy = new Player(this, "diego", "bobby", null);
-
-			_playerList.add(p);
-			_playerList.add(dummy);
-			
-			_teams.get(0).addPlayer(p);
-			_teams.get(1).addPlayer(dummy);
-			
-			_units.add(p);
-			_units.add(dummy);
-			dummy._pos = new Vector(-50, -30);
-
 		}
 	}
 
@@ -153,7 +125,7 @@ public class GameData {
 			p = _spawning.get(i);
 			if (p._spawnTimer == 0) {
 				//done spawning
-				System.out.println("player done spawning");
+//				System.out.println("player done spawning");
 				p._pos = p._spawn;
 				p._delete = false;
 				p._health = p._maxHealth;
@@ -309,7 +281,7 @@ public class GameData {
 
 			} else if (linearr[0].equals("PEDASTAL")) {
 				Vector pos = new Vector(Double.parseDouble(linearr[2]), -1.0*Double.parseDouble(linearr[3]));
-				FlagPedestal pd = new FlagPedestal(this, pos, Double.parseDouble(linearr[4]),"rock");
+				FlagPedestal pd = new FlagPedestal(this, pos, Double.parseDouble(linearr[4]),"flagPedestal");
 				pd._netID = counter.getAndIncrement();
 				_units.add(pd);
 				FlagTeamData ft = (FlagTeamData) _teams.get(Integer.parseInt(linearr[1]));

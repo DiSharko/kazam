@@ -11,7 +11,7 @@ import pvpmagic.spells.DashSpell;
 import pvpmagic.spells.HideSpell;
 import pvpmagic.spells.Spell;
 
-public class Player extends Unit {
+public class Player extends Unit implements Comparable{
 	public static Boolean STATICOBJ = true;
 	public static String TYPE = "Player";
 	public Vector _spawn;
@@ -63,7 +63,6 @@ public class Player extends Unit {
 		_health = 100;
 		_mana = 100;
 
-		_pos = new Vector(-50, -20);
 		Image sprite = Resource.get(_characterName);
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70);
 
@@ -85,6 +84,7 @@ public class Player extends Unit {
 	@Override
 	public void draw(View v){
 		TimedEffect t = _timedEffects.get(RootEffect.TYPE);
+		// TODO figure out why these sprites are drawn only on first two intervals, possible timestamp problem?
 		if (t != null && t._display){
 			v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
 		}
@@ -131,9 +131,11 @@ public class Player extends Unit {
 
 	@Override
 	public void die() {
-		System.out.println("player died");
-		super.die();
+		_timedEffects = new HashMap<String, TimedEffect>();
 		dropFlag();
+		this._collidable = false;
+		this._drawUnder = true;
+		this._basicImage = _characterName + "_splat";
 		_deaths++;
 		_spawnTimer = 100;
 		_data._spawning.add(this);
@@ -185,12 +187,8 @@ public class Player extends Unit {
 		_health += amount;
 		if (_health > _maxHealth) _health = _maxHealth;
 		if (_health <= 0) {
-			caster._kills += 1;
-			System.out.println("-----");
-			System.out.println(caster.toNet());
-			System.out.println("GOT A KILL ON: ");
-			System.out.println(this.toNet());
-			System.out.println("------");
+			if (caster._netID != _netID) caster._kills += 1;
+			this.die();
 		}
 		//System.out.println("REDUCED HEALTH BY: " + amount + " HP: " + _health);
 	}
@@ -246,8 +244,7 @@ public class Player extends Unit {
 			}
 			Vector newforce = new Vector(x,y).normalize().mult(5);
 			_flag.applyForce(newforce); 
-			_flag._delete = false;
-			_data._units.add(_flag);
+			_flag._collidable = true;
 			_flagable = false;
 			_flagGrabTimer = 50;
 			_flag = null;
@@ -289,7 +286,7 @@ public class Player extends Unit {
 		
 		return _netID +              						//index: 0
 				"\t" + (_staticObj ? "static" : _type) +  	//index: 1
-				"\t" + pos +      					//index: 2
+				"\t" + pos +      							//index: 2
 				"\t" + dest +				  				//index: 3
 				"\t" + flag +      							//index: 4
 				"\t" + _health +        					//index: 5
@@ -303,8 +300,11 @@ public class Player extends Unit {
 				"\t" + _basicImage +						//index: 13
 				"\t" + _connected +							//index: 14
 				"\t" + _kills +								//index: 15
-				"\t" + _deaths;								//index: 16
-		
+				"\t" + _deaths +							//index: 16
+				"\t" + _collidable + 						//index: 17
+				"\t" + _drawUnder + 						//index: 18
+				"\t" + _spawnTimer +						//index: 19
+				"\t" + _hidden;								//index: 20
 
 		//when fromNet is called, throw away previous timed effects
 		//list, and instantiate new ones with (this) as target
@@ -326,6 +326,10 @@ public class Player extends Unit {
 			this._connected = Boolean.parseBoolean(networkString[14]);
 			this._kills = Double.parseDouble(networkString[15]);
 			this._deaths = Double.parseDouble(networkString[16]);
+			this._collidable = Boolean.parseBoolean(networkString[17]);
+			this._drawUnder = Boolean.parseBoolean(networkString[18]);
+			this._spawnTimer = Integer.parseInt(networkString[19]);
+			this._hidden = Double.parseDouble(networkString[20]);
 
 			String[] lastCastTimes, sp;
 			lastCastTimes = networkString[7].split(".");
@@ -340,7 +344,6 @@ public class Player extends Unit {
 				ef = TimedEffect.fromNet(effect, objectMap);
 				if (ef != null) _timedEffects.put(ef._type, ef);
 			}
-
 		}
 	}		
 
@@ -366,5 +369,10 @@ public class Player extends Unit {
 		}
 		throw new RuntimeException("Called Player.fromNetInit on string: " 
 				+ Arrays.toString(networkString));
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+		return 0;
 	}
 }

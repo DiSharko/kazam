@@ -38,7 +38,7 @@ public class Resource {
 			return _images.get(imageName);
 		}
 //		throw new NullPointerException();
-//		System.out.println("Image get request for "+imageName+" - does not exist.");
+		System.out.println("Image get request for "+imageName+" - does not exist.");
 		return null;
 	}
 
@@ -109,6 +109,7 @@ public class Resource {
 
 					String[] parts = line.split("/");
 					String name = parts[parts.length-1];
+//					System.out.println(line);
 					Image image = new ImageIcon(Resource.class.getResource("/media/images/"+line+".png")).getImage();
 					_images.put(name, image);
 					if (parts[0].equals("spells") && !parts[1].equals("icon")){

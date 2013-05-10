@@ -66,6 +66,7 @@ public class GameScreen extends Screen {
 
 	public GameScreen(ScreenHolder holder) {
 		super(holder, "game");
+		_mapName = "Department of Secrets";
 
 	}
 
@@ -205,9 +206,23 @@ public class GameScreen extends Screen {
 					g.drawImage(Resource.get("silenceEffect"), x, y, 60, 45, null);
 				}
 			}
-
 		}
 
+		for (int i = 0; i < _data._teams.size(); i++){
+			String s = "Team "+(i+1)+": "+(int)_data._teams.get(i)._teamScore;
+			g.setFont(new Font("Times New Roman", Font.PLAIN, 28));
+			int sWidth = (int)g.getFontMetrics().getStringBounds(s, g).getWidth();
+			int sHeight = (int)g.getFontMetrics().getStringBounds(s, g).getHeight();
+
+			g.setColor(new Color(1,1,1,0.4f));
+			int x = _holder._w*(i+1)/(_data._teams.size()+1)-sWidth/2;
+			int y = 65;
+					
+			g.fillRoundRect(x-5, y-sHeight+4, sWidth+10, 32, 10, 10);
+			g.setColor(Color.black);
+			g.drawString(s, x, y);
+		}
+		
 	}
 
 

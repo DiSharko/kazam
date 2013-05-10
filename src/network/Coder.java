@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import pvpmagic.*;
-import pvpmagic.spells.Spell;
-
+import pvpmagic.spells.*;
 public class Coder {
 	
 	private final static int ID = 0;

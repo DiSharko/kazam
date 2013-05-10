@@ -28,6 +28,7 @@ public abstract class TimedEffect {
 			System.out.println("ERROR: newTimedEffect given a null argument!");
 			return null;
 		}
+		if (caster == null) System.err.println("NULL CASTER!");
 
 		if (type.equals(ConfuseEffect.TYPE)){ 
 			return new ConfuseEffect(numberOfIntervals, caster, (Player) target); 
@@ -52,25 +53,34 @@ public abstract class TimedEffect {
 	}
 	
 	public String toNet() {
+		String casterID = (_caster == null) ? "null" : Integer.toString(_caster._netID);
 		return _type + 
 				"," + _effectCompleted +
 				"," + _numberOfIntervals +
 				"," + _changePerInterval +
-				"," + _caster._netID +
-				"," + _target._netID;
+				"," +  casterID +
+				"," + _target._netID + 
+				"," + _display;
 	}
 	
 	public static TimedEffect fromNet(String effectNetString, HashMap<Integer, Unit> objectMap) {
 		String[] args = effectNetString.split(",");
+		Player caster; TimedEffect t;
 		if (Boolean.parseBoolean(args[1])) {
-			Player caster = (Player) objectMap.get(Integer.parseInt(args[4]));
-			Unit target = objectMap.get(Integer.parseInt(args[5]));
-			if (args[3].equals("null")) { 
-				return newTimedEffect(args[0], Double.parseDouble(args[2]), caster, target);
+			if (!args[4].equals("null")) {
+				caster = null;
 			} else {
-				return newTimedEffect(args[0], Double.parseDouble(args[2]), caster, target, 
+				caster = (Player) objectMap.get(Integer.parseInt(args[4]));
+			}
+			Unit target = objectMap.get(Integer.parseInt(args[5]));
+			if (args[3].equals("null")) {
+				t = newTimedEffect(args[0], Double.parseDouble(args[2]), caster, target);
+			} else {
+				t = newTimedEffect(args[0], Double.parseDouble(args[2]), caster, target, 
 						Double.parseDouble(args[4]));
 			}
+			t._display = Boolean.parseBoolean(args[6]);
+			return t;
 		}
 		return null;
 	}

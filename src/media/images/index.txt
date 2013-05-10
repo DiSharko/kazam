@@ -5,6 +5,7 @@ misc/door_closed
 misc/door_open
 misc/deadrock
 misc/cat
+misc/flagPedestal
 spells/icon
 spells/DisarmSpell
 spells/StunSpell
@@ -27,6 +28,7 @@ spells/HideSpell
 misc/hwall
 misc/vwall
 misc/andrew
+misc/andrew_splat
 misc/diego
 misc/chris
 misc/miraj
