@@ -9,6 +9,7 @@ import java.util.PriorityQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import pvpmagic.spells.Spell;
+import screen.TextInputLine;
 
 
 public class GameData {
@@ -20,6 +21,8 @@ public class GameData {
 	public ArrayList<Unit> _units;
 	
 	public String _gameType;
+
+	TeamData _teamdata;
 
 	ArrayList<TeamData> _teams;
 	ArrayList<Player> _spawning;
