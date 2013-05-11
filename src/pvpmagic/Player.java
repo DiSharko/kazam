@@ -143,16 +143,17 @@ public class Player extends Unit {
 	@Override
 	public void die() {
 		_isDead = true;
+		this._collidable = false;
+		this._drawUnder = true;
+		_timedEffects = new HashMap<String, TimedEffect>();
 		_hidden = 1.0;
 		_isSilenced = false;
 		_isRooted = false;
 		_force = new Vector(0,0);
 		_vel = new Vector(0,0);
-		_timedEffects = new HashMap<String, TimedEffect>();
 		_mana = 0;
 		dropFlag();
-		this._collidable = false;
-		this._drawUnder = true;
+		
 		this._basicImage = _characterName + "_splat";
 		_deaths++;
 		_spawnTimer = 100;
