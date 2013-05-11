@@ -205,15 +205,14 @@ public abstract class Unit {
 		return amount/numberOfIntervals;
 	}
 	public void cleanse() {
-		System.out.println("CLEANSING");
 		for (Entry<String, TimedEffect> e : _timedEffects.entrySet()) {
 			if (e.getValue() == null) continue;
 			if (e.getValue()._toBeCleansed) {
-				System.out.println(e.getValue().toNet());
 				e.setValue(null);
 			}
 		}
-		System.out.println("------");
+		if (_isSilenced) _isSilenced = false;
+		if (_isRooted)	_isRooted = false;
 	}
 	
 	public boolean canCollideWith(Unit u){

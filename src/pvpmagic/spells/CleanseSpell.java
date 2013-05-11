@@ -21,6 +21,7 @@ public class CleanseSpell extends Spell {
 	}
 
 	public void cleanse() {
+		System.out.println("caster: "+_caster);
 		_caster.cleanse();
 	}
 }

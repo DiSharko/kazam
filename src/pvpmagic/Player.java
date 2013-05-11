@@ -98,7 +98,6 @@ public class Player extends Unit {
 		}
 		
 		TimedEffect t = _timedEffects.get(RootEffect.TYPE);
-		// TODO figure out why these sprites are drawn only on first two intervals, possible timestamp problem?
 		if (t != null && t._display){
 			v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
 		}
@@ -153,13 +152,17 @@ public class Player extends Unit {
 	@Override
 	public void die() {
 		_isDead = true;
-		_force = new Vector(0,0);
-		_vel = new Vector(0,0);
-		_timedEffects = new HashMap<String, TimedEffect>();
-		_mana = 0;
-		dropFlag();
 		this._collidable = false;
 		this._drawUnder = true;
+		_timedEffects = new HashMap<String, TimedEffect>();
+		_hidden = 1.0;
+		_isSilenced = false;
+		_isRooted = false;
+		_force = new Vector(0,0);
+		_vel = new Vector(0,0);
+		_mana = 0;
+		dropFlag();
+		
 		this._basicImage = _characterName + "_splat";
 		_deaths++;
 		_spawnTimer = 100;
