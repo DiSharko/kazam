@@ -64,8 +64,8 @@ public class SetupScreen extends Screen {
 		_tabs.add(joinTab);
 		Button hostTab = new Button(this, "hostTab", 200, 50, "Host Game", -1).setRoundness(16);
 		_tabs.add(hostTab);
-		Button serverTab = new Button(this, "serverTab", 200, 50, "Dedicated Server", -1).setRoundness(16);
-		_tabs.add(serverTab);
+//		Button serverTab = new Button(this, "serverTab", 200, 50, "Dedicated Server", -1).setRoundness(16);
+//		_tabs.add(serverTab);
 		Button home = new Button(this, "home", 50, 30, "Home", KeyEvent.VK_ESCAPE);
 		_tabs.add(home);
 
