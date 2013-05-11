@@ -143,6 +143,8 @@ public class Player extends Unit {
 	@Override
 	public void die() {
 		_isDead = true;
+		_isSilenced = false;
+		_isRooted = false;
 		_force = new Vector(0,0);
 		_vel = new Vector(0,0);
 		_timedEffects = new HashMap<String, TimedEffect>();
