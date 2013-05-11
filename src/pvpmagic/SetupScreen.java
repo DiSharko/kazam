@@ -268,11 +268,15 @@ public class SetupScreen extends Screen {
 		} else if (e.id.equals("host")){
 			((ServerScreen)_holder.getScreen("server")).getSettings(this);
 			_holder.getScreen("server").setup();
-			_holder.transitionToScreen(Transition.FADE, "server");
+			if (!((ServerScreen)_holder.getScreen("server"))._stopSetup) {
+				_holder.transitionToScreen(Transition.FADE, "server");
+			}
 		} else if (e.id.equals("connect")){
 			_holder.getScreen("lobby").setup();
 			((LobbyScreen)_holder.getScreen("lobby")).getSettings(this);
-			_holder.transitionToScreen(Transition.FADE, "lobby");
+			if (!((LobbyScreen)_holder.getScreen("lobby"))._stopSetup) {
+				_holder.transitionToScreen(Transition.FADE, "lobby");
+			}
 		}
 	}
 
