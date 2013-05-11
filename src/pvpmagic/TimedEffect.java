@@ -23,7 +23,6 @@ public abstract class TimedEffect {
 			System.out.println("ERROR: newTimedEffect given a null argument!");
 			return null;
 		}
-		if (caster == null) System.err.println("NULL CASTER!");
 
 		if (type.equals(ConfuseEffect.TYPE)){ 
 			return new ConfuseEffect(numberOfIntervals, caster, (Player) target); 
@@ -74,7 +73,7 @@ public abstract class TimedEffect {
 						null);
 			} else {
 				t = newTimedEffect(args[0], Double.parseDouble(args[2]), caster, target, 
-						Double.parseDouble(args[4]));
+						Double.parseDouble(args[3]));
 			}
 			t._display = Boolean.parseBoolean(args[6]);
 			return t;
