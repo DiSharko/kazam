@@ -50,7 +50,7 @@ public abstract class Unit {
 	/**
 	 * Movement characteristics
 	 */
-	protected boolean _movable = true;
+	public boolean _movable = true;
 	boolean _appliesFriction = false;
 	public boolean _appliesRestitution = true;
 	
