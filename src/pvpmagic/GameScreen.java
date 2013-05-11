@@ -102,6 +102,7 @@ public class GameScreen extends Screen {
 	}
 
 	public void initializeGame(SetupScreen s){
+		System.out.println("1 "+_isClient);
 		_data = new GameData(_playerList,_isClient);
 		
 		// construct player map and set pointers to _data in players

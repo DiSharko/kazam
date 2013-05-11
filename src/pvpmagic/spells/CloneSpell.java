@@ -26,9 +26,10 @@ public class CloneSpell extends Spell {
 		if (_caster._flag != null) {
 			Vector flagPos = _pos.plus(40, 0);
 			v.rotate(new Vector(1.5, -1), flagPos);
-			v.drawImage(Resource.get("flag"), flagPos, _caster._flag._size.mult(0.8));
+			v.drawImage(Resource.get(_caster._flag._basicImage), flagPos, _caster._flag._size.mult(0.8));
 			v.unrotate();
 		}
+		System.out.println(_caster._characterName);
 		v.drawImage(Resource.get(_caster._characterName), _pos, _caster._size);
 	}
 }

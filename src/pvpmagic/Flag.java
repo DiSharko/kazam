@@ -72,16 +72,11 @@ public class Flag extends Unit {
 	
 	@Override
 	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
-		if (networkString[1].equals(_staticObj ? "static" : _type) 
-				&& _netID == Integer.parseInt(networkString[0])
-				&& networkString.length == 4) {
-			_pos = Vector.fromNet(networkString[2]);
-			_delete = Boolean.parseBoolean(networkString[3]);
-			_basicImage = networkString[4];
-			_collidable = Boolean.parseBoolean(networkString[5]);
-			_drawUnder = Boolean.parseBoolean(networkString[6]);
-			_vel = Vector.fromNet(networkString[6]);
-			_force = Vector.fromNet(networkString[6]);
-		}
+		_pos = Vector.fromNet(networkString[2]);
+		_delete = Boolean.parseBoolean(networkString[3]);
+		_basicImage = networkString[4];
+		_collidable = Boolean.parseBoolean(networkString[5]);
+		_vel = Vector.fromNet(networkString[6]);
+		_force = Vector.fromNet(networkString[7]);
 	}
 }

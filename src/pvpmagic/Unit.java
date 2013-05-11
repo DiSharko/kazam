@@ -18,7 +18,7 @@ public abstract class Unit {
 	protected boolean _delete = false;
 	protected boolean _drawUnder = false;
 	protected Shape _shape;
-	protected String _basicImage;
+	public String _basicImage;
 	protected String _oldImage;
 	
 	public Unit(GameData data, String type, Boolean staticObj, String basic){
