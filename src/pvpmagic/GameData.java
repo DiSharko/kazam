@@ -16,7 +16,7 @@ public class GameData {
 	
 	private final int NEEDED = 3;
 
-	private int _needed = NEEDED;
+	public int _needed = NEEDED;
 	public ArrayList<Unit> _units;
 	
 	public String _gameType;
