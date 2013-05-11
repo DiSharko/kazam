@@ -44,14 +44,14 @@ public class ServerScreen extends Screen {
 	HashMap<Integer,Player> _playerMap;
 	AtomicBoolean _running;
 	AtomicBoolean _started;
-	boolean _transitioned;
+	boolean _transitioning;
+	boolean _dying;
 	int _statePort;
 	int _inputPort;
 	GameData _data;
 	int _tick;
 	StateServer _stateServer;
 	InputServer _inputServer;
-	LobbyScreen _lobby;
 
 	public ServerScreen(ScreenHolder holder) {
 		super(holder, "server");
@@ -85,7 +85,8 @@ public class ServerScreen extends Screen {
 		_playerMap = new HashMap<Integer,Player>();
 		_running = new AtomicBoolean(true);
 		_started = new AtomicBoolean(false);
-		_transitioned = false;
+		_transitioning = false;
+		_dying = false;
 		_statePort = 9001;
 		_inputPort = 9002;
 		_tick = 0;
@@ -113,7 +114,6 @@ public class ServerScreen extends Screen {
 
 		// setup client to connect with this server
 		LobbyScreen lobby = (LobbyScreen) _holder.getScreen("lobby");
-		_lobby = lobby;
 		lobby.setup();
 		lobby._isHost = _isHost;
 		lobby._isClient = _isClient;
@@ -124,7 +124,7 @@ public class ServerScreen extends Screen {
 			lobby.connect(); // try to connect (usually called in lobby.getSettings()
 			// an error results in a disconnect and killing all network threads/objects
 		} catch (UnknownHostException e) {
-			System.out.println(e.getMessage());
+			System.out.println("ERROR: Unknown host.");
 			lobby._networker.disconnect();
 			try {
 				_stateServer.kill();
@@ -164,7 +164,7 @@ public class ServerScreen extends Screen {
 	@Override
 	public void update() {
 		// update lobby
-		if (_running.get() && !_started.get()) {
+		if (_running.get() && !_started.get() && !_dying) {
 			String input = _netInputs.poll();
 			// execute input and broadcast result
 			if (input != null) {
@@ -177,7 +177,9 @@ public class ServerScreen extends Screen {
 					//ignore
 				}
 			}
-		} else if (_running.get() && !_transitioned) {
+		} else if (_running.get() && !_transitioning && !_dying) {
+			_transitioning = true;
+			
 			// update lobby to final form and broadcast
 			String input = _netInputs.poll();
 			while (input != null) {
@@ -205,10 +207,9 @@ public class ServerScreen extends Screen {
 
 			// broadcast start and switch to client lobby
 			_stateServer.broadcastStart();
-			_transitioned = true;
 			_holder.switchToScreen("lobby");
 
-		} else if (_running.get()) {
+		} else if (_running.get() && !_dying) {
 			// read disconnects and commands whose tick was prior to the present
 			// handleEvent reads and executes commands
 			while (_netInputs.peek() != null) {
@@ -241,9 +242,9 @@ public class ServerScreen extends Screen {
 			String gameState = Coder.encodeGame(_data._units, _data._idCounter, _tick);
 			_stateServer.broadcast(gameState);
 			_tick++;
-		} else {
-			// game over
-			_lobby._networker.disconnect();
+		} else if (!_dying) {
+			_dying = true;
+			// game over - networker should already be dead - make sure to call server.update() upon that happening
 			try {
 				_stateServer.kill();
 			} catch (IOException e) {

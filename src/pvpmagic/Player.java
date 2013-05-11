@@ -84,6 +84,7 @@ public class Player extends Unit implements Comparable{
 
 	@Override
 	public void draw(View v){
+//		System.out.println("flag?: "+this._flag);
 		TimedEffect t = _timedEffects.get(RootEffect.TYPE);
 		// TODO figure out why these sprites are drawn only on first two intervals, possible timestamp problem?
 		if (t != null && t._display){
