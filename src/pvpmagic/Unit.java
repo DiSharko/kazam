@@ -211,6 +211,8 @@ public abstract class Unit {
 				e.setValue(null);
 			}
 		}
+		if (_isSilenced) _isSilenced = false;
+		if (_isRooted)	_isRooted = false;
 	}
 	
 	public boolean canCollideWith(Unit u){
