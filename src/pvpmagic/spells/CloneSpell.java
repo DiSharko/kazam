@@ -2,7 +2,13 @@ package pvpmagic.spells;
 
 import pvpmagic.*;
 
-
+/**
+ * Clone sends out a duplicate sprite of the caster
+ * in the direction of the cursor. This sprite immediately
+ * disappears on collision with any unit.
+ * @author Miraj
+ *
+ */
 public class CloneSpell extends Spell {
 	public static String TYPE = "CloneSpell";
 

@@ -4,7 +4,11 @@ import java.awt.Image;
 
 import pvpmagic.*;
 
-
+/**
+ * Open unlocks doors
+ * @author Miraj
+ *
+ */
 public class OpenSpell extends Spell {
 	public static String TYPE = "OpenSpell";
 

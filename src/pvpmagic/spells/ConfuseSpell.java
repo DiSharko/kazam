@@ -11,14 +11,21 @@ import pvpmagic.Unit;
 import pvpmagic.Vector;
 import pvpmagic.View;
 
+/**
+ * Confuse will silence a target, and proceed
+ * to send them moving uncontrollably in random
+ * directions for the duration of the effect.
+ * @author Miraj
+ *
+ */
 public class ConfuseSpell extends Spell {
 	public static String TYPE = "ConfuseSpell";
 
 	public ConfuseSpell(GameData data, Player caster, Vector dir) {
 		super(data, TYPE, caster, dir);
 		_name = "Confuse";
-		_cooldown = 1000;
-		_manaCost = 10;
+		_cooldown = 3000;
+		_manaCost = 30;
 		Image sprite = Resource.get("ConfuseSpell");
 		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(50), 15);
 	

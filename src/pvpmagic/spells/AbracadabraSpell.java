@@ -3,7 +3,13 @@ package pvpmagic.spells;
 import java.awt.Image;
 
 import pvpmagic.*;
-
+/**
+ * Abracadabra is the killing spell. Upon collision with another
+ * player, it immediately causes them to die, and registers a kill
+ * for the caster.
+ * @author Miraj
+ *
+ */
 public class AbracadabraSpell extends Spell {
 	public static String TYPE = "AbracadabraSpell";
 
@@ -11,7 +17,7 @@ public class AbracadabraSpell extends Spell {
 		super(data, TYPE, caster, dir);
 		_name = "Abracadabra";
 		_size = new Vector(10, 10);
-		_cooldown = 5000;
+		_cooldown = 10000;
 		_manaCost = 10;
 		
 		Image sprite = Resource.get("AbracadabraSpell");

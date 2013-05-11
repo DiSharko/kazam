@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import pvpmagic.spells.AbracadabraSpell;
-import pvpmagic.spells.BlindSpell;
 import pvpmagic.spells.BurnSpell;
 import pvpmagic.spells.CleanseSpell;
 import pvpmagic.spells.CloneSpell;
@@ -50,7 +49,6 @@ public class Tests {
 		assertTrue(Spell.newSpell(null,"Disarm", null, new Vector(1,1)) instanceof DisarmSpell);
 		assertTrue(Spell.newSpell(null,"Burn", null, new Vector(1,1)) instanceof BurnSpell);
 		assertTrue(Spell.newSpell(null,"Root", null, new Vector(1,1)) instanceof RootSpell);
-		assertTrue(Spell.newSpell(null,"Blind", null, new Vector(1,1)) instanceof BlindSpell);
 		assertTrue(Spell.newSpell(null,"Push", null, new Vector(1,1)) instanceof PushSpell);
 		assertTrue(Spell.newSpell(null,"Abracadabra", null, new Vector(1,1)) instanceof AbracadabraSpell);
 		assertTrue(Spell.newSpell(null,"Open", null, new Vector(1,1)) instanceof OpenSpell);

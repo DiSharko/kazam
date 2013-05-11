@@ -4,6 +4,12 @@ import java.awt.Image;
 
 import pvpmagic.*;
 
+/**
+ * Disarm immediately silences a target, preventing
+ * them from casting spells for the a set duration. 
+ * @author Miraj
+ *
+ */
 public class DisarmSpell extends Spell {
 	public static String TYPE = "DisarmSpell";
 
@@ -15,7 +21,7 @@ public class DisarmSpell extends Spell {
 		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(80), 25);
 
 		_shape = new Circle(this, new Vector(-8, -8), 8);
-		_cooldown = 1000;
+		_cooldown = 3000;
 		_manaCost = 10;
 	}
 
@@ -24,7 +30,7 @@ public class DisarmSpell extends Spell {
 		Unit target = c.other(this);
 		target.changeHealth(-5, _caster);
 		if(target instanceof Player) {
-			target.silence(5000, _caster);
+			target.silence(2500, _caster);
 			this.die();
 		}
 	}
