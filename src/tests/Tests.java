@@ -3,6 +3,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import pvpmagic.Door;
 import pvpmagic.Player;
 import pvpmagic.Resource;
 import pvpmagic.Vector;
@@ -46,6 +47,15 @@ public class Tests {
 		assertTrue(p._isSilenced);
 	}
 
+	@Test
+	public void doorTests(){
+		Door d = new Door(null, new Vector(100, 100), 100, "door_closed");
+		d.open();
+		assertTrue(d._basicImage.equals("door_open"));
+		d.lock();
+		assertTrue(d._basicImage.equals("door_closed"));
+	}
+	
 	@Test
 	public void spellCreationTests(){
 		assertTrue(Spell.newSpell(null,"Stun", null, new Vector(1,1)) instanceof StunSpell);
