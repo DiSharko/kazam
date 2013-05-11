@@ -143,6 +143,7 @@ public class Player extends Unit {
 	@Override
 	public void die() {
 		_isDead = true;
+		_hidden = 1.0;
 		_isSilenced = false;
 		_isRooted = false;
 		_force = new Vector(0,0);
