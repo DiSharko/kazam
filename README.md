@@ -40,12 +40,12 @@ spawn points, and teams score points when their players collect this flag and de
 designated flag zone. In the Department of Secrets map, the designated flag zones for each team are
 diagonally across the map.
 
-----------------------------------
+`----------------------------------
 | DFZ 2  |				| DFZ 1  |
 ----------------------------------
 | TEAM 1 |				| TEAM 2 |
 | SPAWN  |      FLAG    | SPAWN  |
-----------------------------------
+----------------------------------`
 Figure 1 - Department of Secrets
 
 Team Deathmatch involves a much simpler objective, simply killing players of the opposing team. The
