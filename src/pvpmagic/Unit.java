@@ -213,6 +213,8 @@ public abstract class Unit {
 		}
 		if (_isSilenced) _isSilenced = false;
 		if (_isRooted)	_isRooted = false;
+		if (!_movable) _movable = true;
+		_basicImage = _oldImage;
 	}
 	
 	public boolean canCollideWith(Unit u){

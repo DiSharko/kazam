@@ -9,6 +9,7 @@ public class KittyEffect extends TimedEffect {
 		_caster = caster;
 		_target = target;
 		_type = TYPE;
+		_toBeCleansed = true;
 	}
 
 	@Override
