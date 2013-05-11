@@ -3,7 +3,6 @@ package pvpmagic;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +41,8 @@ public class LobbyScreen extends Screen {
 	ConcurrentLinkedQueue<String> _netOutputs; // outputs added to by client
 	AtomicBoolean _connected;
 	AtomicBoolean _started;
+	boolean _transitioning;
+	boolean _dying;
 	SyncedString _gameData;
 	SyncedString _lobbyData;
 	int _statePort;
@@ -75,6 +76,8 @@ public class LobbyScreen extends Screen {
 		_netOutputs = new ConcurrentLinkedQueue<String>();
 		_connected = new AtomicBoolean(true);
 		_started = new AtomicBoolean(false);
+		_transitioning = false;
+		_dying = false;
 		_gameData = new SyncedString();
 		_lobbyData = new SyncedString();
 		_gameData.setData("-1");
@@ -93,7 +96,7 @@ public class LobbyScreen extends Screen {
 		try {
 			connect();
 		} catch (UnknownHostException e) {
-			System.out.println(e.getMessage());
+			System.out.println("ERROR: Unknown host.");
 			_networker.disconnect();
 			_holder.transitionToScreen(Transition.FADE, "setup");
 		} catch (NetworkException e) {
@@ -127,7 +130,7 @@ public class LobbyScreen extends Screen {
 
 	@Override
 	public void update() {
-		if (_connected.get() && !_started.get()) {
+		if (_connected.get() && !_started.get() && !_dying) {
 			//update lobby
 			String lobbyData = _lobbyData.getData();
 			try {
@@ -135,7 +138,9 @@ public class LobbyScreen extends Screen {
 			} catch (BadProtocolException e) {
 				end();
 			}
-		} else if (_connected.get()){
+		} else if (_connected.get() && !_transitioning && !_dying){
+			_transitioning = true;
+			
 			// get very last lobby version
 			String lobbyData = _lobbyData.getData();
 			try {
@@ -171,24 +176,20 @@ public class LobbyScreen extends Screen {
 			// initialize game data and switch to game screen
 			gameScreen.initializeGame(_settings);
 			_holder.switchToScreen("game");
-		} else { // disconnect
+		} else if (!_dying) { // disconnect
 			end();
 		}
 	}
 
 	// end gracefully with this function
 	public void end() {
+		_dying = true;
 		_networker.disconnect();
 		if (!_isHost) {
 			_holder.transitionToScreen(Transition.FADE, "setup");
 		} else {
-			try {
-				_server._inputServer.kill();
-			} catch (IOException e) {}
-			try {
-				_server._stateServer.kill();
-			} catch (IOException e) {}
-			_holder.transitionToScreen(Transition.FADE, "setup");
+			_server._running.set(false);
+			_server.update();
 		}
 	}
 

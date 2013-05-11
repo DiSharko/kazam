@@ -10,9 +10,10 @@ import screen.InterfaceElement;
 import screen.Button;
 import screen.Screen;
 import screen.ScreenHolder;
-import screen.TransitionScreen.Transition;
 
 public class PauseScreen extends Screen {
+	
+	GameScreen _game;
 
 	public PauseScreen(ScreenHolder holder) {
 		super(holder, "pause");
@@ -72,11 +73,14 @@ public class PauseScreen extends Screen {
 			_holder.hideBorder();
 			_holder.putScreenAway();
 		} else if (e.id.equals("main")){
-			_holder.transitionToScreen(Transition.FADE, "welcome");
+			_game.end();
 		}
 	}
+
+	public void setGame(GameScreen game) {
+		_game = game;
+	}
 	
-	@Override
 	public void onKeyPressed(KeyEvent e){
 		int key = e.getKeyCode();
 		if (key == KeyEvent.VK_ESCAPE){

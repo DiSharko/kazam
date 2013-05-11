@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -43,6 +42,7 @@ public class GameScreen extends Screen {
 	ConcurrentLinkedQueue<String> _netOutputs; // outputs added to by client
 	AtomicBoolean _connected;
 	AtomicBoolean _started;
+	boolean _dying;
 	SyncedString _gameData;
 	SyncedString _lobbyData;
 	ClientNetworkable _networker;
@@ -96,6 +96,7 @@ public class GameScreen extends Screen {
 		
 		_isClient = false; // set by lobby otherwise after setup call
 		_isHost = false; // same here
+		_dying = false;
 		_playerList = new ArrayList<Player>();
 		
 		onResize();
@@ -280,7 +281,7 @@ public class GameScreen extends Screen {
 				_manaBar.total = _focus._maxMana;
 			}
 		} else {
-			if (_connected.get()) {
+			if (_connected.get() && !_dying) {
 				try {
 					// first call server update if hosting
 					if (_isHost) {
@@ -340,17 +341,13 @@ public class GameScreen extends Screen {
 
 	// end gracefully with this function
 	public void end() {
+		_dying = true;
 		_networker.disconnect();
 		if (!_isHost) {
 			_holder.transitionToScreen(Transition.FADE, "setup");
 		} else {
-			try {
-				_server._inputServer.kill();
-			} catch (IOException e) {}
-			try {
-				_server._stateServer.kill();
-			} catch (IOException e) {}
-			_holder.transitionToScreen(Transition.FADE, "setup");
+			_server._running.set(false);
+			_server.update();
 		}
 	}
 
@@ -507,6 +504,7 @@ public class GameScreen extends Screen {
 		super.handleElementReleased(e);
 		if (e.id.equals("menu")){
 			_holder.showBorder();
+			((PauseScreen)_holder.getScreen("pause")).setGame(this);
 			_holder.switchToScreen("pause");
 		}
 	}
