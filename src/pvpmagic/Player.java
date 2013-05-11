@@ -1,7 +1,9 @@
 package pvpmagic;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Composite;
+import java.awt.Font;
 import java.awt.Image;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,7 +14,7 @@ import pvpmagic.spells.DashSpell;
 import pvpmagic.spells.HideSpell;
 import pvpmagic.spells.Spell;
 
-public class Player extends Unit implements Comparable {
+public class Player extends Unit {
 	public static Boolean STATICOBJ = true;
 	public static String TYPE = "Player";
 	public Vector _spawn;
@@ -22,7 +24,7 @@ public class Player extends Unit implements Comparable {
 	public boolean _flagable = true;
 	
 	public String _characterName;
-	String _playerName;
+	public String _playerName;
 	
 	public double _kills;
 	public double _deaths;
@@ -115,9 +117,16 @@ public class Player extends Unit implements Comparable {
 
 			v.getGraphics().setComposite(java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden));
 			v.drawImage(Resource.get(_basicImage), _pos, drawSize);
+			
+			v.setColor(Color.black);
+			v.getGraphics().setFont(new Font("Times New Roman", Font.PLAIN, 18));
+			v.drawString(_playerName, _pos.minus(0,5));
 
 			v.getGraphics().setComposite(old);
 		} else if (_hidden == 1) {
+			v.setColor(Color.black);
+			v.getGraphics().setFont(new Font("Times New Roman", Font.PLAIN, 18));
+			v.drawString(_playerName, _pos);
 			v.drawImage(Resource.get(_basicImage), _pos, drawSize);
 		}
 		
@@ -406,10 +415,5 @@ public class Player extends Unit implements Comparable {
 		}
 		throw new RuntimeException("Called Player.fromNetInit on string: " 
 				+ Arrays.toString(networkString));
-	}
-
-	@Override
-	public int compareTo(Object arg0) {
-		return 0;
 	}
 }

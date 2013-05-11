@@ -118,4 +118,9 @@ public class View {
 	public void unrotate(){
 		g.rotate(-_lastAngle, _lastFocus.x, _lastFocus.y);
 	}
+
+	public void drawString(String string, Vector pos) {
+		pos = gameToScreenPoint(pos);
+		g.drawString(string, (int)(pos.x), (int)(pos.y));
+	}
 }
