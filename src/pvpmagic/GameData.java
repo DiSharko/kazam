@@ -74,7 +74,8 @@ public class GameData {
 	}
 
 	public void startCastingSpell(Player caster, String spellName, Vector dir){
-		if (!caster._isSilenced && caster._spellToCast == null) {
+		if ((!caster._isSilenced || spellName.equals("Cleanse"))
+				&& caster._spellToCast == null) {
 			Spell s = Spell.newSpell(this, spellName, caster, dir);
 			if (s != null){
 				Long previousCastTime = caster._spellCastingTimes.get(s._name);
