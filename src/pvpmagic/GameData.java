@@ -130,10 +130,12 @@ public class GameData {
 				//done spawning
 //				System.out.println("player done spawning");
 				p._pos = p._spawn;
-				p._delete = false;
+				p._isDead = false;
 				p._health = p._maxHealth;
 				p._health = p._maxMana;
-				_units.add(p);
+				p._collidable = true;
+				p._drawUnder = false;
+				p._basicImage = p._oldImage;
 				_spawning.remove(i);
 				i--;
 			} else {
