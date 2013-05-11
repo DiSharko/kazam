@@ -6,7 +6,6 @@ Confuse
 Dash
 Disarm
 Felify
-Flash
 Hide
 Lock
 Open

@@ -50,7 +50,7 @@ public abstract class Unit {
 	/**
 	 * Movement characteristics
 	 */
-	protected boolean _movable = true;
+	public boolean _movable = true;
 	boolean _appliesFriction = false;
 	public boolean _appliesRestitution = true;
 	
@@ -107,13 +107,18 @@ public abstract class Unit {
 	 * Silence effects
 	 */
 	boolean _canBeSilenced = false;
-	boolean _isSilenced = false;
+	public boolean _isSilenced = false;
 	
 	public void silence(long time, Player caster){ 
 		if (_canBeSilenced) _isSilenced = true; 
 		TimedEffect t = new SilenceEffect(numberOfIntervals(time), caster, this);
 		_timedEffects.put(t._type, t);
 	}
+	/**
+	 * Carries out felify effect 
+	 * @param time Amount of time in ms for effect
+	 * @param caster Player who cast the spell
+	 */
 	public void kitty(long time, Player caster){ 
 		if (_canBeSilenced) _isSilenced = true; 
 		TimedEffect t = new KittyEffect(numberOfIntervals(time), caster, this);
@@ -138,7 +143,11 @@ public abstract class Unit {
 	}
 	
 	public void draw(View v){}
-	
+	/**
+	 * Change the mana of the player by a certain amount
+	 * @param amount The amount of mana change
+	 * @param caster Player responsible for causing the mana change
+	 */
 	public void changeMana(double amount, Player caster) {
 		_mana += amount;
 		if (_mana < 0) _mana = 0;
@@ -196,15 +205,14 @@ public abstract class Unit {
 		return amount/numberOfIntervals;
 	}
 	public void cleanse() {
-		System.out.println("CLEANSING");
 		for (Entry<String, TimedEffect> e : _timedEffects.entrySet()) {
 			if (e.getValue() == null) continue;
 			if (e.getValue()._toBeCleansed) {
-				System.out.println(e.getValue().toNet());
 				e.setValue(null);
 			}
 		}
-		System.out.println("------");
+		if (_isSilenced) _isSilenced = false;
+		if (_isRooted)	_isRooted = false;
 	}
 	
 	public boolean canCollideWith(Unit u){

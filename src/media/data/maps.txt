@@ -1,2 +1,2 @@
-Department of Secrets
-Chamber of Mysteries
+Department of Secrets - Capture the Flag
+Chamber of Mysteries - Team Deathmatch

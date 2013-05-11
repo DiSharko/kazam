@@ -1,18 +1,20 @@
 package pvpmagic;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Composite;
+import java.awt.Font;
 import java.awt.Image;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map.Entry;
 
+import pvpmagic.spells.CleanseSpell;
 import pvpmagic.spells.DashSpell;
 import pvpmagic.spells.HideSpell;
 import pvpmagic.spells.Spell;
 
-public class Player extends Unit implements Comparable{
+public class Player extends Unit {
 	public static Boolean STATICOBJ = true;
 	public static String TYPE = "Player";
 	public Vector _spawn;
@@ -22,7 +24,7 @@ public class Player extends Unit implements Comparable{
 	public boolean _flagable = true;
 	
 	public String _characterName;
-	String _playerName;
+	public String _playerName;
 	
 	public double _kills;
 	public double _deaths;
@@ -50,6 +52,8 @@ public class Player extends Unit implements Comparable{
 	long _timeLastCast;
 
 	double _velocity = 8;
+	
+	Vector _deadSize;
 
 	public Player(GameData data, String characterName, String playerName, String[] spellNames){
 		super(data, TYPE, STATICOBJ, characterName);
@@ -68,6 +72,9 @@ public class Player extends Unit implements Comparable{
 		Image sprite = Resource.get(_characterName);
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70);
 
+		Image deadSprite = Resource.get("andrew_splat");
+		_deadSize = new Vector(deadSprite.getWidth(null), deadSprite.getHeight(null)).normalize().mult(85);
+		
 		double hitBoxScale = .7;
 		_shape = new Box(this, _size.mult(0, (1-hitBoxScale)/2), _size.mult(1, hitBoxScale));
 
@@ -85,8 +92,12 @@ public class Player extends Unit implements Comparable{
 
 	@Override
 	public void draw(View v){
+		Vector drawSize = _size;
+		if (_isDead){
+			drawSize = _deadSize;
+		}
+		
 		TimedEffect t = _timedEffects.get(RootEffect.TYPE);
-		// TODO figure out why these sprites are drawn only on first two intervals, possible timestamp problem?
 		if (t != null && t._display){
 			v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
 		}
@@ -104,11 +115,18 @@ public class Player extends Unit implements Comparable{
 			Composite old = v.getGraphics().getComposite();
 
 			v.getGraphics().setComposite(java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden));
-			v.drawImage(Resource.get(_basicImage), _pos, _size);
+			v.drawImage(Resource.get(_basicImage), _pos, drawSize);
+			
+			v.setColor(Color.black);
+			v.getGraphics().setFont(new Font("Times New Roman", Font.PLAIN, 18));
+			v.drawString(_playerName, _pos.minus(0,5));
 
 			v.getGraphics().setComposite(old);
 		} else if (_hidden == 1) {
-			v.drawImage(Resource.get(_basicImage), _pos, _size);
+			v.setColor(Color.black);
+			v.getGraphics().setFont(new Font("Times New Roman", Font.PLAIN, 18));
+			v.drawString(_playerName, _pos);
+			v.drawImage(Resource.get(_basicImage), _pos, drawSize);
 		}
 		
 		t = _timedEffects.get(ConfuseEffect.TYPE);
@@ -121,7 +139,7 @@ public class Player extends Unit implements Comparable{
 		} 
 		t = _timedEffects.get(HealthBurnEffect.TYPE);
 		if (t != null && t._display){
-			v.drawImage(Resource.get("burnEffect"), _pos.plus(3, _size.y-35), 50);
+			v.drawImage(Resource.get("burnEffect"), _pos.plus(3, drawSize.y-35), 50);
 		}
 
 	}
@@ -134,13 +152,16 @@ public class Player extends Unit implements Comparable{
 	@Override
 	public void die() {
 		_isDead = true;
-		_force = new Vector(0,0);
-		_vel = new Vector(0,0);
-		_timedEffects = new HashMap<String, TimedEffect>();
-		_mana = 0;
-		dropFlag();
+
 		this._collidable = false;
 		this._drawUnder = true;
+		_timedEffects = new HashMap<String, TimedEffect>();
+		_hidden = 1.0;
+		_force = new Vector(0,0);
+		_vel = new Vector(0,0);
+		_mana = 0;
+		dropFlag();
+		
 		this._basicImage = _characterName + "_splat";
 		_deaths++;
 		_spawnTimer = 100;
@@ -194,7 +215,13 @@ public class Player extends Unit implements Comparable{
 		_health += amount;
 		if (_health > _maxHealth) _health = _maxHealth;
 		if (_health <= 0) {
-			if (caster._netID != _netID) caster._kills += 1;
+			Boolean sameTeam = false;
+			for (Player teammate : _data._teams.get(_teamNum)._playerList) {
+				if (caster._netID == teammate._netID) {
+					sameTeam = true;
+				}
+			}
+			if (!sameTeam) caster._kills += 1;
 			this.die();
 		}
 		//System.out.println("REDUCED HEALTH BY: " + amount + " HP: " + _health);
@@ -228,6 +255,9 @@ public class Player extends Unit implements Comparable{
 		} else if (spell._name.equals("Hide")) {
 			HideSpell s = (HideSpell) spell;
 			s.hide();
+		} else if (spell._name.equals("Cleanse")) {
+			CleanseSpell s = (CleanseSpell) spell;
+			s.cleanse();
 		}
 		_spellToCast = spell;
 		_spellCastingTime = spell._castingTime;
@@ -315,8 +345,8 @@ public class Player extends Unit implements Comparable{
 				"\t" + _drawUnder + 						//index: 18
 				"\t" + _spawnTimer +						//index: 19
 				"\t" + _hidden +							//index: 20
-				"\t" + _isDead;								//index: 21
-
+				"\t" + _isDead +							//index: 21
+				"\t" + _movable;							//index: 22
 		//when fromNet is called, throw away previous timed effects
 		//list, and instantiate new ones with (this) as target
 	}
@@ -344,7 +374,8 @@ public class Player extends Unit implements Comparable{
 			this._spawnTimer = Integer.parseInt(networkString[19]);
 			this._hidden = Double.parseDouble(networkString[20]);
 			this._isDead = Boolean.parseBoolean(networkString[21]);
-
+			this._movable = Boolean.parseBoolean(networkString[22]);
+			
 			String[] lastCastTimes, sp;
 			lastCastTimes = networkString[11].split("::");
 			for (String spell : lastCastTimes) {
@@ -387,10 +418,5 @@ public class Player extends Unit implements Comparable{
 		}
 		throw new RuntimeException("Called Player.fromNetInit on string: " 
 				+ Arrays.toString(networkString));
-	}
-
-	@Override
-	public int compareTo(Object arg0) {
-		return 0;
 	}
 }

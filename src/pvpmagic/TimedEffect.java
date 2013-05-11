@@ -40,6 +40,8 @@ public abstract class TimedEffect {
 			return new RootEffect(numberOfIntervals, caster, target); 
 		} else if (type.equals(SilenceEffect.TYPE)) {
 			return new SilenceEffect(numberOfIntervals, caster, target); 
+		} else if (type.equals(KittyEffect.TYPE)) {
+			return new KittyEffect(numberOfIntervals, caster, target);
 		}
 
 		System.out.println("Effect name \""+ type +"\" not found!");

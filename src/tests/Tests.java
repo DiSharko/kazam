@@ -1,8 +1,11 @@
-package pvpmagic;
+package tests;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import pvpmagic.Player;
+import pvpmagic.Resource;
+import pvpmagic.Vector;
 import pvpmagic.spells.AbracadabraSpell;
 import pvpmagic.spells.BurnSpell;
 import pvpmagic.spells.CleanseSpell;
@@ -41,12 +44,6 @@ public class Tests {
 
 		p.silence(1000, null);
 		assertTrue(p._isSilenced);
-		
-		Vector pos = new Vector(0, 0);
-		Flag f = new Flag(null, pos, 10.0,"flag");
-		p._flag = f;
-		p.dropFlag();
-		assertTrue(p._flag == null);
 	}
 
 	@Test

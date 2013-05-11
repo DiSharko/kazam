@@ -198,6 +198,8 @@ public class Coder {
 				} else if (eventString[2].equals("F")){
 					data.startCastingSpell(p, p._spells[7], target);
 				} else if (eventString[2].equals("CLICK")) {
+					System.out.println("rooted: " + p._isRooted);
+					System.out.println("movable " + p._movable);
 					if (!p._isRooted) {
 						p._destination = target;
 					}

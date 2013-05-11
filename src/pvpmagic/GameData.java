@@ -74,7 +74,8 @@ public class GameData {
 	}
 
 	public void startCastingSpell(Player caster, String spellName, Vector dir){
-		if (!caster._isSilenced && caster._spellToCast == null) {
+		if ((!caster._isSilenced || spellName.equals("Cleanse"))
+				&& caster._spellToCast == null) {
 			Spell s = Spell.newSpell(this, spellName, caster, dir);
 			if (s != null){
 				Long previousCastTime = caster._spellCastingTimes.get(s._name);
@@ -130,6 +131,11 @@ public class GameData {
 //				System.out.println("player done spawning");
 				p._pos = p._spawn;
 				p._isDead = false;
+				p._isRooted = false;
+				p._isSilenced = false;
+				p._destination = null;
+				p._movable = true;
+				p._hidden = 1.0;
 				p._health = p._maxHealth;
 				p._mana = p._maxMana;
 				p._collidable = true;
