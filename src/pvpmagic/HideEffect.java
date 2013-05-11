@@ -19,7 +19,6 @@ public class HideEffect extends TimedEffect {
 
 	@Override
 	public void effect() {
-		System.out.println("hiding: intervals: " + _numberOfIntervals);
 		_effectCompleted = false;
 		if (_numberOfIntervals > _disappearVals) {
 			((Player) _target)._hidden -= _increment;
@@ -34,5 +33,6 @@ public class HideEffect extends TimedEffect {
 			((Player) _target)._hidden += _increment;
 			_numberOfIntervals -= 1;
 		}
+		if (((Player) _target)._hidden < 0) ((Player) _target)._hidden = 0.0;
 	}
 }

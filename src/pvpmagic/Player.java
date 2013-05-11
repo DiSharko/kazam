@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import pvpmagic.spells.CleanseSpell;
 import pvpmagic.spells.DashSpell;
 import pvpmagic.spells.HideSpell;
 import pvpmagic.spells.Spell;
@@ -49,6 +50,8 @@ public class Player extends Unit {
 	long _timeLastCast;
 
 	double _velocity = 8;
+	
+	Vector _deadSize;
 
 	public Player(GameData data, String characterName, String playerName, String[] spellNames){
 		super(data, TYPE, STATICOBJ, characterName);
@@ -67,6 +70,9 @@ public class Player extends Unit {
 		Image sprite = Resource.get(_characterName);
 		_size = new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70);
 
+		Image deadSprite = Resource.get("andrew_splat");
+		_deadSize = new Vector(deadSprite.getWidth(null), deadSprite.getHeight(null)).normalize().mult(85);
+		
 		double hitBoxScale = .7;
 		_shape = new Box(this, _size.mult(0, (1-hitBoxScale)/2), _size.mult(1, hitBoxScale));
 
@@ -84,6 +90,11 @@ public class Player extends Unit {
 
 	@Override
 	public void draw(View v){
+		Vector drawSize = _size;
+		if (_isDead){
+			drawSize = _deadSize;
+		}
+		
 		TimedEffect t = _timedEffects.get(RootEffect.TYPE);
 		if (t != null && t._display){
 			v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
@@ -102,11 +113,11 @@ public class Player extends Unit {
 			Composite old = v.getGraphics().getComposite();
 
 			v.getGraphics().setComposite(java.awt.AlphaComposite.getInstance(AlphaComposite.SRC_OVER,(float)_hidden));
-			v.drawImage(Resource.get(_basicImage), _pos, _size);
+			v.drawImage(Resource.get(_basicImage), _pos, drawSize);
 
 			v.getGraphics().setComposite(old);
 		} else if (_hidden == 1) {
-			v.drawImage(Resource.get(_basicImage), _pos, _size);
+			v.drawImage(Resource.get(_basicImage), _pos, drawSize);
 		}
 		
 		t = _timedEffects.get(ConfuseEffect.TYPE);
@@ -119,7 +130,7 @@ public class Player extends Unit {
 		} 
 		t = _timedEffects.get(HealthBurnEffect.TYPE);
 		if (t != null && t._display){
-			v.drawImage(Resource.get("burnEffect"), _pos.plus(3, _size.y-35), 50);
+			v.drawImage(Resource.get("burnEffect"), _pos.plus(3, drawSize.y-35), 50);
 		}
 
 	}
@@ -192,7 +203,13 @@ public class Player extends Unit {
 		_health += amount;
 		if (_health > _maxHealth) _health = _maxHealth;
 		if (_health <= 0) {
-			if (caster._netID != _netID) caster._kills += 1;
+			Boolean sameTeam = false;
+			for (Player teammate : _data._teams.get(_teamNum)._playerList) {
+				if (caster._netID == teammate._netID) {
+					sameTeam = true;
+				}
+			}
+			if (!sameTeam) caster._kills += 1;
 			this.die();
 		}
 		//System.out.println("REDUCED HEALTH BY: " + amount + " HP: " + _health);
@@ -226,6 +243,9 @@ public class Player extends Unit {
 		} else if (spell._name.equals("Hide")) {
 			HideSpell s = (HideSpell) spell;
 			s.hide();
+		} else if (spell._name.equals("Cleanse")) {
+			CleanseSpell s = (CleanseSpell) spell;
+			s.cleanse();
 		}
 		_spellToCast = spell;
 		_spellCastingTime = spell._castingTime;

@@ -46,6 +46,7 @@ public class ServerScreen extends Screen {
 	AtomicBoolean _started;
 	boolean _transitioning;
 	boolean _dying;
+	boolean _stopSetup; // check this after setup before switching to screen
 	int _statePort;
 	int _inputPort;
 	GameData _data;
@@ -87,6 +88,7 @@ public class ServerScreen extends Screen {
 		_started = new AtomicBoolean(false);
 		_transitioning = false;
 		_dying = false;
+		_stopSetup = false;
 		_statePort = 9001;
 		_inputPort = 9002;
 		_tick = 0;
@@ -99,17 +101,12 @@ public class ServerScreen extends Screen {
 			_inputServer.start();
 		} catch (NetworkException e) {
 			System.out.println(e.getMessage());
-			try {
-				_stateServer.kill();
-			} catch (IOException e1) {
-				// ignore as disconnecting
-			}
-			try {
-				_inputServer.kill();
-			} catch (IOException e1) {
-				// ignore as disconnecting
-			}
-			_holder.transitionToScreen(Transition.FADE, "setup");
+			_stopSetup = true;
+		}
+		
+		// break on exception
+		if (_stopSetup) {
+			return;
 		}
 
 		// setup client to connect with this server
@@ -136,7 +133,7 @@ public class ServerScreen extends Screen {
 			} catch (IOException e1) {
 				// ignore as disconnecting
 			}
-			_holder.transitionToScreen(Transition.FADE, "setup");
+			_stopSetup = true;
 		} catch (NetworkException e) {
 			System.out.println(e.getMessage());
 			lobby._networker.disconnect();
@@ -150,7 +147,7 @@ public class ServerScreen extends Screen {
 			} catch (IOException e1) {
 				// ignore as disconnecting
 			}
-			_holder.transitionToScreen(Transition.FADE, "setup");
+			_stopSetup = true;
 		}
 
 		onResize();
