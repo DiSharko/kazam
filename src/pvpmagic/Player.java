@@ -157,8 +157,6 @@ public class Player extends Unit {
 		this._drawUnder = true;
 		_timedEffects = new HashMap<String, TimedEffect>();
 		_hidden = 1.0;
-		_isSilenced = false;
-		_isRooted = false;
 		_force = new Vector(0,0);
 		_vel = new Vector(0,0);
 		_mana = 0;
