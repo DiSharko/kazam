@@ -3,7 +3,12 @@ package pvpmagic.spells;
 import java.awt.Image;
 
 import pvpmagic.*;
-
+/**
+ * Shield raises a shield in the direction of the cursor
+ * that can deflect spells that contact it.
+ * @author Miraj
+ *
+ */
 public class ShieldSpell extends Spell {
 	public static String TYPE = "ShieldSpell";
 
@@ -25,7 +30,7 @@ public class ShieldSpell extends Spell {
 		}
 		
 		_castingTime = 0;
-		_cooldown = 8000;
+		_cooldown = 3000;
 		_manaCost = 20;
 	}
 	

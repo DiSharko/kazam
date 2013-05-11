@@ -4,6 +4,12 @@ import java.awt.Image;
 
 import pvpmagic.*;
 
+/**
+ * Felify will turn a target object, including flags,
+ * doors, and rocks, into cats.
+ * @author Miraj
+ *
+ */
 public class FelifySpell extends Spell {
 	public static String TYPE = "FelifySpell";
 
@@ -16,7 +22,7 @@ public class FelifySpell extends Spell {
 		
 		_shape = new Circle(this, new Vector(-8, -8), 8);
 		
-		_cooldown = 1000;
+		_cooldown = 3000;
 		_manaCost = 10;
 	}
 	

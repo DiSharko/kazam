@@ -3,7 +3,13 @@ package pvpmagic.spells;
 import pvpmagic.GameData;
 import pvpmagic.Player;
 import pvpmagic.Vector;
-
+/**
+ * Dash is a self-casted spell that rapidly propels the
+ * caster a certain distance in the direction of the
+ * cursor.
+ * @author Miraj
+ *
+ */
 public class DashSpell extends Spell {
 	public static String TYPE = "DashSpell";
 

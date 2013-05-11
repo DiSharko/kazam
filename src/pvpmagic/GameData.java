@@ -9,7 +9,6 @@ import java.util.PriorityQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import pvpmagic.spells.Spell;
-import screen.TextInputLine;
 
 
 public class GameData {

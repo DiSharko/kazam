@@ -3,7 +3,12 @@ package pvpmagic.spells;
 import java.awt.Image;
 
 import pvpmagic.*;
-
+/**
+ * Heals an ally (or enemy) by a certain amount of health
+ * over time.
+ * @author Miraj
+ *
+ */
 public class RejuvenateSpell extends Spell {
 	public static String TYPE = "RejuvenateSpell";
 
@@ -12,7 +17,7 @@ public class RejuvenateSpell extends Spell {
 		_name = "Rejuvenate";
 		Image sprite = Resource.get("RejuvenateSpell");
 		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(70), 12);
-		_cooldown = 1000;
+		_cooldown = 2000;
 		_manaCost = 10;
 		
 		_shape = new Circle(this, new Vector(-9,-9), 9);

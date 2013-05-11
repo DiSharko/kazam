@@ -3,7 +3,12 @@ package pvpmagic.spells;
 import java.awt.Image;
 
 import pvpmagic.*;
-
+/**
+ * Root anchors an enemy into the ground, preventing
+ * them from moving for a set period of time.
+ * @author Miraj
+ *
+ */
 public class RootSpell extends Spell {
 	public static String TYPE = "RootSpell";
 	double scale = .3;
@@ -14,7 +19,7 @@ public class RootSpell extends Spell {
 		Image sprite = Resource.get("RootSpell");
 		setProperties(new Vector(sprite.getWidth(null)*scale, sprite.getHeight(null)*scale), 15);
 		
-		_cooldown = 1000;
+		_cooldown = 3000;
 		_manaCost = 10;
 		_shape = new Circle(this, new Vector(-12, -12), 12);
 	}

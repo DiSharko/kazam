@@ -4,6 +4,13 @@ import java.awt.Image;
 
 import pvpmagic.*;
 
+/**
+ * Push can be cast on an ally or enemy to move them a
+ * direct distance away from the caster in the direction of 
+ * the cursor
+ * @author Miraj
+ *
+ */
 public class PushSpell extends Spell {
 	public static String TYPE = "PushSpell";
 

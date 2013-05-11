@@ -4,7 +4,12 @@ import java.awt.Image;
 
 import pvpmagic.*;
 
-
+/**
+ * The Burn spell causes reductions to health and mana
+ * over time.
+ * @author Miraj
+ *
+ */
 public class BurnSpell extends Spell {
 	public static String TYPE = "BurnSpell";
 	

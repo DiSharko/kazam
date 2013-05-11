@@ -3,7 +3,12 @@ package pvpmagic.spells;
 import java.awt.Image;
 
 import pvpmagic.*;
-
+/**
+ * Stun roots (prevents movement) and silences
+ * (prevents casting) a target for a set amount of time.
+ * @author Miraj
+ *
+ */
 public class StunSpell extends Spell {
 	public static String TYPE = "StunSpell";
 	
@@ -13,8 +18,8 @@ public class StunSpell extends Spell {
 		Image sprite = Resource.get("StunSpell");
 		setProperties(new Vector(sprite.getWidth(null), sprite.getHeight(null)).normalize().mult(50), 15);
 		_name = "Stun";
-		_cooldown = 1500;
-		_manaCost = 12;
+		_cooldown = 3000;
+		_manaCost = 25;
 		_shape = new Circle(this, new Vector(-7,-7), 7);
 	}
 

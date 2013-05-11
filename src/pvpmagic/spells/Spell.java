@@ -58,7 +58,6 @@ public abstract class Spell extends Unit {
 		else if (name.equals("Disarm")) { return new DisarmSpell(data, caster, dir); }
 		else if (name.equals("Burn")) { return new BurnSpell(data, caster, dir); }
 		else if (name.equals("Root")) { return new RootSpell(data, caster, dir); }
-		else if (name.equals("Blind")) { return new BlindSpell(data, caster, dir); }
 		else if (name.equals("Push")) { return new PushSpell(data, caster, dir); }
 		else if (name.equals("Abracadabra")) { return new AbracadabraSpell(data, caster, dir); }
 		else if (name.equals("Open")) { return new OpenSpell(data, caster, dir); }

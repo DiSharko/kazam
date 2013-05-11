@@ -11,7 +11,12 @@ import pvpmagic.Resource;
 import pvpmagic.Unit;
 import pvpmagic.Vector;
 import pvpmagic.View;
-
+/**
+ * Summon can cause a static map object, namely flags, to 
+ * gravitate towards the caster.
+ * @author Miraj
+ *
+ */
 public class SummonSpell extends Spell {
 	public static String TYPE = "SummonSpell";
 

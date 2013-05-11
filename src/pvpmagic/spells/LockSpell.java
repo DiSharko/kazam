@@ -4,7 +4,11 @@ import java.awt.Image;
 
 import pvpmagic.*;
 
-
+/**
+ * Lock locks door objects
+ * @author Miraj
+ *
+ */
 public class LockSpell extends Spell {
 	public static String TYPE = "LockSpell";
 
