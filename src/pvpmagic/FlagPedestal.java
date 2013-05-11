@@ -44,6 +44,7 @@ public class FlagPedestal extends Unit {
 			if (p._flag != null){
 				_flag = p._flag;
 				p._flag = null;
+				System.out.println("player scored the flag: "+p._flag);
 			}
 		}
 	}	
