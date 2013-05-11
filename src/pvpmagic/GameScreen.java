@@ -331,7 +331,7 @@ public class GameScreen extends Screen {
 					e.printStackTrace();
 					end();
 				}
-			} else {
+			} else if (!_dying) {
 				end();
 			}
 		}
