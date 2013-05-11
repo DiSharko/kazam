@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
 
+import pvpmagic.spells.CleanseSpell;
 import pvpmagic.spells.DashSpell;
 import pvpmagic.spells.HideSpell;
 import pvpmagic.spells.Spell;
@@ -194,7 +195,13 @@ public class Player extends Unit implements Comparable{
 		_health += amount;
 		if (_health > _maxHealth) _health = _maxHealth;
 		if (_health <= 0) {
-			if (caster._netID != _netID) caster._kills += 1;
+			Boolean sameTeam = false;
+			for (Player teammate : _data._teams.get(_teamNum)._playerList) {
+				if (caster._netID == teammate._netID) {
+					sameTeam = true;
+				}
+			}
+			if (!sameTeam) caster._kills += 1;
 			this.die();
 		}
 		//System.out.println("REDUCED HEALTH BY: " + amount + " HP: " + _health);
@@ -228,6 +235,9 @@ public class Player extends Unit implements Comparable{
 		} else if (spell._name.equals("Hide")) {
 			HideSpell s = (HideSpell) spell;
 			s.hide();
+		} else if (spell._name.equals("Cleanse")) {
+			CleanseSpell s = (CleanseSpell) spell;
+			s.cleanse();
 		}
 		_spellToCast = spell;
 		_spellCastingTime = spell._castingTime;
