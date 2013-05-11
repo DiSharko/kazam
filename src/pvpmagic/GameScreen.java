@@ -312,6 +312,16 @@ public class GameScreen extends Screen {
 					_lastTick = curTick;
 					_clientTick++;
 					
+					for (TeamData teamData : _data._teams) {
+						if (teamData._teamScore == _data._needed) {
+							System.out.println("GAME OVER!");
+							System.out.println("Team " + teamData.TEAM_NUM + " has won!");
+							end();
+						}
+					}
+					
+					
+					
 					//update game screen display/camera
 					_view._camera = _focus._pos;
 					_view._scale = (Math.min(_holder._h, _holder._w))/600.0;

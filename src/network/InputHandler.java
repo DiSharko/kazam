@@ -40,8 +40,6 @@ public class InputHandler extends Thread {
 			writer.write(_id + "\n");
 			writer.flush();
 			
-			//System.out.println("starting to read inputs");
-			
 			// get inputs and pass along
 			while(_running.get()) {
 				//System.out.println("blocking read?");
@@ -49,8 +47,6 @@ public class InputHandler extends Thread {
 				//System.out.println("INPUTHANDLER" + _id + "\t" + input);
 				_inputs.put(_id + "\t" + input);
 			}
-			
-			System.out.println("SOCKET CLOSING");
 			
 			// clean up
 			closeSocket();
