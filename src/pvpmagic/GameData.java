@@ -14,7 +14,7 @@ import pvpmagic.spells.Spell;
 public class GameData {
 	public enum GameMode { CTF, TEAM_DEATHMATCH }
 	
-	private final int NEEDED = 3;
+	public final int NEEDED = 3;
 
 	private int _needed = NEEDED;
 	public ArrayList<Unit> _units;

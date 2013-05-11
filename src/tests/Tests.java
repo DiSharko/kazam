@@ -1,10 +1,14 @@
 package tests;
 import static org.junit.Assert.*;
 
+import java.util.Map.Entry;
+
 import org.junit.Test;
 
+import pvpmagic.Flag;
 import pvpmagic.Player;
 import pvpmagic.Resource;
+import pvpmagic.TimedEffect;
 import pvpmagic.Vector;
 import pvpmagic.spells.AbracadabraSpell;
 import pvpmagic.spells.BurnSpell;
@@ -44,6 +48,21 @@ public class Tests {
 
 		p.silence(1000, null);
 		assertTrue(p._isSilenced);
+		
+		Vector pos = new Vector(0, 0);
+		Flag f = new Flag(null, pos, 10.0,"flag");
+		p._flag = f;
+		p.dropFlag();
+		assertTrue(p._flag == null);
+		
+		p.kitty(1000, null);
+		for (Entry<String,TimedEffect> e : p._timedEffects.entrySet()) {
+			e.getValue().effect();
+		}
+		assertTrue(p._basicImage == "cat");
+		p.cleanse();
+		System.out.println(p._basicImage);
+		assertTrue(p._basicImage != "cat");
 	}
 
 	@Test
