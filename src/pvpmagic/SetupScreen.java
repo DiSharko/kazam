@@ -47,6 +47,7 @@ public class SetupScreen extends Screen {
 	@Override
 	public void switchInto(){
 		_holder.setFPS(25);
+		_holder.showBorder();
 	}
 
 	@Override
