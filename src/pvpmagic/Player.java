@@ -5,6 +5,7 @@ import java.awt.Composite;
 import java.awt.Image;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map.Entry;
 
 import pvpmagic.spells.DashSpell;
@@ -25,6 +26,7 @@ public class Player extends Unit implements Comparable{
 	
 	public double _kills;
 	public double _deaths;
+	public boolean _isDead = false;
 
 	public Vector _destination;
 
@@ -83,7 +85,6 @@ public class Player extends Unit implements Comparable{
 
 	@Override
 	public void draw(View v){
-//		System.out.println("flag?: "+this._flag);
 		TimedEffect t = _timedEffects.get(RootEffect.TYPE);
 		// TODO figure out why these sprites are drawn only on first two intervals, possible timestamp problem?
 		if (t != null && t._display){
@@ -132,6 +133,9 @@ public class Player extends Unit implements Comparable{
 
 	@Override
 	public void die() {
+		_isDead = true;
+		_force = new Vector(0,0);
+		_vel = new Vector(0,0);
 		_timedEffects = new HashMap<String, TimedEffect>();
 		dropFlag();
 		this._collidable = false;
@@ -249,7 +253,7 @@ public class Player extends Unit implements Comparable{
 			_flag._drawUnder = false;
 			_flagable = false;
 			_flagGrabTimer = 50;
-			_flag = null;
+			this._flag = null;
 		}
 	}
 
@@ -278,14 +282,16 @@ public class Player extends Unit implements Comparable{
 				timedEffectsStr += e.getValue().toNet() + "::";
 			}
 		}
-		if (timedEffectsStr.length() > 0) timedEffectsStr = 
-				timedEffectsStr.substring(0, timedEffectsStr.length() - 2);
-		
+		if (timedEffectsStr.length() > 0) {
+			timedEffectsStr = timedEffectsStr.substring(0, timedEffectsStr.length() - 2);
+		}
+				
 		String pos = (_pos == null) ? null : _pos.toNet();
 		String dest = (_destination == null) ? null : _destination.toNet();
-		String flag = (_flag == null) ? null : Integer.toString(_flag._netID);
+		String flag = (this._flag == null) ? null : Integer.toString(_flag._netID);
 		String vel = (_vel == null) ? null : _vel.toNet();
 		String force = (_force == null) ? null : _force.toNet();
+		//System.out.println("sending flag: "+flag);
 		return _netID +              						//index: 0
 				"\t" + (_staticObj ? "static" : _type) +  	//index: 1
 				"\t" + pos +      							//index: 2
@@ -306,7 +312,8 @@ public class Player extends Unit implements Comparable{
 				"\t" + _collidable + 						//index: 17
 				"\t" + _drawUnder + 						//index: 18
 				"\t" + _spawnTimer +						//index: 19
-				"\t" + _hidden;								//index: 20
+				"\t" + _hidden +							//index: 20
+				"\t" + _isDead;								//index: 21
 
 		//when fromNet is called, throw away previous timed effects
 		//list, and instantiate new ones with (this) as target
@@ -317,7 +324,9 @@ public class Player extends Unit implements Comparable{
 		if (networkString[1].equals(_staticObj ? "static" : _type)) {
 			this._pos = Vector.fromNet(networkString[2]);
 			this._destination = Vector.fromNet(networkString[3]);
+			//System.out.println("recieveing flag: "+networkString[4]);
 			if (!networkString[4].equals("null")) this._flag = (Flag) objectMap.get(Integer.parseInt(networkString[4]));
+			else this._flag = null;
 			this._health = Double.parseDouble(networkString[5]);
 			this._mana = Double.parseDouble(networkString[6]);
 			this._vel = Vector.fromNet(networkString[7]);
@@ -332,6 +341,7 @@ public class Player extends Unit implements Comparable{
 			this._drawUnder = Boolean.parseBoolean(networkString[18]);
 			this._spawnTimer = Integer.parseInt(networkString[19]);
 			this._hidden = Double.parseDouble(networkString[20]);
+			this._isDead = Boolean.parseBoolean(networkString[21]);
 
 			String[] lastCastTimes, sp;
 			lastCastTimes = networkString[11].split("::");
@@ -344,11 +354,12 @@ public class Player extends Unit implements Comparable{
 			String[] tEffects; TimedEffect ef;
 			tEffects = networkString[12].split("::");
 			_timedEffects = new HashMap<String, TimedEffect>();
-			for (String effect : tEffects) {
-				ef = TimedEffect.fromNet(effect, objectMap);
-				if (ef != null) _timedEffects.put(ef._type, ef);
+			for (int i = 0; i < tEffects.length; i++) {
+				ef = TimedEffect.fromNet(tEffects[i], objectMap);
+				if (ef != null) {
+					_timedEffects.put(ef._type, ef);
+				}
 			}
-
 		}
 	}		
 
