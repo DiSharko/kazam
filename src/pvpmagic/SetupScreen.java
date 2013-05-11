@@ -64,8 +64,8 @@ public class SetupScreen extends Screen {
 		_tabs.add(joinTab);
 		Button hostTab = new Button(this, "hostTab", 200, 50, "Host Game", -1).setRoundness(16);
 		_tabs.add(hostTab);
-		Button serverTab = new Button(this, "serverTab", 200, 50, "Dedicated Server", -1).setRoundness(16);
-		_tabs.add(serverTab);
+//		Button serverTab = new Button(this, "serverTab", 200, 50, "Dedicated Server", -1).setRoundness(16);
+//		_tabs.add(serverTab);
 		Button home = new Button(this, "home", 50, 30, "Home", KeyEvent.VK_ESCAPE);
 		_tabs.add(home);
 
@@ -268,11 +268,15 @@ public class SetupScreen extends Screen {
 		} else if (e.id.equals("host")){
 			((ServerScreen)_holder.getScreen("server")).getSettings(this);
 			_holder.getScreen("server").setup();
-			_holder.transitionToScreen(Transition.FADE, "server");
+			if (!((ServerScreen)_holder.getScreen("server"))._stopSetup) {
+				_holder.transitionToScreen(Transition.FADE, "server");
+			}
 		} else if (e.id.equals("connect")){
 			_holder.getScreen("lobby").setup();
 			((LobbyScreen)_holder.getScreen("lobby")).getSettings(this);
-			_holder.transitionToScreen(Transition.FADE, "lobby");
+			if (!((LobbyScreen)_holder.getScreen("lobby"))._stopSetup) {
+				_holder.transitionToScreen(Transition.FADE, "lobby");
+			}
 		}
 	}
 

@@ -43,6 +43,7 @@ public class LobbyScreen extends Screen {
 	AtomicBoolean _started;
 	boolean _transitioning;
 	boolean _dying;
+	boolean _stopSetup;
 	SyncedString _gameData;
 	SyncedString _lobbyData;
 	int _statePort;
@@ -78,6 +79,7 @@ public class LobbyScreen extends Screen {
 		_started = new AtomicBoolean(false);
 		_transitioning = false;
 		_dying = false;
+		_stopSetup = false;
 		_gameData = new SyncedString();
 		_lobbyData = new SyncedString();
 		_gameData.setData("-1");
@@ -98,11 +100,11 @@ public class LobbyScreen extends Screen {
 		} catch (UnknownHostException e) {
 			System.out.println("ERROR: Unknown host.");
 			_networker.disconnect();
-			_holder.transitionToScreen(Transition.FADE, "setup");
+			_stopSetup = true;
 		} catch (NetworkException e) {
 			System.out.println(e.getMessage());
 			_networker.disconnect();
-			_holder.transitionToScreen(Transition.FADE, "setup");
+			_stopSetup = true;
 		}
 	}
 
