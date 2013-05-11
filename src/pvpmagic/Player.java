@@ -266,26 +266,26 @@ public class Player extends Unit implements Comparable{
 	public String toNet() {
 		String lastCastTimes = "";
 		for (Entry<String, Long> e : _spellCastingTimes.entrySet()) {
-			lastCastTimes += e.getKey() + "," + e.getValue() + ".";
+			lastCastTimes += e.getKey() + "," + e.getValue() + "::";
 		}
-		if (lastCastTimes.length() > 0) lastCastTimes = 
-				lastCastTimes.substring(0, lastCastTimes.length() - 1);
+		if (lastCastTimes.length() > 0) {
+			lastCastTimes = lastCastTimes.substring(0, lastCastTimes.length() - 2);
+		}
 		
 		String timedEffectsStr = "";
 		for (Entry<String,TimedEffect> e : _timedEffects.entrySet()) {
 			if (e.getValue() != null) {	
-				timedEffectsStr += e.getValue().toNet() + ".";
+				timedEffectsStr += e.getValue().toNet() + "::";
 			}
 		}
 		if (timedEffectsStr.length() > 0) timedEffectsStr = 
-				timedEffectsStr.substring(0, timedEffectsStr.length() - 1);
+				timedEffectsStr.substring(0, timedEffectsStr.length() - 2);
 		
 		String pos = (_pos == null) ? null : _pos.toNet();
 		String dest = (_destination == null) ? null : _destination.toNet();
 		String flag = (_flag == null) ? null : Integer.toString(_flag._netID);
 		String vel = (_vel == null) ? null : _vel.toNet();
 		String force = (_force == null) ? null : _force.toNet();
-		
 		return _netID +              						//index: 0
 				"\t" + (_staticObj ? "static" : _type) +  	//index: 1
 				"\t" + pos +      							//index: 2
@@ -334,13 +334,15 @@ public class Player extends Unit implements Comparable{
 			this._hidden = Double.parseDouble(networkString[20]);
 
 			String[] lastCastTimes, sp;
-			lastCastTimes = networkString[7].split(".");
+			lastCastTimes = networkString[11].split("::");
 			for (String spell : lastCastTimes) {
 				sp = spell.split(",");
-				this._spellCastingTimes.put(sp[0], Long.parseLong(sp[1]));
+				if (sp.length == 2) {
+					this._spellCastingTimes.put(sp[0], Long.parseLong(sp[1]));
+				}
 			}
 			String[] tEffects; TimedEffect ef;
-			tEffects = networkString[8].split(".");
+			tEffects = networkString[12].split("::");
 			_timedEffects = new HashMap<String, TimedEffect>();
 			for (String effect : tEffects) {
 				ef = TimedEffect.fromNet(effect, objectMap);
