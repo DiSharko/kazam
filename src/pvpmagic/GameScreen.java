@@ -91,6 +91,7 @@ public class GameScreen extends Screen {
 		_interfaceElements.add(_manaBar);
 
 		Button menu = new Button(this, "menu", Resource.get("menu"));
+		menu.activationKeycode = KeyEvent.VK_ESCAPE;
 		menu.w = menu.h = 60;
 		_interfaceElements.add(menu);
 		
@@ -353,15 +354,11 @@ public class GameScreen extends Screen {
 
 	@Override
 	public void onKeyPressed(KeyEvent e){
+		super.onKeyPressed(e);
 		int key = e.getKeyCode();
 
 		//System.out.println("HERE");
 		
-		if (key == KeyEvent.VK_ESCAPE){
-			_holder.showBorder();
-			_holder.switchToScreen("pause");
-		}
-
 		if (key == KeyEvent.VK_LEFT){
 			_view._camera = _view._camera.minus(10, 0);
 		}

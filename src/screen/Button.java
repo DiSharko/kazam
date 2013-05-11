@@ -49,7 +49,7 @@ public class Button extends InterfaceElement {
 		x = 0; y = 0;
 	}	
 
-	int activationKeycode = -1;
+	public int activationKeycode = -1;
 
 	public Color textColor = Color.black;
 	public int defaultFontSize = 18;

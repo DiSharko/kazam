@@ -79,6 +79,7 @@ public class PauseScreen extends Screen {
 
 	public void setGame(GameScreen game) {
 		_game = game;
+		System.out.println("GAME IS SET");
 	}
 	
 	public void onKeyPressed(KeyEvent e){
