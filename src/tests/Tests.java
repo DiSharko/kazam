@@ -1,10 +1,13 @@
 package tests;
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+
 import org.junit.Test;
 
 import pvpmagic.Player;
 import pvpmagic.Resource;
+import pvpmagic.Unit;
 import pvpmagic.Vector;
 import pvpmagic.spells.AbracadabraSpell;
 import pvpmagic.spells.BurnSpell;
@@ -28,10 +31,10 @@ import pvpmagic.spells.SummonSpell;
 public class Tests {
 
 	Resource r = new Resource();
+	Player p = new Player(null, "andrew", "Bob", new String[]{});
 
 	@Test
 	public void playerTests(){
-		Player p = new Player(null, "andrew", "Bob", new String[]{});
 		p.changeHealth(-20, null);
 		assertTrue(p._health == p._maxHealth-20);
 
@@ -65,5 +68,14 @@ public class Tests {
 		assertTrue(Spell.newSpell(null,"Dash", null, new Vector(1,1)) instanceof DashSpell);
 		assertTrue(Spell.newSpell(null,"Felify", null, new Vector(1,1)) instanceof FelifySpell);
 		assertTrue(Spell.newSpell(null,"Shield", null, new Vector(1,1)) instanceof ShieldSpell);
+	}
+	
+	@Test
+	public void toNetfromNet() {
+		p.changeHealth(-10, null);
+		p.changeMana(-10, null);
+		p.fromNet(p.toNet().split("\t"), new HashMap<Integer, Unit>());
+		assertTrue(p._health == 90.0);
+		assertTrue(p._mana == 90.0);
 	}
 }
