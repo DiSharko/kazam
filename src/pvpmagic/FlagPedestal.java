@@ -65,6 +65,8 @@ public class FlagPedestal extends Unit {
 				&& networkString.length == 4) {
 			if (!networkString[2].equals("null")){
 				_flag = (Flag) objectMap.get(Integer.parseInt(networkString[2]));
+			} else {
+				_flag = null;
 			}
 			_basicImage = networkString[3];
 		}
