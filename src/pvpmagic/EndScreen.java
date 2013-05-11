@@ -8,6 +8,7 @@ import screen.Button;
 import screen.Screen;
 import screen.ScreenHolder;
 import screen.InterfaceElement;
+import screen.TransitionScreen.Transition;
 
 public class EndScreen extends Screen {
 
@@ -44,8 +45,22 @@ public class EndScreen extends Screen {
 	}
 
 	@Override
+	protected void handleElementReleased(InterfaceElement e){
+		if (e.id.equals("main")){
+			_holder.transitionToScreen(Transition.FADE, "welcome");
+		}
+	}
+	
+	@Override
 	protected void onResize() {
-		
+		if (_interfaceElements != null){
+			for (InterfaceElement e : _interfaceElements){
+				if (e.id.equals("main")){
+					e.x = _holder._w/2-e.w/2;
+					e.y = _holder._h/2;
+				}
+			}
+		}
 	}
 
 }
