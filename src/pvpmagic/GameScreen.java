@@ -191,7 +191,7 @@ public class GameScreen extends Screen {
 				if (_focus._spellCastingTimes.containsKey(_focusSpellButtons[i].name)){
 					double timeSinceCast = System.currentTimeMillis() - _focus._spellCastingTimes.get(_focusSpellButtons[i].name);
 					double cooldown = proto._cooldown;
-
+					
 					if (timeSinceCast < cooldown){
 						double fraction = (cooldown-timeSinceCast)/cooldown;
 						g.setColor(new Color(0,0,1,0.4f));
