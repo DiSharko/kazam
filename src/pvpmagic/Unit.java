@@ -18,7 +18,7 @@ public abstract class Unit {
 	protected boolean _delete = false;
 	protected boolean _drawUnder = false;
 	protected Shape _shape;
-	protected String _basicImage;
+	public String _basicImage;
 	protected String _oldImage;
 	
 	public Unit(GameData data, String type, Boolean staticObj, String basic){
@@ -196,12 +196,15 @@ public abstract class Unit {
 		return amount/numberOfIntervals;
 	}
 	public void cleanse() {
+		System.out.println("CLEANSING");
 		for (Entry<String, TimedEffect> e : _timedEffects.entrySet()) {
 			if (e.getValue() == null) continue;
 			if (e.getValue()._toBeCleansed) {
+				System.out.println(e.getValue().toNet());
 				e.setValue(null);
 			}
 		}
+		System.out.println("------");
 	}
 	
 	public boolean canCollideWith(Unit u){
