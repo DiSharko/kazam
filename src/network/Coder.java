@@ -180,6 +180,7 @@ public class Coder {
 				//eventString is in the format netID \t timestamp \t <data>
 				Vector target = Vector.fromNet(eventString[3]);
 				Player p = playerMap.get(Integer.parseInt(eventString[0]));
+				if (p._isDead) return;
 				if (eventString[2].equals("Q")) {
 					data.startCastingSpell(p, p._spells[0], target);
 				} else if (eventString[2].equals("W")){
