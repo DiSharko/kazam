@@ -13,8 +13,9 @@ public class DeathmatchTeamData extends TeamData{
 	public void update() {
 		//update scores
 		int total = 0;
-		//for(Player p : _playerList)
-		//	total += p._kills;
+		for(Player p : _playerList) {
+			total += p._kills;
+		}
 		_teamScore = total;
 	}
 
@@ -27,10 +28,6 @@ public class DeathmatchTeamData extends TeamData{
 
 	@Override
 	public void fromNet(String[] networkString, HashMap<Integer, Unit> objectMap) {
-		if (networkString[1].equals("FlagTeamData") 
-				&& _netID == Integer.parseInt(networkString[0])
-				&& networkString.length == 3) {
 			_teamScore = Integer.parseInt(networkString[2]);
-		}
 	}
 }

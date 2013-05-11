@@ -74,8 +74,8 @@ public abstract class Unit {
 	public double _maxHealth = 100;
 	public double _maxMana = 100;
 	
-	protected double _health = _maxHealth;
-	protected double _mana = _maxMana;
+	public double _health = _maxHealth;
+	public double _mana = _maxMana;
 	
 	/**
 	 * Effects that occur over time 

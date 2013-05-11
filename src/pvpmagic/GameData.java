@@ -132,7 +132,7 @@ public class GameData {
 				p._pos = p._spawn;
 				p._isDead = false;
 				p._health = p._maxHealth;
-				p._health = p._maxMana;
+				p._mana = p._maxMana;
 				p._collidable = true;
 				p._drawUnder = false;
 				p._basicImage = p._oldImage;

@@ -137,6 +137,7 @@ public class Player extends Unit implements Comparable{
 		_force = new Vector(0,0);
 		_vel = new Vector(0,0);
 		_timedEffects = new HashMap<String, TimedEffect>();
+		_mana = 0;
 		dropFlag();
 		this._collidable = false;
 		this._drawUnder = true;
@@ -165,9 +166,10 @@ public class Player extends Unit implements Comparable{
 			dropFlag();
 
 		//health and mana regeneration
-		changeHealth(0.125, this);
-		changeMana(0.125, this);
-
+		if (!_isDead) {
+			changeHealth(0.125, this);
+			changeMana(0.125, this);
+		}
 		Vector center = _pos.plus(_size.div(2.0));
 		if (_spellCastingTime > 0) _spellCastingTime--;
 		else if (_spellToCast != null){
