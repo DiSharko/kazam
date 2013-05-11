@@ -143,9 +143,6 @@ public class Player extends Unit {
 	@Override
 	public void die() {
 		_isDead = true;
-		_hidden = 1.0;
-		_isSilenced = false;
-		_isRooted = false;
 		_force = new Vector(0,0);
 		_vel = new Vector(0,0);
 		_timedEffects = new HashMap<String, TimedEffect>();
@@ -336,8 +333,8 @@ public class Player extends Unit {
 				"\t" + _drawUnder + 						//index: 18
 				"\t" + _spawnTimer +						//index: 19
 				"\t" + _hidden +							//index: 20
-				"\t" + _isDead;								//index: 21
-
+				"\t" + _isDead +							//index: 21
+				"\t" + _movable;							//index: 22
 		//when fromNet is called, throw away previous timed effects
 		//list, and instantiate new ones with (this) as target
 	}
@@ -365,7 +362,8 @@ public class Player extends Unit {
 			this._spawnTimer = Integer.parseInt(networkString[19]);
 			this._hidden = Double.parseDouble(networkString[20]);
 			this._isDead = Boolean.parseBoolean(networkString[21]);
-
+			this._movable = Boolean.parseBoolean(networkString[22]);
+			
 			String[] lastCastTimes, sp;
 			lastCastTimes = networkString[11].split("::");
 			for (String spell : lastCastTimes) {

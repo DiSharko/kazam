@@ -131,6 +131,11 @@ public class GameData {
 //				System.out.println("player done spawning");
 				p._pos = p._spawn;
 				p._isDead = false;
+				p._isRooted = false;
+				p._isSilenced = false;
+				p._destination = null;
+				p._movable = true;
+				p._hidden = 1.0;
 				p._health = p._maxHealth;
 				p._mana = p._maxMana;
 				p._collidable = true;
