@@ -126,7 +126,7 @@ public class LobbyScreen extends Screen {
 		String clientData = "static" +
 				"\t" + characterName + 
 				"\t" + playerName + 
-				"\t" + spellStr.substring(0, spellStr.length() - 1) + "\n";
+				"\t" + spellStr.substring(0, spellStr.length() - 1);
 		_networker.connect(_serverIP, clientData);
 	}
 

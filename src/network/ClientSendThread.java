@@ -31,7 +31,7 @@ public class ClientSendThread extends Thread {
 		try {
 			// get writer and sent client data
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(_client.getOutputStream()));
-			writer.write(_clientData);
+			writer.write(_clientData + "\n");
 			writer.flush();
 			
 			BufferedReader reader = new BufferedReader(new InputStreamReader(_client.getInputStream()));
