@@ -48,7 +48,7 @@ public class ClientNetworker implements ClientNetworkable {
 			_getThread.start();
 		} catch (IOException e) {
 			disconnect();
-			throw new NetworkException(e.getMessage());
+			throw new NetworkException("ERROR: Network exception in client networker.");
 		}
 	}
 

@@ -56,18 +56,15 @@ public class Flag extends Unit {
 	}
 	@Override
 	public String toNet() {
-		String pos = (_pos == null) ? null : _pos.toNet();
-		String vel = (_vel == null) ? null : _vel.toNet();
-		String force = (_force == null) ? null : _force.toNet();
 		return _netID +
 				"\t" + (_staticObj ? "static" : _type) + 
-				"\t" + pos + 
+				"\t" + _pos.toNet() + 
 				"\t" + _delete +
 				"\t" + _basicImage + 
 				"\t" + _collidable +
 				"\t" + _drawUnder + 
-				"\t" + vel +
-				"\t" + force;
+				"\t" + _vel.toNet() +
+				"\t" + _force.toNet();
 	}
 	
 	@Override
@@ -76,7 +73,8 @@ public class Flag extends Unit {
 		_delete = Boolean.parseBoolean(networkString[3]);
 		_basicImage = networkString[4];
 		_collidable = Boolean.parseBoolean(networkString[5]);
-		_vel = Vector.fromNet(networkString[6]);
-		_force = Vector.fromNet(networkString[7]);
+		_drawUnder = Boolean.parseBoolean(networkString[6]);
+		_vel = Vector.fromNet(networkString[7]);
+		_force = Vector.fromNet(networkString[8]);
 	}
 }
