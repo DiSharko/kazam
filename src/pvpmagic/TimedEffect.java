@@ -66,6 +66,7 @@ public abstract class TimedEffect {
 	public static TimedEffect fromNet(String effectNetString, HashMap<Integer, Unit> objectMap) {
 		String[] args = effectNetString.split(",");
 		Player caster; TimedEffect t;
+		if (args.length == 1) return null; //Empty string
 		if (Boolean.parseBoolean(args[1])) {
 			if (!args[4].equals("null")) {
 				caster = null;
