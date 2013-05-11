@@ -12,7 +12,7 @@ import pvpmagic.spells.DashSpell;
 import pvpmagic.spells.HideSpell;
 import pvpmagic.spells.Spell;
 
-public class Player extends Unit implements Comparable {
+public class Player extends Unit {
 	public static Boolean STATICOBJ = true;
 	public static String TYPE = "Player";
 	public Vector _spawn;
@@ -96,7 +96,6 @@ public class Player extends Unit implements Comparable {
 		}
 		
 		TimedEffect t = _timedEffects.get(RootEffect.TYPE);
-		// TODO figure out why these sprites are drawn only on first two intervals, possible timestamp problem?
 		if (t != null && t._display){
 			v.drawImage(Resource.get("rootEffect"), _pos.plus(-18, _size.y-23), 90);
 		}
@@ -406,10 +405,5 @@ public class Player extends Unit implements Comparable {
 		}
 		throw new RuntimeException("Called Player.fromNetInit on string: " 
 				+ Arrays.toString(networkString));
-	}
-
-	@Override
-	public int compareTo(Object arg0) {
-		return 0;
 	}
 }
