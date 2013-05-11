@@ -5,6 +5,7 @@ import java.awt.Composite;
 import java.awt.Image;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map.Entry;
 
 import pvpmagic.spells.DashSpell;
@@ -277,9 +278,10 @@ public class Player extends Unit implements Comparable{
 				timedEffectsStr += e.getValue().toNet() + "::";
 			}
 		}
-		if (timedEffectsStr.length() > 0) timedEffectsStr = 
-				timedEffectsStr.substring(0, timedEffectsStr.length() - 2);
-		
+		if (timedEffectsStr.length() > 0) {
+			timedEffectsStr = timedEffectsStr.substring(0, timedEffectsStr.length() - 2);
+		}
+				
 		String pos = (_pos == null) ? null : _pos.toNet();
 		String dest = (_destination == null) ? null : _destination.toNet();
 		String flag = (_flag == null) ? null : Integer.toString(_flag._netID);
@@ -343,11 +345,12 @@ public class Player extends Unit implements Comparable{
 			String[] tEffects; TimedEffect ef;
 			tEffects = networkString[12].split("::");
 			_timedEffects = new HashMap<String, TimedEffect>();
-			for (String effect : tEffects) {
-				ef = TimedEffect.fromNet(effect, objectMap);
-				if (ef != null) _timedEffects.put(ef._type, ef);
+			for (int i = 0; i < tEffects.length; i++) {
+				ef = TimedEffect.fromNet(tEffects[i], objectMap);
+				if (ef != null) {
+					_timedEffects.put(ef._type, ef);
+				}
 			}
-
 		}
 	}		
 

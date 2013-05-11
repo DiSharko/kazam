@@ -18,11 +18,6 @@ public abstract class TimedEffect {
 	public abstract void effect();
 	
 	public static TimedEffect newTimedEffect(String type, Double numberOfIntervals,
-			Unit caster, Unit target) {
-		return newTimedEffect(type, numberOfIntervals, target, null);
-	}
-	
-	public static TimedEffect newTimedEffect(String type, Double numberOfIntervals,
 			Player caster, Unit target, Double changePerInterval){
 		if (type == null || target == null){
 			System.out.println("ERROR: newTimedEffect given a null argument!");
@@ -67,15 +62,16 @@ public abstract class TimedEffect {
 		String[] args = effectNetString.split(",");
 		Player caster; TimedEffect t;
 		if (args.length == 1) return null; //Empty string
-		if (Boolean.parseBoolean(args[1])) {
-			if (!args[4].equals("null")) {
+		if (!Boolean.parseBoolean(args[1])) {
+			if (args[4].equals("null")) {
 				caster = null;
 			} else {
 				caster = (Player) objectMap.get(Integer.parseInt(args[4]));
 			}
 			Unit target = objectMap.get(Integer.parseInt(args[5]));
 			if (args[3].equals("null")) {
-				t = newTimedEffect(args[0], Double.parseDouble(args[2]), caster, target);
+				t = newTimedEffect(args[0], Double.parseDouble(args[2]), caster, target,
+						null);
 			} else {
 				t = newTimedEffect(args[0], Double.parseDouble(args[2]), caster, target, 
 						Double.parseDouble(args[4]));
