@@ -1,5 +1,8 @@
 package pvpmagic.spells;
 
+import java.awt.Color;
+import java.awt.Font;
+
 import pvpmagic.*;
 
 /**
@@ -35,7 +38,9 @@ public class CloneSpell extends Spell {
 			v.drawImage(Resource.get(_caster._flag._basicImage), flagPos, _caster._flag._size.mult(0.8));
 			v.unrotate();
 		}
-		System.out.println(_caster._characterName);
 		v.drawImage(Resource.get(_caster._characterName), _pos, _caster._size);
+		v.setColor(Color.black);
+		v.getGraphics().setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		v.drawString(_caster._playerName, _pos.minus(0,5));
 	}
 }
