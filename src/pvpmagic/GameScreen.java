@@ -313,7 +313,7 @@ public class GameScreen extends Screen {
 					_clientTick++;
 					
 					for (TeamData teamData : _data._teams) {
-						if (teamData._teamScore == _data._needed) {
+						if (teamData._teamScore >= _data._needed) {
 							System.out.println("GAME OVER!");
 							System.out.println("Team " + teamData.TEAM_NUM + " has won!");
 							end();
