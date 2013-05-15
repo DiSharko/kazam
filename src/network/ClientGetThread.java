@@ -46,6 +46,8 @@ public class ClientGetThread extends Thread {
 					} else {
 						buffer += line+"\n";
 					}
+				} else {
+					break; // kill on remote disconnect
 				}
 			}
 			

@@ -253,6 +253,7 @@ public class ServerScreen extends Screen {
 				// ignore
 			}
 			_holder.transitionToScreen(Transition.FADE, "setup");
+			System.out.println("done transitioning");
 		}
 	}
 

@@ -7,7 +7,11 @@ public class CommandComparator implements Comparator<String> {
 	public int compare(String o1, String o2) {
 		try {
 			if (o1.split("\t")[0].equals("DISCONNECTION")) {
-				return -1;
+				if (o2.split("\t")[0].equals("DISCONNECTION")) {
+					return 0;
+				} else {
+					return -1;
+				}
 			} else if (o2.split("\t")[0].equals("DISCONNECTION")) {
 				return 1;
 			} else {

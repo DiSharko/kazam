@@ -40,9 +40,7 @@ public class StateHandler extends Thread {
 			}
 		}
 		// remove from list - this should block until broadcast() or broadcastStart() is finished
-		synchronized(_clients) {
-			_clients.remove(_client);
-		}
+		_clients.remove(_client);
 	}
 
 }

@@ -14,9 +14,10 @@ import pvpmagic.spells.Spell;
 public class GameData {
 	public enum GameMode { CTF, TEAM_DEATHMATCH }
 	
-	public final int NEEDED = 3;
+	public final int TDM_NEEDED = 12;
+	public final int CTF_NEEDED = 3; 
 
-	public int _needed = NEEDED;
+	public int _needed;
 	public ArrayList<Unit> _units;
 	
 	public String _gameType;
@@ -113,16 +114,7 @@ public class GameData {
 			}
 		}
 		
-		//check if any team has one
-		for (TeamData td : _teams) {
-			td.update();
-			if(td._teamScore == _needed) {
-				//one team has won!!!
-				System.out.println("Team "+td.TEAM_NUM+" has won the game!");
-			}
-		}
-		
-		//update spawing players
+		//update spawning players
 		Player p;
 		for(int i = 0; i < _spawning.size(); i++) {
 			p = _spawning.get(i);
@@ -218,7 +210,7 @@ public class GameData {
 		if(linearr[0].equals("SETUP") && (linearr.length == 3)) {
 			if (linearr[2].equals("TEAM DEATHMATCH")) {
 				_gameType = "TEAM DEATHMATCH";
-				_needed = 12;
+				_needed = TDM_NEEDED;
 				for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
 					DeathmatchTeamData data = new DeathmatchTeamData(i, this);
 					data._netID = counter.getAndIncrement();
@@ -227,7 +219,7 @@ public class GameData {
 				}
 			} else if (linearr[2].equals("TEAM FLAG")) {
 				_gameType = "TEAM FLAG";
-				_needed = 3;
+				_needed = CTF_NEEDED;
 				for (int i = 0; i < Integer.parseInt(linearr[1]); i++) {
 					FlagTeamData data = new FlagTeamData(i, this);
 					data._netID = counter.getAndIncrement();
